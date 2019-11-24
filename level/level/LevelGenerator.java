@@ -28,18 +28,17 @@ public class LevelGenerator
     //Max items per level
     private int itemThreshold;
     
-    private String[] dir = { "north", "east", "south", "west" };
 
     /// <summary>
     /// Default constructor
     /// </summary>
     public LevelGenerator()
     {
-        roomNumber = 5;
+        roomNumber = 10;
         roomTileSizeX = 20;
         roomTileSizeY = 10;
         enemyNumber = 5;
-        enemyThreshold = 2;
+        enemyThreshold = 5;
         itemNumber = 5;
         itemThreshold = 1;
     }
@@ -75,11 +74,11 @@ public class LevelGenerator
         enemyThreshold = itemtresh;
     }
    
-    public LevelData generateLevel(int lvlnum)
+    public LevelData generateLevel(int lvlnum, boolean fromFile)
     {
     	Random ran = new Random();
 
-        //initialize room list and grid
+        //initialize room list and grid (to map the crawlers path)
     	HashMap<UUID, RoomData> roomList = new HashMap<>();
         UUID[][] roomGrid = new UUID[roomNumber * 2][ roomNumber * 2];
 
@@ -95,86 +94,87 @@ public class LevelGenerator
         for (int i = 0; i < roomNumber - 1; i++)
         {
             RoomData tmp = null;
-            boolean newRoom = false;
+            boolean newRoom = false;             
+           
 
             //random direction
-            switch (dir[ran.nextInt(3)])
+            switch (Direction.values()[ran.nextInt(4)])
             {
-                case "north":
+                case NORTH:
                     //if room has an adjacent (north) room and there is no other room create new room and connect them
-                    if ((new UUID(0,0) == roomPointer.getadjacentRoom("north")) && (roomGrid[roomCoord.x][ roomCoord.x - 1] == new UUID(0,0) ))
+                    if ((new UUID(0,0).equals(roomPointer.getadjacentRoom(Direction.NORTH))) && (roomGrid[roomCoord.x- 1][ roomCoord.x ] == null ))
                     {
                         tmp = new RoomData();
-                        connectRooms(roomPointer, tmp, "north");
-                        roomGrid[roomCoord.x][ roomCoord.y - 1] = tmp.getRoomID();
+                        connectRooms(roomPointer, tmp, Direction.NORTH);
+                        roomGrid[roomCoord.x- 1][ roomCoord.y] = tmp.getRoomID();
                         //move pointers
-                        roomCoord.y--;
+                        roomCoord.x--;
                         roomPointer = tmp;
                         newRoom = true;
                     }
                     //if there is already a room, but not connected, connect them
-                    else if (roomGrid[roomCoord.x][ roomCoord.y - 1] != new UUID(0,0))
+                    else if (roomGrid[roomCoord.x- 1][ roomCoord.y ] != null)
                     {
-                        tmp = roomList.get(roomGrid[roomCoord.x][roomCoord.y - 1]);
-                        connectRooms(roomPointer, tmp, "north");
+                        tmp = roomList.get(roomGrid[roomCoord.x - 1][roomCoord.y]);
+                        connectRooms(roomPointer, tmp, Direction.NORTH);
+                        roomCoord.x--;
+                        roomPointer = tmp;
+                    }
+                    break;
+
+                case SOUTH:
+                	if ((new UUID(0,0).equals(roomPointer.getadjacentRoom(Direction.NORTH))) && (roomGrid[roomCoord.x + 1][ roomCoord.y] == null ))
+                    {
+                        tmp = new RoomData();
+                        connectRooms(roomPointer, tmp, Direction.SOUTH);
+                        roomGrid[roomCoord.x + 1][roomCoord.y] = tmp.getRoomID();
+                        roomCoord.x++;
+                        roomPointer = tmp;
+                        newRoom = true;
+                    }
+                    else if (roomGrid[roomCoord.x + 1][roomCoord.y ] != null)
+                    {
+                    	tmp = roomList.get(roomGrid[roomCoord.x + 1][roomCoord.y]);
+                        connectRooms(roomPointer, tmp, Direction.SOUTH);
+                        roomCoord.x++;
+                        roomPointer = tmp;
+                    }
+                    break;
+
+                case WEST:
+                    if ((new UUID(0,0).equals(roomPointer.getadjacentRoom(Direction.WEST))) && (roomGrid[roomCoord.x][ roomCoord.y- 1] == null))
+                    {
+                        tmp = new RoomData();
+                        connectRooms(roomPointer, tmp, Direction.WEST);
+                        roomGrid[roomCoord.x ][roomCoord.y- 1] = tmp.getRoomID();
+                        roomCoord.y--;
+                        roomPointer = tmp;
+                        newRoom = true;
+                    }
+                    else if (roomGrid[roomCoord.x ][ roomCoord.y - 1 ] != null)
+                    {
+                    	tmp = roomList.get(roomGrid[roomCoord.x][roomCoord.y-1]);
+                        connectRooms(roomPointer, tmp, Direction.WEST);
                         roomCoord.y--;
                         roomPointer = tmp;
                     }
                     break;
 
-                case "south":
-                	if ((new UUID(0,0) == roomPointer.getadjacentRoom("north")) && (roomGrid[roomCoord.x][ roomCoord.x - 1] == new UUID(0,0) ))
+                case EAST:
+                    if ((new UUID(0,0).equals(roomPointer.getadjacentRoom(Direction.EAST))) && (roomGrid[roomCoord.x][ roomCoord.y + 1] == null))
                     {
                         tmp = new RoomData();
-                        connectRooms(roomPointer, tmp, "south");
-                        roomGrid[roomCoord.x][roomCoord.y + 1] = tmp.getRoomID();
+                        connectRooms(roomPointer, tmp, Direction.EAST);
+                        roomGrid[roomCoord.x][ roomCoord.y + 1] = tmp.getRoomID();
                         roomCoord.y++;
                         roomPointer = tmp;
                         newRoom = true;
                     }
-                    else if (roomGrid[roomCoord.x][roomCoord.y + 1] != new UUID(0,0))
+                    else if (roomGrid[roomCoord.x ][ roomCoord.y+ 1] != null)
                     {
-                    	tmp = roomList.get(roomGrid[roomCoord.x][roomCoord.y + 1]);
-                        connectRooms(roomPointer, tmp, "south");
+                    	tmp = roomList.get(roomGrid[roomCoord.x][roomCoord.y+1]);
+                        connectRooms(roomPointer, tmp, Direction.EAST);
                         roomCoord.y++;
-                        roomPointer = tmp;
-                    }
-                    break;
-
-                case "west":
-                    if ((new UUID(0,0) == roomPointer.getadjacentRoom("west")) && (roomGrid[roomCoord.x - 1][ roomCoord.y] == new UUID(0,0)))
-                    {
-                        tmp = new RoomData();
-                        connectRooms(roomPointer, tmp, "west");
-                        roomGrid[roomCoord.x - 1][roomCoord.y] = tmp.getRoomID();
-                        roomCoord.x--;
-                        roomPointer = tmp;
-                        newRoom = true;
-                    }
-                    else if (roomGrid[roomCoord.x - 1][ roomCoord.y] != new UUID(0,0))
-                    {
-                    	tmp = roomList.get(roomGrid[roomCoord.x-1][roomCoord.y]);
-                        connectRooms(roomPointer, tmp, "west");
-                        roomCoord.x--;
-                        roomPointer = tmp;
-                    }
-                    break;
-
-                case "east":
-                    if ((new UUID(0,0) == roomPointer.getadjacentRoom("east")) && (roomGrid[roomCoord.x + 1][ roomCoord.y] == new UUID(0,0)))
-                    {
-                        tmp = new RoomData();
-                        connectRooms(roomPointer, tmp, "east");
-                        roomGrid[roomCoord.x + 1][ roomCoord.y] = tmp.getRoomID();
-                        roomCoord.x++;
-                        roomPointer = tmp;
-                        newRoom = true;
-                    }
-                    else if (roomGrid[roomCoord.x + 1][ roomCoord.y] != new UUID(0,0))
-                    {
-                    	tmp = roomList.get(roomGrid[roomCoord.x+1][roomCoord.y]);
-                        connectRooms(roomPointer, tmp, "east");
-                        roomCoord.x++;
                         roomPointer = tmp;
                     }
                     break;
@@ -191,20 +191,18 @@ public class LevelGenerator
             }
         }
 
-        generateRooms(roomList);
+        if(fromFile)
+        {
+          generateRoomsFromTemplate(roomList);
+        }
+        {
+          generateRooms(roomList);
+        }   
 
-        System.out.println(Arrays.deepToString(roomGrid));
+        //Debug
+        print2D(roomGrid, roomList);
         
         return new LevelData(roomList,roomGrid,lvlnum);
-    }
-
-    public byte[][] generateLevelbyTemplates(String dir)
-    {       
-        //
-        //ToDo
-        //
-
-        return new byte[1][1];
     }
 
     
@@ -214,10 +212,7 @@ public class LevelGenerator
      * @return
      */
     private HashMap<UUID,RoomData> generateRooms(HashMap<UUID,RoomData> roomList)
-    {
-        //overall enemies and item per level
-        int enemies = this.enemyNumber;
-        int items = this.itemNumber;
+    {        
         
         for(Map.Entry<UUID, RoomData> entry : roomList.entrySet()) 
         {
@@ -226,21 +221,35 @@ public class LevelGenerator
         }  
         
         return null;
+    }    
+    
+    
+    /**
+     * Creates a room by template for each entry in a given list of rooms
+     * @param roomList
+     * @return
+     */
+    private HashMap<UUID,RoomData> generateRoomsFromTemplate(HashMap<UUID,RoomData> roomList)
+    {        
+        
+        for(Map.Entry<UUID, RoomData> entry : roomList.entrySet()) 
+        {
+        	 GenerateSingleRoom(entry.getValue());        	 
+        }  
+        
+        return null;
     }
+    
+    
 
+    /**
+     * Generates a single room
+     * @param room
+     * @return
+     */
     private RoomData GenerateSingleRoom(RoomData room)
     {
-        //tile codes (should  probably be an enum XD)
-        byte wall =   (byte) 255;
-        //corner tiles?
-        byte ground = (byte) 100;
-        byte door =   (byte) 150;
-        byte enemy =  (byte) 20;
-        //enemies kind?
-        byte item =   (byte) 55;
-        //item kind??
-
-        byte[][] roomdata = new byte[roomTileSizeX][roomTileSizeY];
+    	int[][] roomdata = new int[roomTileSizeX][roomTileSizeY];
 
         Random ran = new Random();
 
@@ -259,15 +268,15 @@ public class LevelGenerator
                     if (isDoorPosition(i, j, roomdata))
                     {
                         //check adjacent rooms
-                        if ((room.getadjacentRoom("west") != new UUID(0,0)) && (i == 0)) { roomdata[i][j] = door; }
-                        else if ((room.getadjacentRoom("east") != new UUID(0,0)) && (i == roomdata.length - 1)) { roomdata[i][j] = door; }
-                        else if ((room.getadjacentRoom("north") != new UUID(0,0)) && (j == 0)) { roomdata[i][j] = door; }
-                        else if ((room.getadjacentRoom("south") != new UUID(0,0)) && (j == roomdata[0].length - 1)) { roomdata[i][j] = door; }
-                        else { roomdata[i][j] = wall; }
+                        if ((room.getadjacentRoom(Direction.WEST) != new UUID(0,0)) && (i == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((room.getadjacentRoom(Direction.EAST) != new UUID(0,0)) && (i == roomdata.length - 1)) { roomdata[i][j] =TileCode. door; }
+                        else if ((room.getadjacentRoom(Direction.NORTH) != new UUID(0,0)) && (j == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((room.getadjacentRoom(Direction.SOUTH) != new UUID(0,0)) && (j == roomdata[0].length - 1)) { roomdata[i][j] = TileCode.door; }
+                        else { roomdata[i][j] = TileCode.wall; }
                     }
                     else
                     {
-                    	roomdata[i][j] = wall;
+                    	roomdata[i][j] = TileCode.wall;
                     }
                 }
                 // ground
@@ -276,20 +285,18 @@ public class LevelGenerator
                     // highly complex enemy random distribution algorithm
                     if ((ran.nextInt(roomdata.length + enemycount) == 0) && (enemycount > 0))
                     {
-                    	roomdata[i][j] = enemy;
-                        enemycount--;
-                        //enemies = enemies - 1;
+                    	roomdata[i][j] = TileCode.enemy;
+                        enemycount--;                        
                     }
                     // advanced random item algorithm
                     else if ((ran.nextInt(roomdata.length + enemycount)== 0) && (itemcount > 0))
                     {
-                    	roomdata[i][j] = item;
-                        itemcount--;
-                        //items--;
+                    	roomdata[i][j] = TileCode.item;
+                        itemcount--;                      
                     }
                     else
                     {
-                    	roomdata[i][j] = ground;
+                    	roomdata[i][j] = TileCode.ground;
                     }
                 }
             }
@@ -298,42 +305,108 @@ public class LevelGenerator
         return room;
     }
     
+    /**
+     * Generates a single room by template using LevelPicUtil
+     * @param room
+     * @return
+     */
+    private RoomData GenerateSingleRoomByTemplate(RoomData room)
+    {
+    	int[][] roomdata = new int[roomTileSizeX][roomTileSizeY];
+
+        Random ran = new Random();                   
+
+        for (int i = 0; i < roomdata.length; i++)
+        {
+            for (int j = 0; j < roomdata[0].length; j++)
+            {
+//                //walls
+//                if (isWall(i, j, roomdata))
+//                {
+//                    //doors halfway in walls
+//                    if (isDoorPosition(i, j, roomdata))
+//                    {
+//                        //check adjacent rooms
+//                        if ((room.getadjacentRoom(Direction.WEST) != new UUID(0,0)) && (i == 0)) { roomdata[i][j] = door; }
+//                        else if ((room.getadjacentRoom(Direction.EAST) != new UUID(0,0)) && (i == roomdata.length - 1)) { roomdata[i][j] = door; }
+//                        else if ((room.getadjacentRoom(Direction.NORTH) != new UUID(0,0)) && (j == 0)) { roomdata[i][j] = door; }
+//                        else if ((room.getadjacentRoom(Direction.SOUTH) != new UUID(0,0)) && (j == roomdata[0].length - 1)) { roomdata[i][j] = door; }
+//                        else { roomdata[i][j] = wall; }
+//                    }
+//                    else
+//                    {
+//                    	roomdata[i][j] = wall;
+//                    }
+//                }
+//                // ground
+//                else
+//                {
+//                    // highly complex enemy random distribution algorithm
+//                    if ((ran.nextInt(roomdata.length + enemycount) == 0) && (enemycount > 0))
+//                    {
+//                    	roomdata[i][j] = enemy;
+//                        enemycount--;                        
+//                    }
+//                    // advanced random item algorithm
+//                    else if ((ran.nextInt(roomdata.length + enemycount)== 0) && (itemcount > 0))
+//                    {
+//                    	roomdata[i][j] = item;
+//                        itemcount--;                      
+//                    }
+//                    else
+//                    {
+//                    	roomdata[i][j] = ground;
+//                    }
+//                }
+            }
+        }
+        room.setRoomData(roomdata);
+        return room;
+    }
     
-    private boolean isWall(int i, int j, byte[][] arr)
+    
+    private boolean isWall(int i, int j, int[][] arr)
     {
         return (i == 0) || (j == 0) || (i == arr.length - 1) || (j == arr[0].length - 1);
     }
 
    
-    private boolean isDoorPosition(int i, int j, byte[][] arr)
+    private boolean isDoorPosition(int i, int j, int[][] arr)
     {
         return (i == arr.length / 2 || j == arr[0].length / 2);
     }
     
     
-  
-    private boolean connectRooms(RoomData room, RoomData room2, String direction)
+    
+    /**
+     * Connects 2 rooms in a specific direction
+     * @param room
+     * @param room2
+     * @param direction
+     * @return
+     */
+    private boolean connectRooms(RoomData room, RoomData room2, Direction direction)
     {
-        String counterdirection = "";
+        Direction counterdirection = null;
 
         if (!room.alreadyadjacent(room2.getRoomID()))
         {
             switch (direction)
             {
-                case "north":
-                    counterdirection = "south";
+                case NORTH:
+                    counterdirection = Direction.SOUTH;
                     break;
 
-                case "south":
-                    counterdirection = "north";
+                case SOUTH:
+                    counterdirection = Direction.NORTH;
                     break;
 
-                case "west":
-                    counterdirection = "east";
+                case WEST:
+                    counterdirection = Direction.EAST;
                     break;
 
-                case "east":
-                    counterdirection = "west";
+                case EAST:
+                    counterdirection = Direction.WEST;
                     break;
 
                 default:
@@ -350,4 +423,58 @@ public class LevelGenerator
             return false;
         }
     }
+    
+   
+    /**
+     * Prints debug info to console
+     * @param roomGrid
+     * @param roomlist
+     */
+    public static void print2D(UUID[][] roomGrid, HashMap<UUID, RoomData> roomlist) 
+    { 
+        // Loop through all rows 
+        for (int i = 0; i < roomGrid.length; i++) 
+        {  
+            // Loop through all elements of current row 
+            for (int j = 0; j < roomGrid[i].length; j++) 
+            {
+            	if(roomGrid[i][j] == null) 
+            	{
+            		System.out.print((new UUID(0,0)).toString().substring(0,4) + " ");
+            	}
+            	else
+            	{
+                System.out.print(roomGrid[i][j].toString().substring(0,4) + " "); 
+            	}
+            }
+            System.out.println("");
+        }
+        
+        System.out.println("");
+        
+        for(Map.Entry<UUID, RoomData> entry : roomlist.entrySet()) 
+        {
+        	 System.out.println("ID:" + entry.getKey().toString().substring(0,4)+" "+
+        			 "North:" +entry.getValue().getadjacentRoom(Direction.NORTH).toString().substring(0,4)+" "+
+        			 "South:" +entry.getValue().getadjacentRoom(Direction.SOUTH).toString().substring(0,4)+" "+
+        			 "West:" +entry.getValue().getadjacentRoom(Direction.WEST).toString().substring(0,4)+" "+
+        			 "East:" +entry.getValue().getadjacentRoom(Direction.EAST).toString().substring(0,4));         	 
+        }  
+        
+        System.out.println("");  
+        
+        for(Map.Entry<UUID, RoomData> entry : roomlist.entrySet()) 
+        {
+        	for (int i = 0; i < entry.getValue().getRoomData()[i].length; i++) 
+            {                 
+                for (int j = 0; j < entry.getValue().getRoomData().length; j++) 
+                {                	
+                    System.out.print(entry.getValue().getRoomData()[j][i] + " ");                	
+                }
+                System.out.println("");
+            }
+        	System.out.println("");    
+        } 
+        
+    } 
 }

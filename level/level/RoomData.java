@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class RoomData
 {
-	private byte[][] roomData;
+	private int[][] roomData;
 
     private UUID adjacentRoomNorth;
     private UUID adjacentRoomSouth;
@@ -30,7 +30,7 @@ public class RoomData
         roomID = UUID.randomUUID();
     }
 
-    public RoomData(byte[][] data, UUID north, UUID east, UUID south, UUID west)
+    public RoomData(int[][] data, UUID north, UUID east, UUID south, UUID west)
     {
         roomData = data;
 
@@ -57,33 +57,33 @@ public class RoomData
         return roomData[0].length;
     }
 
-    public byte[][] getRoomData()
+    public int[][] getRoomData()
     {
         return roomData;
     }
 
-    public void setRoomData(byte[][] val)
+    public void setRoomData(int[][] val)
     {
         this.roomData = val;
     }
     
-    public void setadjacentRoom(RoomData room, String direction)
+    public void setadjacentRoom(RoomData room, Direction direction)
     {
         switch (direction)
         {
-            case "north":
+            case NORTH:
                 adjacentRoomNorth = room.getRoomID();
                 break;
 
-            case "south":
+            case SOUTH:
                 adjacentRoomSouth = room.getRoomID();
                 break;
 
-            case "west":
+            case WEST:
                 adjacentRoomWest = room.getRoomID();
                 break;
 
-            case "east":
+            case EAST:
                 adjacentRoomEast = room.getRoomID();
                 break;
 
@@ -92,20 +92,20 @@ public class RoomData
         }
     }
    
-    public UUID getadjacentRoom(String direction)
+    public UUID getadjacentRoom(Direction direction)
     {
         switch (direction)
         {
-            case "north":
+        	case NORTH:
                 return adjacentRoomNorth;                
 
-            case "south":
+        	case SOUTH:
                 return adjacentRoomSouth;              
 
-            case "west":
+        	case WEST:
                 return adjacentRoomWest;              
 
-            case "east":
+        	case EAST:
                 return adjacentRoomEast;               
         }
 
