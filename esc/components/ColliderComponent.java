@@ -1,5 +1,6 @@
 package components;
 
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -27,6 +28,11 @@ public class ColliderComponent extends Component<Rectangle>
     public void translate(double x, double y){
         this.shape.setTranslateX(x);
         this.shape.setTranslateY(y);      
+    }
+    
+    public void translate(Point2D point){
+        this.shape.setTranslateX(point.getX());
+        this.shape.setTranslateY(point.getY());      
     }
 
     public void translateX(double x){

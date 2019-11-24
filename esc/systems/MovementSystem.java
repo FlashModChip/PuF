@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.util.Pair;
+import settings.Settings;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,10 +47,10 @@ public class MovementSystem implements ECSystem {
 
     // debug
 	
-	  //private boolean debugDummy = Settings.getDebug("MovementSystem@dummy");
-	  //private boolean debugStepSize = Settings.getDebug("MovementSystem@stepsize");
+	private boolean debugDummy = Settings.getDebug("MovementSystem@dummy");
+	private boolean debugStepSize = Settings.getDebug("MovementSystem@stepsize");
     
-    private boolean debugDummy = true;
+    
 	
     private boolean debugBuffer = false;
 
@@ -65,11 +67,11 @@ public class MovementSystem implements ECSystem {
     // we beam the collider to this place during collision detection to prevent self-collision
     // axis origin is where map creation start, it should be empty
     // if the entity is to big consider using negative values or in a 2D game offsetting on z-axis
-    //private Point3D safeSpot = Settings.getSafeSpot();
+    private Point3D safeSpot = Settings.getSafeSpot();
 
     // fallback dummy size
     // is used when entity has no shape and no collider
-    //private Box fallBackSize = Settings.getFallBackSize();
+    private Box fallBackSize = Settings.getFallBackSize();
 
     // stepsize defines the max vector length of velocity
     // it should not be greater than the smallest entity on the map
@@ -195,7 +197,8 @@ public class MovementSystem implements ECSystem {
                         // the position will be reset automatically when applying the new position
                         if (entity.hasComponent(ColliderComponent.class)) {
                             count++;
-                            ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translate(safeSpot);
+                            ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translateX(safeSpot.getX());
+                            ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translateX(safeSpot.getY());
                         }
 
                         // run collision detection
@@ -228,11 +231,11 @@ public class MovementSystem implements ECSystem {
                             ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translate(position);
                         }
 
-                        // update light position
-                        if (entity.hasComponent(LightComponent.class)) {
-                            count++;
-                            ((LightComponent) entity.getComponent(LightComponent.class)).translate(position);
-                        }
+						/*
+						 * // update light position if (entity.hasComponent(LightComponent.class)) {
+						 * count++; ((LightComponent)
+						 * entity.getComponent(LightComponent.class)).translate(position); }
+						 */
                     }
                 }
             }
@@ -280,7 +283,7 @@ public class MovementSystem implements ECSystem {
         }
         // if the entity has not a shape (e.g. it's a light), take the fallback size
         else {
-            //reference = fallBackSize;
+            reference = fallBackSize;
         }
 
         dummyBox.setHeight(reference.getHeight());
@@ -292,7 +295,7 @@ public class MovementSystem implements ECSystem {
         // we should test velocity on violating this rule
 
         // get the length of velocity-vector
-        double vectorLength = Math.sqrt( Math.pow(velocity.getX(), 2) + Math.pow(velocity.getY(), 2) + Math.pow(velocity.getZ(), 2) );
+        double vectorLength = Math.sqrt( Math.pow(velocity.getX(), 2) + Math.pow(velocity.getY(), 2));
 
         // calculate required steps to reach the target
         int steps = (int) Math.ceil( vectorLength/stepsize );
@@ -306,8 +309,7 @@ public class MovementSystem implements ECSystem {
         // check steps on collision
         for (int i = 1; i<= steps; i++) {
             dummyBox.setTranslateX(position.getX() + (velocity.getX() / steps * i));
-            dummyBox.setTranslateY(position.getY() + (velocity.getY() / steps * i));
-            dummyBox.setTranslateZ(position.getZ() + (velocity.getZ() / steps * i));
+            dummyBox.setTranslateY(position.getY() + (velocity.getY() / steps * i));          
 
             // traverse all colliders to detect collision
             crashBoxVelocity = traverseColliders();
@@ -362,8 +364,7 @@ public class MovementSystem implements ECSystem {
 
                 // prevent crawling corners
                 dummyBox.setTranslateX(position.getX() + velocity.getX());
-                dummyBox.setTranslateY(position.getY());
-                dummyBox.setTranslateZ(position.getZ());
+                dummyBox.setTranslateY(position.getY());            
                 Pair<UUID, Box> crashBoxAxis = traverseColliders();
 
                 // check positive x-axis
@@ -374,7 +375,7 @@ public class MovementSystem implements ECSystem {
                     boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
                     if (velCollision || axisCollision) {
                         collisionVector = new Point3D(velocity.getX(), collisionVector.getY(), collisionVector.getZ());
-                        velocity = new Point3D(i, velocity.getY(), velocity.getZ());
+                        velocity = new Point2D(i, velocity.getY());
                         xCollision = true;
                         break;
                     }
@@ -386,7 +387,7 @@ public class MovementSystem implements ECSystem {
                     boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
                     if (velCollision || axisCollision) {
                         collisionVector = new Point3D(velocity.getX(), collisionVector.getY(), collisionVector.getZ());
-                        velocity = new Point3D(i, velocity.getY(), velocity.getZ());
+                        velocity = new Point2D(i, velocity.getY());
                         xCollision = true;
                         break;
                     }
@@ -403,8 +404,7 @@ public class MovementSystem implements ECSystem {
 
                 // prevent crawling corners
                 dummyBox.setTranslateX(position.getX());
-                dummyBox.setTranslateY(position.getY() + velocity.getY());
-                dummyBox.setTranslateZ(position.getZ());
+                dummyBox.setTranslateY(position.getY() + velocity.getY());               
                 Pair<UUID, Box> crashBoxAxis = traverseColliders();
 
                 // check positive y-axis
@@ -415,7 +415,7 @@ public class MovementSystem implements ECSystem {
                     boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
                     if (velCollision || axisCollision) {
                         collisionVector = new Point3D(collisionVector.getX(), velocity.getY(), collisionVector.getZ());
-                        velocity = new Point3D(velocity.getX(), i, velocity.getZ());
+                        velocity = new Point2D(velocity.getX(), i);
                         yCollision = true;
                         break;
                     }
@@ -427,7 +427,7 @@ public class MovementSystem implements ECSystem {
                     boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
                     if (velCollision || axisCollision) {
                         collisionVector = new Point3D(collisionVector.getX(), velocity.getY(), collisionVector.getZ());
-                        velocity = new Point3D(velocity.getX(), i, velocity.getZ());
+                        velocity = new Point2D(velocity.getX(), i);
                         yCollision = true;
                         break;
                     }
@@ -438,46 +438,32 @@ public class MovementSystem implements ECSystem {
                 if (yCollision) gameEvent.addData(EventData.ColliderUUID, crashBoxAxis);
             }
 
-            // check z-axis
-            if (velocity.getZ() != 0) {
-                boolean zCollision = false;
-
-                // prevent crawling corners
-                dummyBox.setTranslateX(position.getX());
-                dummyBox.setTranslateY(position.getY());
-                dummyBox.setTranslateZ(position.getZ() + velocity.getZ());
-                Pair<UUID, Box> crashBoxAxis = traverseColliders();
-
-                // check positive z-axis
-                dummyBox.setDepth(dummyBox.getDepth()+2);
-                for (double i=0; i<velocity.getZ(); i++) {
-                    dummyBox.setTranslateZ(position.getZ() + i);
-                    boolean velCollision = getCollision(dummyBox, crashBoxVelocity.getValue());
-                    boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
-                    if (velCollision || axisCollision) {
-                        collisionVector = new Point3D(collisionVector.getX(), collisionVector.getY(), velocity.getZ());
-                        velocity = new Point3D(velocity.getX(), velocity.getY(), i);
-                        zCollision = true;
-                        break;
-                    }
-                }
-                // check negative z-axis
-                for (double i=0; i>velocity.getZ(); i--) {
-                    dummyBox.setTranslateZ(position.getZ() + i);
-                    boolean velCollision = getCollision(dummyBox, crashBoxVelocity.getValue());
-                    boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue());
-                    if (velCollision || axisCollision) {
-                        collisionVector = new Point3D(collisionVector.getX(), collisionVector.getY(), velocity.getZ());
-                        velocity = new Point3D(velocity.getX(), velocity.getY(), i);
-                        zCollision = true;
-                        break;
-                    }
-                }
-                dummyBox.setDepth(dummyBox.getDepth()-2);
-
-                // add collider to event
-                if (zCollision) gameEvent.addData(EventData.ColliderUUID, crashBoxAxis);
-            }
+			/*
+			 * // check z-axis if (velocity.getZ() != 0) { boolean zCollision = false;
+			 * 
+			 * // prevent crawling corners dummyBox.setTranslateX(position.getX());
+			 * dummyBox.setTranslateY(position.getY()); Pair<UUID, Box> crashBoxAxis =
+			 * traverseColliders();
+			 * 
+			 * // check positive z-axis dummyBox.setDepth(dummyBox.getDepth()+2); for
+			 * (double i=0; i<velocity.getZ(); i++) { dummyBox.setTranslateZ(position.getZ()
+			 * + i); boolean velCollision = getCollision(dummyBox,
+			 * crashBoxVelocity.getValue()); boolean axisCollision = getCollision(dummyBox,
+			 * crashBoxAxis.getValue()); if (velCollision || axisCollision) {
+			 * collisionVector = new Point3D(collisionVector.getX(), collisionVector.getY(),
+			 * velocity.getZ()); velocity = new Point3D(velocity.getX(), velocity.getY(),
+			 * i); zCollision = true; break; } } // check negative z-axis for (double i=0;
+			 * i>velocity.getZ(); i--) { dummyBox.setTranslateZ(position.getZ() + i);
+			 * boolean velCollision = getCollision(dummyBox, crashBoxVelocity.getValue());
+			 * boolean axisCollision = getCollision(dummyBox, crashBoxAxis.getValue()); if
+			 * (velCollision || axisCollision) { collisionVector = new
+			 * Point3D(collisionVector.getX(), collisionVector.getY(), velocity.getZ());
+			 * velocity = new Point3D(velocity.getX(), velocity.getY(), i); zCollision =
+			 * true; break; } } dummyBox.setDepth(dummyBox.getDepth()-2);
+			 * 
+			 * // add collider to event if (zCollision)
+			 * gameEvent.addData(EventData.ColliderUUID, crashBoxAxis); }
+			 */
 
 
             // === PART 6 - PACK RESULTS AND PASS EVENT TO LOGIC ===

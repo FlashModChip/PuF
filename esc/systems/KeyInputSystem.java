@@ -2,11 +2,18 @@ package systems;
 
 import entities.Entity;
 import entities.EntityManager;
+import game.Game;
 import javafx.geometry.Point3D;
 import javafx.scene.input.KeyCode;
+import settings.Settings;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import components.Component;
+import components.KeyInputComponent;
+import components.VelocityComponent;
 
 /**
  * handles key input
@@ -76,16 +83,14 @@ public class KeyInputSystem implements ECSystem {
                     Entity entity = EntityManager.getEntity(uuid);
 
                     // update jump
-                    if (buttonW && entity.hasComponent(JumpComponent.class)) {
-                        Component jumpComponent = entity.getComponent(JumpComponent.class);
-                        if ((boolean) jumpComponent.getValue()) {
-                            yVel = jump;
-                            jumpComponent.setValue(false);
-                            eventCommandSystem.addEvent(new GameEvent(GameEvent.ENTITY_JUMP));
-                        }
-
-                        count++;
-                    }
+					/*
+					 * if (buttonW && entity.hasComponent(JumpComponent.class)) { Component
+					 * jumpComponent = entity.getComponent(JumpComponent.class); if ((boolean)
+					 * jumpComponent.getValue()) { yVel = jump; jumpComponent.setValue(false);
+					 * eventCommandSystem.addEvent(new GameEvent(GameEvent.ENTITY_JUMP)); }
+					 * 
+					 * count++; }
+					 */
 
                     // update velocity
                     if (entity.hasComponent(VelocityComponent.class)) {

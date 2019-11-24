@@ -1,10 +1,13 @@
 package systems;
 
 import entities.Entity;
+import events.EventData;
 import events.EventNotifier;
 import events.GameEvent;
 import javafx.geometry.Point3D;
 import java.util.*;
+
+import components.VelocityComponent;
 
 /**
  * event command stack is a system to handle and distribute events
@@ -74,12 +77,12 @@ public class EventCommandSystem implements ECSystem {
                 Entity entity = (Entity) event.getData(EventData.CollisionUUID);
                 Point3D velocity = (Point3D) event.getData(EventData.VELOCITY);
 
-                // on land reset jump-ability & velocity
-                if (velocity.getY() > gravity && entity.hasComponent(JumpComponent.class)) {
-                    entity.getComponent(JumpComponent.class).setValue(true);
-                    event.consume();
-                    eventNotifier.fireEvent(new GameEvent(GameEvent.ENTITY_LAND));
-                }
+//                // on land reset jump-ability & velocity
+//                if (velocity.getY() > gravity && entity.hasComponent(JumpComponent.class)) {
+//                    entity.getComponent(JumpComponent.class).setValue(true);
+//                    event.consume();
+//                    eventNotifier.fireEvent(new GameEvent(GameEvent.ENTITY_LAND));
+//                }
 
                 // on land (y>0) or when hitting the roof (y<0) reset velocity
                 // do nor reset when hitting a wall (y=0)

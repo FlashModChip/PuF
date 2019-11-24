@@ -10,9 +10,9 @@ public class SystemManager {
     EntityManager entityManager = EntityManager.getInstance();
 
     // store all systems here
-    RenderSystem render = new RenderSystem();
+    //RenderSystem render = new RenderSystem();
     KeyInputSystem keyInput = new KeyInputSystem();
-    RotationSystem rotation = new RotationSystem();
+    //RotationSystem rotation = new RotationSystem();
     GravitySystem gravity = new GravitySystem();
     MovementSystem movement = new MovementSystem();
     EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
@@ -43,8 +43,8 @@ public class SystemManager {
         }
 
         movement.run(debug_init);
-        rotation.run(debug_init);
-        render.run(debug_init);
+        //rotation.run(debug_init);
+        //render.run(debug_init);
         garbage.run(debug_init);
 
         if(debug_init) System.out.println("SystemManager@init <end>");
@@ -63,7 +63,7 @@ public class SystemManager {
             System.out.println("SystemManager: entities to update: " + entityManager.entitiesUpdateBuffer.size());
         }
 
-        render.run(debug_update);
+        //render.run(debug_update);
         gravity.run(debug_update);
         keyInput.run(debug_update);
         movement.run(debug_update);
