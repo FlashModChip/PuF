@@ -1,40 +1,29 @@
 package game;
 
-import com.iando.client.audio.AudioPlayer;
-import com.iando.client.ecs.components.*;
-import com.iando.client.event.EventNotifier;
-import com.iando.client.event.GameEvent;
-import com.iando.client.level.LevelLoader;
-import com.iando.client.settings.Settings;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.ResourceBundle;
 import entities.Block;
 import entities.Player;
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Point3D;
-import javafx.scene.*;
+import javafx.scene.Camera;
+import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import systems.SystemManager;
-
-import java.net.URL;
-import java.util.HashMap;
-import java.util.ResourceBundle;
 
 /*
  IF YOU ENCOUNTER ARTIFACTS
@@ -48,7 +37,7 @@ import java.util.ResourceBundle;
 public class Game extends Application implements Initializable {
 
     // settings
-    Settings settings = Settings.getInstance();
+    //Settings settings = Settings.getInstance();
 
     // stage, scene and pane
     public Stage stage;
@@ -82,10 +71,10 @@ public class Game extends Application implements Initializable {
     private final DoubleProperty angleY = new SimpleDoubleProperty();
 
     // level-loader, system-manager, event-notifier, audio-player
-    private LevelLoader levelLoader = new LevelLoader();
-    private SystemManager systemManager;
-    private EventNotifier eventNotifier = EventNotifier.getInstance();
-    private AudioPlayer audioPlayer = new AudioPlayer();
+    //private LevelLoader levelLoader = new LevelLoader();
+    //private SystemManager systemManager;
+    //private EventNotifier eventNotifier = EventNotifier.getInstance();
+    //private AudioPlayer audioPlayer = new AudioPlayer();
 
     Block test;
 
@@ -108,21 +97,19 @@ public class Game extends Application implements Initializable {
      */
     @Override
     public void init() {
-        System.out.println("Running...");
-        windowHeight = Settings.getWindowHeight();
-        windowWidth = Settings.getWindowWidth();
-
-        // load level
-        levelLoader.load(1);
-
-        // store level dimensions
-        levelHeight = levelLoader.getMapHeight();
-        levelWidth = levelLoader.getMapWidth();
-        System.out.println("map dimensions: x: "+levelWidth+" y: "+levelHeight);
-
-        // init & run the SystemManager
-        systemManager = new SystemManager();
-        systemManager.init();
+		/*
+		 * System.out.println("Running..."); windowHeight = Settings.getWindowHeight();
+		 * windowWidth = Settings.getWindowWidth();
+		 * 
+		 * // load level levelLoader.load(1);
+		 * 
+		 * // store level dimensions levelHeight = levelLoader.getMapHeight();
+		 * levelWidth = levelLoader.getMapWidth();
+		 * System.out.println("map dimensions: x: "+levelWidth+" y: "+levelHeight);
+		 * 
+		 * // init & run the SystemManager systemManager = new SystemManager();
+		 * systemManager.init();
+		 */
     }
 
     /**
@@ -133,78 +120,56 @@ public class Game extends Application implements Initializable {
      */
     @Override
     public void start(Stage stage) {
-        // create a master pane
-        StackPane masterPane = new StackPane();
-        scene = new Scene(masterPane, windowWidth, windowHeight, true);
-        stage.setTitle(Settings.getTitle());
-        stage.setResizable(false);
-
-        // create separate sub-scenes for bg, game & gui overlay
-
-        // bg-scene
-        SubScene bgScene = new SubScene(createBackgroundContent(), windowWidth, windowHeight);
-
-        // game-scene
-        SubScene gameScene = new SubScene(createGameContent(), windowWidth, windowHeight, true, SceneAntialiasing.BALANCED);
-
-        // attach camera to scene
-        gameScene.setCamera(camera);
-
-        // gui-scene
-        SubScene guiScene = new SubScene(createGUIContent(), windowWidth, windowHeight);
-
-        // add content
-        masterPane.getChildren().addAll(bgScene, gameScene, guiScene);
-
-        // add mouse-control to camera
-        initMouseControl();
-
-        // capture user input into buffer
-        scene.setOnKeyPressed(event-> keyInput.put(event.getCode(), true));
-        scene.setOnKeyReleased(event -> keyInput.put(event.getCode(), false));
-
-        // game loop
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-        timer.start();
-
-        // set scene and show
-        stage.setScene(scene);
-        stage.show();
-
-        // register audio-player as event-handler
-        eventNotifier.addEventhandler(GameEvent.ANY, audioPlayer);
-
-        // test ECS: add, modify, delete entity during runtime
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> {
-                    player.addComponent(new LightComponent(Color.BLUE));
-                    player.addComponent(new ColliderComponent(10,50,10));
-                }),
-                new KeyFrame(Duration.seconds(2), e -> {
-                    test = new Block(200, 500, -200);
-                }),
-                new KeyFrame(Duration.seconds(3), e -> {
-                    test.addComponent(new LightComponent(Color.RED));
-                }),
-                new KeyFrame(Duration.seconds(5), e -> {
-//                    test.removeComponent(test.getComponent(ShapeComponent.class));
-                }),
-                new KeyFrame(Duration.seconds(6), e -> {
-                    test.getComponent(PositionComponent.class).setValue(new Point3D(200,500,0));
-//                    test.removeComponent(test.getComponent(ColliderComponent.class));
-                    test.addComponent(new VelocityComponent());
-                    test.addComponent(new GravityComponent());
-                }),
-                new KeyFrame(Duration.seconds(10), e -> {
-                    test.delete();
-                })
-        );
-        timeline.play();
+		/*
+		 * // create a master pane StackPane masterPane = new StackPane(); scene = new
+		 * Scene(masterPane, windowWidth, windowHeight, true);
+		 * stage.setTitle(Settings.getTitle()); stage.setResizable(false);
+		 * 
+		 * // create separate sub-scenes for bg, game & gui overlay
+		 * 
+		 * // bg-scene SubScene bgScene = new SubScene(createBackgroundContent(),
+		 * windowWidth, windowHeight);
+		 * 
+		 * // game-scene SubScene gameScene = new SubScene(createGameContent(),
+		 * windowWidth, windowHeight, true, SceneAntialiasing.BALANCED);
+		 * 
+		 * // attach camera to scene gameScene.setCamera(camera);
+		 * 
+		 * // gui-scene SubScene guiScene = new SubScene(createGUIContent(),
+		 * windowWidth, windowHeight);
+		 * 
+		 * // add content masterPane.getChildren().addAll(bgScene, gameScene, guiScene);
+		 * 
+		 * // add mouse-control to camera initMouseControl();
+		 * 
+		 * // capture user input into buffer scene.setOnKeyPressed(event->
+		 * keyInput.put(event.getCode(), true)); scene.setOnKeyReleased(event ->
+		 * keyInput.put(event.getCode(), false));
+		 * 
+		 * // game loop AnimationTimer timer = new AnimationTimer() {
+		 * 
+		 * @Override public void handle(long now) { update(); } }; timer.start();
+		 * 
+		 * // set scene and show stage.setScene(scene); stage.show();
+		 * 
+		 * // register audio-player as event-handler
+		 * eventNotifier.addEventhandler(GameEvent.ANY, audioPlayer);
+		 * 
+		 * // test ECS: add, modify, delete entity during runtime Timeline timeline =
+		 * new Timeline( new KeyFrame(Duration.seconds(1), e -> {
+		 * player.addComponent(new LightComponent(Color.BLUE)); player.addComponent(new
+		 * ColliderComponent(10,50,10)); }), new KeyFrame(Duration.seconds(2), e -> {
+		 * test = new Block(200, 500, -200); }), new KeyFrame(Duration.seconds(3), e ->
+		 * { test.addComponent(new LightComponent(Color.RED)); }), new
+		 * KeyFrame(Duration.seconds(5), e -> { //
+		 * test.removeComponent(test.getComponent(ShapeComponent.class)); }), new
+		 * KeyFrame(Duration.seconds(6), e -> {
+		 * test.getComponent(PositionComponent.class).setValue(new Point3D(200,500,0));
+		 * // test.removeComponent(test.getComponent(ColliderComponent.class));
+		 * test.addComponent(new VelocityComponent()); test.addComponent(new
+		 * GravityComponent()); }), new KeyFrame(Duration.seconds(10), e -> {
+		 * test.delete(); }) ); timeline.play();
+		 */
     }
 
     /**
@@ -267,28 +232,21 @@ public class Game extends Application implements Initializable {
      * main update tick
      */
     private void update() {
-        // run the SystemManager
-        systemManager.update();
-
-        // move camera to player position
-        Point3D playerPosition = (Point3D) player.getComponent(PositionComponent.class).getValue();
-        cameraPivot.setTranslateX(playerPosition.getX());
-        cameraPivot.setTranslateY(playerPosition.getY());
-        cameraPivot.setTranslateZ(playerPosition.getZ());
-
-        // reset camera
-        if(isPressed(KeyCode.R)){
-            camera.rotateProperty().set(0);
-            angleX.set(0);
-            angleY.set(0);
-        }
-        // rotate camera (z-axis)
-        if(isPressed(KeyCode.Q)){
-            camera.rotateProperty().set(camera.getRotate() - 0.1);
-        }
-        if(isPressed(KeyCode.E)){
-            camera.rotateProperty().set(camera.getRotate() + 0.1);
-        }
+		/*
+		 * // run the SystemManager systemManager.update();
+		 * 
+		 * // move camera to player position Point3D playerPosition = (Point3D)
+		 * player.getComponent(PositionComponent.class).getValue();
+		 * cameraPivot.setTranslateX(playerPosition.getX());
+		 * cameraPivot.setTranslateY(playerPosition.getY());
+		 * cameraPivot.setTranslateZ(playerPosition.getZ());
+		 * 
+		 * // reset camera if(isPressed(KeyCode.R)){ camera.rotateProperty().set(0);
+		 * angleX.set(0); angleY.set(0); } // rotate camera (z-axis)
+		 * if(isPressed(KeyCode.Q)){ camera.rotateProperty().set(camera.getRotate() -
+		 * 0.1); } if(isPressed(KeyCode.E)){
+		 * camera.rotateProperty().set(camera.getRotate() + 0.1); }
+		 */
     }
 
     /**
@@ -351,13 +309,13 @@ public class Game extends Application implements Initializable {
      * @param stage
      *      stage
      */
-    public void inject(Settings settings, Stage stage) {
-        this.settings = settings;
-        this.stage = stage;
-
-        this.windowHeight = Settings.getWindowHeight();
-        this.windowWidth = Settings.getWindowWidth();
-    }
+	/*
+	 * public void inject(Settings settings, Stage stage) { this.settings =
+	 * settings; this.stage = stage;
+	 * 
+	 * this.windowHeight = Settings.getWindowHeight(); this.windowWidth =
+	 * Settings.getWindowWidth(); }
+	 */
 
     /**
      * implementation of initializable

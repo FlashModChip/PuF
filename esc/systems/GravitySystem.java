@@ -1,8 +1,5 @@
 package systems;
 
-import com.iando.client.ecs.components.*;
-import com.iando.client.settings.Settings;
-
 import entities.Entity;
 import entities.EntityManager;
 import javafx.geometry.Point3D;
@@ -17,7 +14,14 @@ import java.util.UUID;
  * affected components: gravity, velocity
  */
 public class GravitySystem implements ECSystem {
-    // entity-manager
+
+	@Override
+	public void run(boolean debug) {
+		// TODO Auto-generated method stub
+		
+	}
+	/**
+	// entity-manager
     private EntityManager entityManager = EntityManager.getInstance();
 
     // settings
@@ -64,4 +68,5 @@ public class GravitySystem implements ECSystem {
             System.out.println("GravitySystem <end>");
         }
     }
+    */
 }

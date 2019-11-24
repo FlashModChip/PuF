@@ -1,15 +1,15 @@
 package systems;
 
-import com.iando.client.ecs.components.Component;
-import com.iando.client.ecs.entities.State;
-
 import entities.Entity;
 import entities.EntityManager;
+import entities.State;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import components.Component;
 
 /**
  * garbage collector has different tasks:

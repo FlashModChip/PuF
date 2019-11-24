@@ -1,10 +1,5 @@
 package systems;
 
-import com.iando.client.ecs.components.*;
-import com.iando.client.event.GameEvent;
-import com.iando.client.game.Game;
-import com.iando.client.settings.Settings;
-
 import entities.Entity;
 import entities.EntityManager;
 import javafx.geometry.Point3D;

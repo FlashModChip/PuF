@@ -1,14 +1,12 @@
 package systems;
 
-import com.iando.client.ecs.components.*;
-import com.iando.client.ecs.entities.State;
-import com.iando.client.event.EventData;
-import com.iando.client.event.GameEvent;
-import com.iando.client.game.Game;
-import com.iando.client.settings.Settings;
-
 import entities.Entity;
 import entities.EntityManager;
+import entities.State;
+import events.EventData;
+import events.GameEvent;
+import game.Game;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -18,6 +16,12 @@ import javafx.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import components.ColliderComponent;
+import components.Component;
+import components.PositionComponent;
+import components.ShapeComponent;
+import components.VelocityComponent;
 
 /**
  * performs all movements on entities
@@ -40,8 +44,12 @@ public class MovementSystem implements ECSystem {
     private int levelWidth = Game.levelWidth;
 
     // debug
-    private boolean debugDummy = Settings.getDebug("MovementSystem@dummy");
-    private boolean debugStepSize = Settings.getDebug("MovementSystem@stepsize");
+	
+	  //private boolean debugDummy = Settings.getDebug("MovementSystem@dummy");
+	  //private boolean debugStepSize = Settings.getDebug("MovementSystem@stepsize");
+    
+    private boolean debugDummy = true;
+	
     private boolean debugBuffer = false;
 
     // hashmap colliders
@@ -57,18 +65,18 @@ public class MovementSystem implements ECSystem {
     // we beam the collider to this place during collision detection to prevent self-collision
     // axis origin is where map creation start, it should be empty
     // if the entity is to big consider using negative values or in a 2D game offsetting on z-axis
-    private Point3D safeSpot = Settings.getSafeSpot();
+    //private Point3D safeSpot = Settings.getSafeSpot();
 
     // fallback dummy size
     // is used when entity has no shape and no collider
-    private Box fallBackSize = Settings.getFallBackSize();
+    //private Box fallBackSize = Settings.getFallBackSize();
 
     // stepsize defines the max vector length of velocity
     // it should not be greater than the smallest entity on the map
     // otherwise collision detection could fail and the moving entity would magically jumping over it
     // decreasing this value will decrease performance as well
     // because we have to traverse all entities more often during collision detection
-    private int stepsize = Settings.getStepsize();
+    private int stepsize = 12;
 
     /**
      * constructor
@@ -106,7 +114,7 @@ public class MovementSystem implements ECSystem {
 
                 // get position component & data
                 PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-                Point3D position = positionComponent.getValue();
+                Point2D position = positionComponent.getValue();
                 State positionComponentState = positionComponent.getState();
                 if (debugBuffer) System.out.println("position state: "+positionComponentState);
 
@@ -117,7 +125,8 @@ public class MovementSystem implements ECSystem {
                     State componentState = component.getState();
                     if (debugBuffer) System.out.println("component state: "+componentState);
                     if (positionComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-                        component.translate(position);
+                    	 component.translateX(position.getX());
+                         component.translateY(position.getY());
                     }
                 }
 
@@ -128,21 +137,21 @@ public class MovementSystem implements ECSystem {
                     State componentState = component.getState();
                     if (debugBuffer) System.out.println("component state: "+componentState);
                     if (positionComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-                        component.translate(position);
+                        component.translateX(position.getX());
+                        component.translateY(position.getY());
                     }
                 }
 
-                // update light
-                if (entity.hasComponent(LightComponent.class)) {
-                    count++;
-                    LightComponent component = (LightComponent) entity.getComponent(LightComponent.class);
-                    State componentState = component.getState();
-                    if (debugBuffer) System.out.println("component state: "+componentState);
-                    if (positionComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-                        component.translate(position);
-                    }
-                    component.setState(State.STABLE);
-                }
+				/*
+				 * // update light if (entity.hasComponent(LightComponent.class)) { count++;
+				 * LightComponent component = (LightComponent)
+				 * entity.getComponent(LightComponent.class); State componentState =
+				 * component.getState(); if (debugBuffer)
+				 * System.out.println("component state: "+componentState); if
+				 * (positionComponentState == State.UPDATE || component.getState() ==
+				 * State.UPDATE) { component.translate(position); }
+				 * component.setState(State.STABLE); }
+				 */
             }
         }
 
@@ -171,9 +180,9 @@ public class MovementSystem implements ECSystem {
                 if (component.isEnabled() && entity.hasComponent(PositionComponent.class)) {
 
                     // get velocity & position
-                    Point3D velocity = (Point3D) component.getValue();
+                    Point2D velocity = (Point2D) component.getValue();
                     PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
-                    Point3D position = positionComponent.getValue();
+                    Point2D position = positionComponent.getValue();
 
                     // check if entity needs an update (velocity is != 0)
                     if (!velocity.equals(nullVector)) {
@@ -193,7 +202,7 @@ public class MovementSystem implements ECSystem {
                         velocity = collisionDetection(entity, position, velocity);
 
                         // update position (add vector to current position)
-                        position = new Point3D(position.getX() + velocity.getX(), position.getY() + velocity.getY(), position.getZ() + velocity.getZ());
+                        position = new Point2D(position.getX() + velocity.getX(), position.getY() + velocity.getY());
 
                         // check if we have left the map and in case throw an event
                         if (position.getY() < 0 || position.getY() > levelHeight ||
@@ -247,7 +256,7 @@ public class MovementSystem implements ECSystem {
      * @return
      *      updated velocity vector
      */
-    private Point3D collisionDetection(Entity entity, Point3D position, Point3D velocity) {
+    private Point2D collisionDetection(Entity entity, Point2D position, Point2D velocity) {
 
 
         // === PART 4 - ROUGH ESTIMATION ===
@@ -271,7 +280,7 @@ public class MovementSystem implements ECSystem {
         }
         // if the entity has not a shape (e.g. it's a light), take the fallback size
         else {
-            reference = fallBackSize;
+            //reference = fallBackSize;
         }
 
         dummyBox.setHeight(reference.getHeight());

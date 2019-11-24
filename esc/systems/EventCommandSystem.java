@@ -1,6 +1,8 @@
 package systems;
 
 import entities.Entity;
+import events.EventNotifier;
+import events.GameEvent;
 import javafx.geometry.Point3D;
 import java.util.*;
 
@@ -39,7 +41,8 @@ public class EventCommandSystem implements ECSystem {
     private List<GameEvent> eventStack = new ArrayList<>();
 
     // gravity
-    private double gravity = Settings.getGravity();
+    //private double gravity = Settings.getGravity();
+    private double gravity = 10;
 
     /**
      * events will be pushed in by other systems

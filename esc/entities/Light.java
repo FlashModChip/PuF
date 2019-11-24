@@ -1,21 +1,19 @@
 package entities;
 
-import com.iando.client.ecs.components.*;
-import com.iando.client.settings.Settings;
+
+import components.PositionComponent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
+import settings.Settings;
 
 /**
  * light entity
  */
 public class Light extends Entity {
-    private Color color;
-
     // settings
     Settings settings = Settings.getInstance();
 
     // debug
-    private boolean debug = settings.getDebug("Light@color");
+    private boolean debug = Settings.getDebug("Light@color");
 
     public Light(double x, double y, double z) {
         super();
@@ -26,16 +24,17 @@ public class Light extends Entity {
         int r = (int) (Math.random()*randomness) + groundLightness;
         int g = (int) (Math.random()*randomness) + groundLightness;
         int b = (int) (Math.random()*randomness) + groundLightness;
-        color = Color.rgb(r, g,  b);
+        Color.rgb(r, g,  b);
         if(debug) System.out.println("light color: "+r+","+g+","+b);
 
-        addComponent(new PositionComponent(x, y, z));
-        addComponent(new LightComponent(color));
-        addComponent(new RenderComponent());
+        addComponent(new PositionComponent(x, y));
+        //addComponent(new LightComponent(color));
+        //addComponent(new RenderComponent());
     }
 
-    @Override
-    public void setMaterial(PhongMaterial material) {
-
-    }
-}
+/*
+ * public void setMaterial(PhongMaterial material) {
+ * 
+ * }
+ */
+ }

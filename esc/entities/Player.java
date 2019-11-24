@@ -1,14 +1,9 @@
 package entities;
 
-import com.iando.client.ecs.components.*;
-
 import components.KeyInputComponent;
-import components.NameComponent;
 import components.PositionComponent;
 import components.ShapeComponent;
 import components.VelocityComponent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
 
 /**
  * player entity

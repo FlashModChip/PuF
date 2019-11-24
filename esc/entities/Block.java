@@ -1,10 +1,10 @@
 package entities;
 
-import com.iando.client.ecs.components.*;
-import com.iando.client.settings.Settings;
+import components.*;
+import components.ShapeComponent;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
+import settings.Settings;
 
 /**
  * block entity
@@ -35,19 +35,19 @@ public class Block extends Entity {
         double randomDepth = Math.random() * 50;
         depth = (int) (depth+randomDepth);
 
-        addComponent(new PositionComponent(x, y, z));
-        addComponent(new RotationComponent(rotation));
-        addComponent(new ShapeComponent(width, height, depth, color));
-        addComponent(new ColliderComponent(width, height, depth));
-        addComponent(new RenderComponent());
+        addComponent(new PositionComponent(x, y));
+        //addComponent(new RotationComponent(rotation));
+        addComponent(new ShapeComponent(width, height));
+        addComponent(new ColliderComponent(width, height));
+        //addComponent(new RenderComponent());
     }
 
     /**
      * add material
      * @param material
      */
-    @Override
-    public void setMaterial(PhongMaterial material) {
-        ((ShapeComponent) this.getComponent(ShapeComponent.class)).setMaterial(material);
-    }
+	/*
+	 * @Override public void setMaterial(PhongMaterial material) { ((ShapeComponent)
+	 * this.getComponent(ShapeComponent.class)).setMaterial(material); }
+	 */
 }
