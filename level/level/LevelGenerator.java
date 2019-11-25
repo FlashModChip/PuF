@@ -28,6 +28,8 @@ public class LevelGenerator
     //Max items per level
     private int itemThreshold;
     
+    private String path = "./level/roomTemplates/";
+    
 
     /// <summary>
     /// Default constructor
@@ -200,7 +202,9 @@ public class LevelGenerator
         }   
 
         //Debug
-        print2D(roomGrid, roomList);
+        //print2D(roomGrid, roomList);
+        
+        LevelPicUtil.getLevelDatafromPNG(path, 20, 10);
         
         return new LevelData(roomList,roomGrid,lvlnum);
     }
