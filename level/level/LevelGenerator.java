@@ -36,7 +36,7 @@ public class LevelGenerator
     /// </summary>
     public LevelGenerator()
     {
-        roomNumber = 10;
+        roomNumber = 5;
         roomTileSizeX = 20;
         roomTileSizeY = 10;
         enemyNumber = 5;
@@ -198,15 +198,23 @@ public class LevelGenerator
           generateRoomsFromTemplate(roomList);
         }
         {
-          generateRooms(roomList);
+          //generateRooms(roomList);
+          generateRoomsFromTemplate(roomList);
         }   
 
-        //Debug
-        //print2D(roomGrid, roomList);
+        //cut off empty columns /rows
+        roomGrid = resizeArray(roomGrid);        
         
-        LevelPicUtil.getLevelDatafromPNG(path, 20, 10);
+        //generate lvl grid (maybe easier for drawing level?
+        int[][] tmp= roomGridToArray(roomGrid,roomList);
+               
+        //debug
+        print2D(roomGrid, roomList, tmp); 
+        //System.out.print(getRoomDataSingleTile(18,8,roomGrid,roomList));
         
-        return new LevelData(roomList,roomGrid,lvlnum);
+        //LevelPicUtil.getLevelDatafromPNG(path, 20, 10);
+        
+        return new LevelData(roomList,roomGrid,tmp ,lvlnum);
     }
 
     
@@ -220,8 +228,7 @@ public class LevelGenerator
         
         for(Map.Entry<UUID, RoomData> entry : roomList.entrySet()) 
         {
-        	 GenerateSingleRoom(entry.getValue());
-        	 
+        	 GenerateSingleRoom(entry.getValue());        	 
         }  
         
         return null;
@@ -238,7 +245,7 @@ public class LevelGenerator
         
         for(Map.Entry<UUID, RoomData> entry : roomList.entrySet()) 
         {
-        	 GenerateSingleRoom(entry.getValue());        	 
+        	GenerateSingleRoomByTemplate(entry.getValue());        	 
         }  
         
         return null;
@@ -272,10 +279,10 @@ public class LevelGenerator
                     if (isDoorPosition(i, j, roomdata))
                     {
                         //check adjacent rooms
-                        if ((room.getadjacentRoom(Direction.WEST) != new UUID(0,0)) && (i == 0)) { roomdata[i][j] = TileCode.door; }
-                        else if ((room.getadjacentRoom(Direction.EAST) != new UUID(0,0)) && (i == roomdata.length - 1)) { roomdata[i][j] =TileCode. door; }
-                        else if ((room.getadjacentRoom(Direction.NORTH) != new UUID(0,0)) && (j == 0)) { roomdata[i][j] = TileCode.door; }
-                        else if ((room.getadjacentRoom(Direction.SOUTH) != new UUID(0,0)) && (j == roomdata[0].length - 1)) { roomdata[i][j] = TileCode.door; }
+                        if ((!room.getadjacentRoom(Direction.WEST).equals(new UUID(0,0))) && (i == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((!room.getadjacentRoom(Direction.EAST).equals(new UUID(0,0))) && (i == roomdata.length - 1)) { roomdata[i][j] =TileCode. door; }
+                        else if ((!room.getadjacentRoom(Direction.NORTH).equals(new UUID(0,0))) && (j == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((!room.getadjacentRoom(Direction.SOUTH).equals(new UUID(0,0)))&& (j == roomdata[0].length - 1)) { roomdata[i][j] = TileCode.door; }
                         else { roomdata[i][j] = TileCode.wall; }
                     }
                     else
@@ -309,6 +316,7 @@ public class LevelGenerator
         return room;
     }
     
+    
     /**
      * Generates a single room by template using LevelPicUtil
      * @param room
@@ -316,54 +324,30 @@ public class LevelGenerator
      */
     private RoomData GenerateSingleRoomByTemplate(RoomData room)
     {
-    	int[][] roomdata = new int[roomTileSizeX][roomTileSizeY];
-
-        Random ran = new Random();                   
-
-        for (int i = 0; i < roomdata.length; i++)
+    	int[][] roomdata = LevelPicUtil.getLevelDatafromPNG(path, roomTileSizeX, roomTileSizeY);
+    	                       
+    	//assigning door (templates dont know where the doors are!)
+    	for (int i = 0; i < roomdata.length; i++)
         {
             for (int j = 0; j < roomdata[0].length; j++)
             {
-//                //walls
-//                if (isWall(i, j, roomdata))
-//                {
-//                    //doors halfway in walls
-//                    if (isDoorPosition(i, j, roomdata))
-//                    {
-//                        //check adjacent rooms
-//                        if ((room.getadjacentRoom(Direction.WEST) != new UUID(0,0)) && (i == 0)) { roomdata[i][j] = door; }
-//                        else if ((room.getadjacentRoom(Direction.EAST) != new UUID(0,0)) && (i == roomdata.length - 1)) { roomdata[i][j] = door; }
-//                        else if ((room.getadjacentRoom(Direction.NORTH) != new UUID(0,0)) && (j == 0)) { roomdata[i][j] = door; }
-//                        else if ((room.getadjacentRoom(Direction.SOUTH) != new UUID(0,0)) && (j == roomdata[0].length - 1)) { roomdata[i][j] = door; }
-//                        else { roomdata[i][j] = wall; }
-//                    }
-//                    else
-//                    {
-//                    	roomdata[i][j] = wall;
-//                    }
-//                }
-//                // ground
-//                else
-//                {
-//                    // highly complex enemy random distribution algorithm
-//                    if ((ran.nextInt(roomdata.length + enemycount) == 0) && (enemycount > 0))
-//                    {
-//                    	roomdata[i][j] = enemy;
-//                        enemycount--;                        
-//                    }
-//                    // advanced random item algorithm
-//                    else if ((ran.nextInt(roomdata.length + enemycount)== 0) && (itemcount > 0))
-//                    {
-//                    	roomdata[i][j] = item;
-//                        itemcount--;                      
-//                    }
-//                    else
-//                    {
-//                    	roomdata[i][j] = ground;
-//                    }
-//                }
+                //walls
+                if (isWall(i, j, roomdata))
+                {
+                    //doors halfway in walls
+                    if (isDoorPosition(i, j, roomdata))
+                    {
+                        //check adjacent rooms
+                        if ((!room.getadjacentRoom(Direction.WEST).equals(new UUID(0,0))) && (i == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((!room.getadjacentRoom(Direction.EAST).equals(new UUID(0,0))) && (i == roomdata.length - 1)) { roomdata[i][j] =TileCode. door; }
+                        else if ((!room.getadjacentRoom(Direction.NORTH).equals(new UUID(0,0))) && (j == 0)) { roomdata[i][j] = TileCode.door; }
+                        else if ((!room.getadjacentRoom(Direction.SOUTH).equals(new UUID(0,0)))&& (j == roomdata[0].length - 1)) { roomdata[i][j] = TileCode.door; }
+                        else { roomdata[i][j] = TileCode.wall; }
+                    }                   
+                }              
             }
         }
+    	
         room.setRoomData(roomdata);
         return room;
     }
@@ -428,13 +412,117 @@ public class LevelGenerator
         }
     }
     
+  //Resizes a 2d array (deletes empty rows and columns)
+    private static UUID[][] resizeArray(UUID[][] source) {
+
+        //checking bounds
+        int xStart, xEnd, yStart, yEnd;
+        xStart = yStart = source.length;
+        xEnd = yEnd = 0;
+
+        for  (int i = 0;i<source.length;i++ )
+        {
+            for  (int j = 0;j < source[0].length; j++ )
+            {
+                if(source[i][j] != null)
+                {
+                    if(xStart > i) {xStart =i;}               
+                    if(yStart > j) {yStart =j;}
+                    if(xEnd < i) {xEnd =i;}
+                    if(yEnd < j) {yEnd =j;}
+                }
+            }
+        }
+        //create new smaller array
+        int height = xEnd-xStart;
+        int width = yEnd-yStart;
+
+        UUID[][] dest = new UUID[height+1][width+1];
+
+        for (int i= 0; i <= height ; i++) 
+        {
+            for(int j = 0; j <= width; j++)
+            {
+                dest[i][j] = source[i+xStart][j+yStart];                
+            }
+        }
+
+        return dest;
+    }
+   
+    
+    /**
+     * converts a roomlist and a roomgrid in an 2d array
+     * @param grid
+     * @param roomlist
+     * @return
+     */
+    private int[][] roomGridToArray(UUID[][] grid, HashMap<UUID, RoomData> roomlist) {
+
+        //int tilesizeX = 20;
+        //int tilesizeY = 10;
+
+        //create new array(individual roomsizes*rooms)
+        int[][]result = new int[grid[0].length*roomTileSizeX][grid.length*roomTileSizeY];
+        
+                
+        for  (int i = 0;i<grid.length;i++ )
+        {
+            for  (int j = 0;j < grid[0].length; j++ )
+            {
+                //Fill data of a single room in giant grid
+                if(grid[i][j] != null && roomlist.containsKey(grid[i][j]))
+                {
+                RoomData tempRoom = roomlist.get(grid[i][j]);
+
+                    for  (int k = 0;k<tempRoom.getRoomData().length;k++ )
+                    {
+                        for  (int l = 0;l < tempRoom.getRoomData()[0].length; l++ )
+                        {
+                            result[(j*roomTileSizeX)+k][(i*roomTileSizeY)+l] = tempRoom.getRoomData()[k][l];                            
+                        }
+                    }
+                }
+            }
+        }       
+
+        return result;
+    }
+
+  
+    /**
+     * mapping coordinates of roomGridToArray - array to roomlist + grid containers
+     * @param x
+     * @param y
+     * @param grid
+     * @param roomlist
+     * @return
+     */
+    private int getRoomDataSingleTile(int x,int y, UUID[][] grid, HashMap<UUID,RoomData> roomlist) {
+
+        int roomCoordX = (int)x/roomTileSizeX;
+        int roomCoordY = (int)y/roomTileSizeY;
+
+        return roomlist.get(grid[roomCoordX][roomCoordY]).getRoomData()[x-(roomCoordX*roomTileSizeX)][y-(roomCoordY*roomTileSizeY)];
+        
+    }
+   
+    private void setRoomDataSingleTile(int x,int y,int val, UUID[][] grid, HashMap<UUID,RoomData> roomlist) {
+
+        int roomCoordX = (int)x/roomTileSizeX;
+        int roomCoordY = (int)y/roomTileSizeY;
+        
+        roomlist.get(grid[roomCoordX][roomCoordY]).getRoomData()[x-(roomCoordX*roomTileSizeX)][y-(roomCoordY*roomTileSizeY)] = val;
+        
+    }
+    
    
     /**
      * Prints debug info to console
      * @param roomGrid
      * @param roomlist
      */
-    public static void print2D(UUID[][] roomGrid, HashMap<UUID, RoomData> roomlist) 
+    public static void print2D(UUID[][] roomGrid, HashMap<UUID, RoomData> roomlist, int[][] largearr) 
     { 
         // Loop through all rows 
         for (int i = 0; i < roomGrid.length; i++) 
@@ -479,6 +567,18 @@ public class LevelGenerator
             }
         	System.out.println("");    
         } 
+        
+        // Loop through all rows 
+        for (int i = 0; i < largearr[0].length; i++) 
+        {  
+            // Loop through all elements of current row 
+            for (int j = 0; j < largearr.length; j++) 
+            {
+            	System.out.print((largearr[j][i] != 0 ? largearr[j][i]:"000" )+" "); 
+            
+            }
+            System.out.println("");
+        }
         
     } 
 }
