@@ -44,6 +44,15 @@ public class LevelGenerator
         itemNumber = 5;
         itemThreshold = 1;
     }
+
+    // getter size of the rooms
+    public int getRoomTileSizeX() {
+        return roomTileSizeX;
+    }
+
+    public int getRoomTileSizeY() {
+        return roomTileSizeY;
+    }
    
     public LevelGenerator(int roomnum, int roomtilex, int roomtiley, int enemynum, int enemythresh, int itemnum, int itemtresh)
     {
