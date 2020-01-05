@@ -11,6 +11,7 @@ public class ShapeComponent extends Component<Rectangle> {
 
     public ShapeComponent(int width, int height) {
     	Rectangle shape = new Rectangle(width, height);
+
 		/*
 		 * PhongMaterial material = new PhongMaterial();
 		 * material.setDiffuseColor(color); shape.setMaterial(material);

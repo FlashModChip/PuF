@@ -23,7 +23,7 @@ public class Settings {
     // generic blocksize
     private static final int BLOCKSIZE = 50;
     // player movement-speed
-    private static final int SPEED = 5;
+    private static final int SPEED = 2;
 
     // player jump-velocity
    // private static final int JUMP = -15; Brauchen wir nicht ??
@@ -111,7 +111,9 @@ public class Settings {
         return fallBackSize;
     }
 
+
     public static int getStepsize() {
         return stepsize;
     }
+
 }

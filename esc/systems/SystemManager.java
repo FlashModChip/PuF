@@ -1,6 +1,7 @@
 package systems;
 
 import entities.EntityManager;
+import settings.Settings;
 
 /**
  * stores and runs all systems
@@ -10,7 +11,7 @@ public class SystemManager {
     EntityManager entityManager = EntityManager.getInstance();
 
     // store all systems here
-    //RenderSystem render = new RenderSystem();
+    RenderSystem render = new RenderSystem();
     KeyInputSystem keyInput = new KeyInputSystem();
     //RotationSystem rotation = new RotationSystem();
     GravitySystem gravity = new GravitySystem();
@@ -19,7 +20,7 @@ public class SystemManager {
     GarbageCollectorSystem garbage = new GarbageCollectorSystem();
 
     // settings
-    //Settings settings = Settings.getInstance();
+    Settings settings = Settings.getInstance();
 
     // debug
     //private boolean debug_init = settings.getDebug("SystemManager@init");
@@ -44,7 +45,7 @@ public class SystemManager {
 
         movement.run(debug_init);
         //rotation.run(debug_init);
-        //render.run(debug_init);
+        render.run(debug_init);
         garbage.run(debug_init);
 
         if(debug_init) System.out.println("SystemManager@init <end>");
@@ -55,7 +56,7 @@ public class SystemManager {
      */
     public void update() {
         if(debug_update) {
-            System.err.println("SystemManager@init <start>");
+            System.err.println("SystemManager@update <start>");
             System.out.println("entities: " + entityManager.entities.size());
         }
 
@@ -70,6 +71,6 @@ public class SystemManager {
         garbage.run(debug_update);
         eventCommandSystem.run(debug_update);
 
-        if(debug_update) System.out.println("SystemManager@init <end>");
+        if(debug_update) System.out.println("SystemManager@update <end>");
     }
 }

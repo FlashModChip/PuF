@@ -1,5 +1,6 @@
 package systems;
 
+import application.Main;
 import entities.Entity;
 import entities.EntityManager;
 import game.Game;
@@ -36,7 +37,7 @@ public class KeyInputSystem implements ECSystem {
     private double xVel, yVel;
 
     // key hashmap
-    private HashMap<KeyCode,Boolean> keyInput = Game.keyInput;
+    private HashMap<KeyCode,Boolean> keyInput = Main.keyInput;
 
     @Override
     public void run(boolean debug) {
@@ -53,6 +54,7 @@ public class KeyInputSystem implements ECSystem {
             // default velocity
             xVel = 0;
             yVel = 0;
+            System.err.println(keyInput );
 
             // W-key has special functionality ??????
             //boolean buttonW = false;
@@ -60,18 +62,20 @@ public class KeyInputSystem implements ECSystem {
             // react on buffered user input
             // move player
             if(isPressed(KeyCode.DOWN)){
-                yVel = -movement;
+                yVel = movement;
+                System.out.println("klappt dies hier???");
+
                // buttonW = true; ????
             }
             if (isPressed(KeyCode.UP)){
                 // do nothing
-                yVel = movement;
+                yVel = -movement;
             }
             if(isPressed(KeyCode.RIGHT)){
-                xVel = -movement;
+                xVel = movement;
             }
             if(isPressed(KeyCode.LEFT)){
-                xVel = movement;
+                xVel = -movement;
             }
             if(isPressed(KeyCode.A)){
                 //TODO Angriff gegen Feind
@@ -87,6 +91,10 @@ public class KeyInputSystem implements ECSystem {
             for(Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
                 UUID uuid = entry.getKey();
                 Component component = entry.getValue();
+
+                System.err.println(entry.getValue());
+
+
 
                 // check if component is enabled
                 if (component.isEnabled()) {
@@ -136,6 +144,7 @@ public class KeyInputSystem implements ECSystem {
      *      boolean: is key pressed
      */
     private boolean isPressed(KeyCode key){
+        System.out.println(key + "____"+keyInput);
         return keyInput.getOrDefault(key,false);
     }
 }

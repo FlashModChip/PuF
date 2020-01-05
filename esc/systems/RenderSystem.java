@@ -1,12 +1,19 @@
 package systems;
 
-
+import application.Main;
+import components.Component;
+import components.RenderComponent;
+import components.ShapeComponent;
+import components.Sprite;
 import entities.Entity;
 import entities.EntityManager;
 import entities.State;
 import javafx.scene.PointLight;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Rectangle;
+import systems.ECSystem;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,9 +25,9 @@ import java.util.UUID;
  *
  * affected components: render, shape, light
  */
-/*public class RenderSystem implements ECSystem {
+public class RenderSystem implements ECSystem {
     // root
-    private Pane root = Game.root;
+    private Pane root = Main.root;
 
     @Override
     public void run(boolean debug) {
@@ -48,20 +55,21 @@ import java.util.UUID;
         // new approach
         if (entities == null) {
             if(debug) System.out.println("entities to render: 0");
-       // } else {
+        } else {
 //            if(debug) System.out.println("entities to render: " + entities.size());
 
             // traverse all renderComponents
 //            for(Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
-          //  for(Map.Entry<UUID, Entity> entry : entities.entrySet()) {
-                //UUID uuid = entry.getKey();
+            for(Map.Entry<UUID, Entity> entry : entities.entrySet()) {
+                UUID uuid = entry.getKey();
 //                Component component = entry.getValue();
-               // Entity entity = entry.getValue();
-              // State entityState = entity.getState();
+                Entity entity = entry.getValue();
+                State entityState = entity.getState();
 //                System.out.println("entity state: "+entityState);
 
                 // check if component is enabled
-//             // if (entity.hasComponent(RenderComponent.class)) {
+//                if (entity.isEnabled()) {
+                if (entity.hasComponent(RenderComponent.class)) {
 
 //                    Entity entity = EntityManager.getEntity(uuid);
 
@@ -70,12 +78,12 @@ import java.util.UUID;
 //                    System.out.println("render state: "+renderComponentState);
 
                     // update shape
-                    if (entity.hasComponent(ShapeComponent.class)) {
+                    if (entity.hasComponent(Sprite.class)) {
                         count++;
-                        Component component = entity.getComponent(ShapeComponent.class);
+                        Component component = entity.getComponent(Sprite.class);
                         State componentState = component.getState();
-//                        System.out.println("component state: "+componentState);
-                        Box shape = (Box) component.getValue();
+                       System.out.println("component state: "+componentState);
+                        Rectangle shape = (Rectangle) component.getValue();
                         // remove shape from scene, when either the renderComponent or the shapeComponent is flagged to delete
                         if (entityState == State.DELETE || renderComponentState == State.DELETE || component.getState() == State.DELETE) {
                             root.getChildren().remove(shape);
@@ -83,25 +91,26 @@ import java.util.UUID;
                         // add shape to scene, when either the renderComponent or the shapeComponent is flagged to update
                         else if (renderComponentState == State.UPDATE || component.getState() == State.UPDATE) {
                             root.getChildren().add(shape);
+                            System.out.println(root);
                         }
                     }
 
                     // update light
-                    if (entity.hasComponent(LightComponent.class)) {
-                        count++;
-                        Component component = entity.getComponent(LightComponent.class);
-                        State componentState = component.getState();
+               //     if (entity.hasComponent(LightComponent.class)) {
+               //         count++;
+               //         Component component = entity.getComponent(LightComponent.class);
+               //         State componentState = component.getState();
 //                        System.out.println("component state: "+componentState);
-                        PointLight light = (PointLight) component.getValue();
+               //         PointLight light = (PointLight) component.getValue();
                         // remove light from scene, when either the renderComponent or the lightComponent is flagged to delete
-                        if (entityState == State.DELETE || renderComponentState == State.DELETE || component.getState() == State.DELETE) {
-                            root.getChildren().remove(light);
-                        }
+               //         if (entityState == State.DELETE || renderComponentState == State.DELETE || component.getState() == State.DELETE) {
+              //              root.getChildren().remove(light);
+               //         }
                         // add light to scene, when either the renderComponent or the lightComponent is flagged to update
-                        else if (renderComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-                            root.getChildren().add(light);
-                        }
-                    }
+             //           else if (renderComponentState == State.UPDATE || component.getState() == State.UPDATE) {
+             //               root.getChildren().add(light);
+             //           }
+                    //}
                 }
             }
         }
@@ -110,4 +119,4 @@ import java.util.UUID;
             System.out.println("RenderSystem <end>");
         }
     }
-}*/
+}
