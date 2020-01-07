@@ -1,6 +1,13 @@
 package application;
 
+import components.PositionComponent;
+import components.Sprite;
+import entities.Player;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -8,19 +15,36 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import level.LevelGenerator;
 import level.LevelToUi;
+import settings.Settings;
+import systems.SystemManager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static javafx.scene.transform.Transform.translate;
 
 
 public class Main extends Application {
 
     Stage window;
     Scene startScene, gameScene;
-
+    private SystemManager systemManager;
+    Settings settings = Settings.getInstance();
+    // store key input in a hashmap
+    public static HashMap<KeyCode,Boolean> keyInput = new HashMap<>();
+    //UNSCHÖN
+    public static ArrayList<Bounds> colliderWallMap = new ArrayList<>();
+    public static ArrayList<Bounds> colliderEnemiesMap = new ArrayList<>();
+    public static ArrayList<Bounds> colliderDoorMap = new ArrayList<>();
     int STAGE_WIDTH = 900;
+
 
     // Test 2d intArray
     int[][] testMap = {
@@ -37,7 +61,7 @@ public class Main extends Application {
     };
 
     LevelGenerator lol = new LevelGenerator();
-    LevelToUi map = new LevelToUi(testMap, lol.getRoomTileSizeX(), lol.getRoomTileSizeY(), STAGE_WIDTH / 20);
+   public LevelToUi map = new LevelToUi(testMap, lol.getRoomTileSizeX(), lol.getRoomTileSizeY(), STAGE_WIDTH / 20);
 
 
     //canvas test for drawing map (for better performance?)
@@ -46,9 +70,27 @@ public class Main extends Application {
     Canvas canvas = new Canvas(STAGE_WIDTH, STAGE_WIDTH / 2);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
+    Player player = new Player(300.0,200.0);
+    public static Pane root = new Pane();
+
+    /**
+     * init ressources
+     */
+    @Override
+    public void init() {
+        System.out.println("Running...");
+
+
+        // init & run the SystemManager
+        systemManager = new SystemManager();
+        systemManager.init();
+    }
+
 
     @Override
     public void start(Stage primaryStage) {
+
+
         window = primaryStage;
 
         map.tilesRenderer(gc, image);
@@ -65,11 +107,29 @@ public class Main extends Application {
 
         Pane overlay = new Pane();
         overlay.getChildren().addAll(map.interactiveRectLayer());
+        colliderWallMap = map.boundsWallRectLayer();
+        colliderEnemiesMap = map.boundsEnemiesRectLayer();
+        colliderDoorMap = map.boundsDoorRectLayer();
+        //System.out.println(colliderEnemiesMap);
+
 
         //Layout gameScene
         Group rootGame = new Group();
-        rootGame.getChildren().addAll(canvas, overlay);
+        rootGame.getChildren().addAll(canvas, overlay, root);
         gameScene = new Scene(rootGame, STAGE_WIDTH, 600);
+
+        // capture user input into buffer
+        gameScene.setOnKeyPressed(event-> keyInput.put(event.getCode(), true));
+        gameScene.setOnKeyReleased(event -> keyInput.put(event.getCode(), false));
+
+        // game loop
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        timer.start();
 
         window.setScene(startScene);
         window.setTitle("Test run");
@@ -82,6 +142,35 @@ public class Main extends Application {
 
     }
 
+
+    /**
+     * main update tick
+     */
+    private void update() {
+        // run the SystemManager
+        systemManager.update();
+
+        // move camera to player position
+        Point2D playerPosition = (Point2D) player.getComponent(PositionComponent.class).getValue();
+
+       // ((Sprite) player.getComponent(Sprite.class)).translateX(playerPosition.getX());
+
+
+        // reset camera
+
+    }
+
+    /**
+     * helper function to parse key events
+     *
+     * @param key
+     *      keycode
+     * @return
+     *      boolean: is key pressed
+     */
+    private boolean isPressed(KeyCode key){
+        return keyInput.getOrDefault(key,false);
+    }
 
 //Roman Boer
 

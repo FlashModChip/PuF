@@ -6,7 +6,7 @@ package events;
 public enum EventData {
     CollisionUUID("UUID of collision"),
     ColliderUUID("UUID of collider"),
-    VELOCITY("Point3D");
+    VELOCITY("Point2D");
 
     EventData(String description) {
 

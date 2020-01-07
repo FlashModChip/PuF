@@ -1,5 +1,6 @@
 package settings;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.shape.Box;
 
@@ -22,9 +23,12 @@ public class Settings {
     // generic blocksize
     private static final int BLOCKSIZE = 50;
     // player movement-speed
-    private static final int SPEED = 5;
+    private static final int SPEED = 1;
+
     // player jump-velocity
-    private static final int JUMP = -15;
+   // private static final int JUMP = -15; Brauchen wir nicht ??
+
+
     // gravity strength
     private static final double GRAVITY = 0.5;
     // use textures on blocks
@@ -34,7 +38,7 @@ public class Settings {
 
     // movement system
     // safe spot for self-collision
-    private static Point3D SAFE_SPOT = new Point3D(0, 0, 0);
+    private static Point2D SAFE_SPOT = new Point2D(0, 0);
     // fallback size for dummy box
     private static Box fallBackSize = new Box(5,5,5);
     // set the size of the smallest entity here
@@ -49,7 +53,7 @@ public class Settings {
 
     public static Settings getInstance() {
         DEBUG.put("LevelLoader@entityCreation", false);
-        DEBUG.put("SystemManager@init", true);
+        DEBUG.put("SystemManager@init", false);
         DEBUG.put("SystemManager@update", false);
         DEBUG.put("MovementSystem@dummy", false);
         DEBUG.put("MovementSystem@stepsize", false);
@@ -86,9 +90,10 @@ public class Settings {
         return SPEED;
     }
 
-    public static int getJump() {
-        return JUMP;
-    }
+   // Brauchen wir nicht, springt nicht
+  //  public static int getJump() {
+  //      return JUMP;
+  //  }
 
     public static double getGravity() {
         return GRAVITY;
@@ -98,7 +103,7 @@ public class Settings {
         return PLAY_SOUNDS;
     }
 
-    public static Point3D getSafeSpot() {
+    public static Point2D getSafeSpot() {
         return SAFE_SPOT;
     }
 
@@ -106,7 +111,9 @@ public class Settings {
         return fallBackSize;
     }
 
+
     public static int getStepsize() {
         return stepsize;
     }
+
 }

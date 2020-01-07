@@ -1,21 +1,23 @@
 package entities;
 
-import components.*;
-import javafx.geometry.Point2D;
+import components.KeyInputComponent;
+import components.PositionComponent;
+import components.ShapeComponent;
+import components.VelocityComponent;
 
 /**
  * player entity
  */
-public class Player extends Entity {
+public class Enemy extends Entity {
 
 	
-    public Player() {
+    public Enemy() {
         super();
         init(0,0);
     }
 
    
-    public Player(double x, double y) {
+    public Enemy(double x, double y) {
         super();
         init(x, y);
     }
@@ -28,16 +30,10 @@ public class Player extends Entity {
     private void init(double x, double y) {
         //addComponent(new NameComponent(name));
         addComponent(new PositionComponent(x, y));
-        addComponent(new VelocityComponent());
-        addComponent(new KeyInputComponent());       
-        //addComponent(new ShapeComponent(40, 40));
-        //Testen
-        addComponent(new Sprite("pic/1Stehen", new Point2D(50, 50)));
-        addComponent(new RenderComponent());
-        System.out.println("passiert was");
-        //System.out.println(getAllComponents());
+        addComponent(new VelocityComponent());               
+        addComponent(new ShapeComponent(40, 40));
+        //addComponent(new RenderComponent());
     }
-
 
     /**
      * add material

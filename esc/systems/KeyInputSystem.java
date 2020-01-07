@@ -1,8 +1,10 @@
 package systems;
 
+import application.Main;
 import entities.Entity;
 import entities.EntityManager;
 import game.Game;
+import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.input.KeyCode;
 import settings.Settings;
@@ -27,13 +29,15 @@ public class KeyInputSystem implements ECSystem {
     // event-system
     private EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
 
-    // speed & jump
+    // speed
     private int movement = Settings.getSpeed();
-    private int jump = Settings.getJump();
-    private double xVel, yVel, zVel;
+
+   // private int jump = Settings.getJump(); Brauchen wir nicht, springt nicht ??
+
+    private double xVel, yVel;
 
     // key hashmap
-    private HashMap<KeyCode,Boolean> keyInput = Game.keyInput;
+    private HashMap<KeyCode,Boolean> keyInput = Main.keyInput;
 
     @Override
     public void run(boolean debug) {
@@ -50,32 +54,47 @@ public class KeyInputSystem implements ECSystem {
             // default velocity
             xVel = 0;
             yVel = 0;
-            zVel = 0;
+            System.err.println(keyInput );
 
-            // W-key has special functionality
-            boolean buttonW = false;
+            // W-key has special functionality ??????
+            //boolean buttonW = false;
 
             // react on buffered user input
             // move player
-            if(isPressed(KeyCode.W)){
-//                yVel = -movement;
-                buttonW = true;
+            if(isPressed(KeyCode.DOWN)){
+                yVel = movement;
+               // System.out.println("klappt dies hier???");
+
+               // buttonW = true; ????
             }
-            if (isPressed(KeyCode.S)){
+            if (isPressed(KeyCode.UP)){
                 // do nothing
-//                yVel = movement;
+                yVel = -movement;
             }
-            if(isPressed(KeyCode.A)){
+            if(isPressed(KeyCode.RIGHT)){
+                xVel = movement;
+            }
+            if(isPressed(KeyCode.LEFT)){
                 xVel = -movement;
             }
+            if(isPressed(KeyCode.A)){
+                //TODO Angriff gegen Feind
+            }
             if(isPressed(KeyCode.D)){
-                xVel = movement;
+                //TODO Item einsammeln
+            }
+            if(isPressed(KeyCode.W)){
+                // TODO Item einlösen ??
             }
 
             // traverse all keyInputComponents
             for(Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
                 UUID uuid = entry.getKey();
                 Component component = entry.getValue();
+
+                System.err.println(entry.getValue());
+
+
 
                 // check if component is enabled
                 if (component.isEnabled()) {
@@ -96,12 +115,12 @@ public class KeyInputSystem implements ECSystem {
                     if (entity.hasComponent(VelocityComponent.class)) {
                         Component velocityComponent = entity.getComponent(VelocityComponent.class);
                         // restore current y-velocity
-                        Point3D velocity = (Point3D) velocityComponent.getValue();
+                        Point2D velocity = (Point2D) velocityComponent.getValue();
                         if (yVel == 0) {
-                            yVel = velocity.getY();
+                           // yVel = velocity.getY();
                         }
                         // set velocity
-                        velocityComponent.setValue(new Point3D(xVel, yVel, zVel));
+                        velocityComponent.setValue(new Point2D(xVel, yVel));
 
                         count++;
                     }
@@ -125,6 +144,7 @@ public class KeyInputSystem implements ECSystem {
      *      boolean: is key pressed
      */
     private boolean isPressed(KeyCode key){
+      //  System.out.println(key + "____"+keyInput);
         return keyInput.getOrDefault(key,false);
     }
 }

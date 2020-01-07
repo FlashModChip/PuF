@@ -8,14 +8,20 @@ import java.util.UUID;
 /// </summary>
 public class LevelData {
 	
-	 HashMap<UUID, RoomData> roomList;
-     UUID[][] roomGrid;
+	//List of individual room data
+	 private HashMap<UUID, RoomData> roomList;
+	 //2 dimensional array of rooms (via ID reference)
+	 private UUID[][] roomGrid;
+     //2 dimensional array of level data  
+	 private int[][] levelgrid;
+     
      private int lvlNumber;
 
-     public LevelData(HashMap<UUID, RoomData> lvlrm,UUID[][] roomgrd , int lvlnum)
+     public LevelData(HashMap<UUID, RoomData> lvlrm,UUID[][] roomgrd ,int[][] lvlgrd, int lvlnum)
      {
     	 roomList = lvlrm;
          roomGrid = roomgrd;
+         levelgrid = lvlgrd;
          lvlNumber = lvlnum;
      }
 
@@ -27,6 +33,11 @@ public class LevelData {
      public	 UUID[][] getLevelRoomGrid()
      {
     	 return roomGrid;
+     }
+     
+     public	 int[][] getLevelGrid()
+     {
+    	 return levelgrid;
      }
 
      public int getLevelNumber()

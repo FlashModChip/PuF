@@ -7,10 +7,11 @@ import javafx.scene.shape.Rectangle;
  * shape component (maybe transfer to texture, because 2D)
  */
 public class ShapeComponent extends Component<Rectangle> {
-    private Rectangle shape;
+    private Rectangle shape;    
 
     public ShapeComponent(int width, int height) {
     	Rectangle shape = new Rectangle(width, height);
+
 		/*
 		 * PhongMaterial material = new PhongMaterial();
 		 * material.setDiffuseColor(color); shape.setMaterial(material);
