@@ -23,7 +23,7 @@ public class Settings {
     // generic blocksize
     private static final int BLOCKSIZE = 50;
     // player movement-speed
-    private static final int SPEED = 2;
+    private static final int SPEED = 1;
 
     // player jump-velocity
    // private static final int JUMP = -15; Brauchen wir nicht ??
@@ -53,7 +53,7 @@ public class Settings {
 
     public static Settings getInstance() {
         DEBUG.put("LevelLoader@entityCreation", false);
-        DEBUG.put("SystemManager@init", true);
+        DEBUG.put("SystemManager@init", false);
         DEBUG.put("SystemManager@update", false);
         DEBUG.put("MovementSystem@dummy", false);
         DEBUG.put("MovementSystem@stepsize", false);

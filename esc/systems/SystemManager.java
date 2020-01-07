@@ -24,8 +24,8 @@ public class SystemManager {
 
     // debug
     //private boolean debug_init = settings.getDebug("SystemManager@init");
-    private boolean debug_update = true;
-    private boolean debug_init = true;
+    private boolean debug_update = false;
+    private boolean debug_init = false;
     /**
      * constructor
      */

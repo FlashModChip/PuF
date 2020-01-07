@@ -63,7 +63,7 @@ public class KeyInputSystem implements ECSystem {
             // move player
             if(isPressed(KeyCode.DOWN)){
                 yVel = movement;
-                System.out.println("klappt dies hier???");
+               // System.out.println("klappt dies hier???");
 
                // buttonW = true; ????
             }
@@ -117,7 +117,7 @@ public class KeyInputSystem implements ECSystem {
                         // restore current y-velocity
                         Point2D velocity = (Point2D) velocityComponent.getValue();
                         if (yVel == 0) {
-                            yVel = velocity.getY();
+                           // yVel = velocity.getY();
                         }
                         // set velocity
                         velocityComponent.setValue(new Point2D(xVel, yVel));
@@ -144,7 +144,7 @@ public class KeyInputSystem implements ECSystem {
      *      boolean: is key pressed
      */
     private boolean isPressed(KeyCode key){
-        System.out.println(key + "____"+keyInput);
+      //  System.out.println(key + "____"+keyInput);
         return keyInput.getOrDefault(key,false);
     }
 }

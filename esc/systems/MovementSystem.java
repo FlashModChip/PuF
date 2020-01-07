@@ -8,13 +8,18 @@ import entities.State;
 import events.EventData;
 import events.GameEvent;
 import game.Game;
+import javafx.event.Event;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
+import level.LevelToUi;
 import settings.Settings;
 
 import java.util.HashMap;
@@ -49,6 +54,8 @@ public class MovementSystem implements ECSystem {
 
     private boolean debugBuffer = false;
 
+
+
     // hashmap colliders
     private HashMap<UUID, Component> colliders;
 
@@ -57,6 +64,8 @@ public class MovementSystem implements ECSystem {
 
     // null vector for comparision
     private Point3D nullVector = new Point3D(0, 0, 0);
+
+
 
     // safe spot
     // we beam the collider to this place during collision detection to prevent self-collision
@@ -90,6 +99,8 @@ public class MovementSystem implements ECSystem {
 
     @Override
     public void run(boolean debug) {
+        boolean noCollision = true;
+
         if (debug) System.err.println("MovementSystem <start>");
         int count = 0;
 
@@ -171,6 +182,7 @@ public class MovementSystem implements ECSystem {
                 UUID uuid = entry.getKey();
                 Component component = entry.getValue();
                 Entity entity = entityManager.getEntity(uuid);
+                Sprite componentSprite = (Sprite) entity.getComponent(Sprite.class);
 
                 // check if component is enabled and has a position
                 // assume it has a velocity, otherwise it would not be in this list
@@ -181,7 +193,7 @@ public class MovementSystem implements ECSystem {
                     PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
                     Point2D position = positionComponent.getValue();
 
-                    System.out.println(position);
+
 
                     // check if entity needs an update (velocity is != 0)
                     if (!velocity.equals(nullVector)) {
@@ -205,22 +217,43 @@ public class MovementSystem implements ECSystem {
                         position = new Point2D(position.getX() + velocity.getX(), position.getY() + velocity.getY());
 
                         // check if we have left the map and in case throw an event
-                        if (position.getY() < 0 || position.getY() > levelHeight ||
-                                position.getX() < 0 || position.getX() > levelWidth) {
-                            //  GameEvent event = new GameEvent(GameEvent.OUT_OF_WORLD);
-                            //   event.addData(EventData.CollisionUUID, uuid);
-                            //  eventCommandSystem.addEvent(event);
+                        for(int i = 0; i<Main.colliderWallMap.size(); i++){
+                            System.out.println(componentSprite.getValue().getWidth() +"  "+ componentSprite.getValue().getHeight());
+                            if(Main.colliderWallMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())){
+
+                                noCollision = false;
+                            }
+                        }
+                        for(int i = 0; i<Main.colliderEnemiesMap.size(); i++){
+
+                            if(Main.colliderEnemiesMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
+                                  System.err.println("FEIND");
+                                //  positionComponent.setValue(position);
+                                noCollision = false;
+                                //TODO Angriff oder aufsammeln etc.
+                            }
+                        }
+                        for(int i = 0; i<Main.colliderDoorMap.size(); i++){
+
+                            if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
+                                System.err.println("nächstes Level");
+                                //  positionComponent.setValue(position);
+                              //  noCollision = false;
+                                //TODO nächstes Level etc.
+                            }
                         }
 
                         // store velocity and position in it's components
-                        component.setValue(velocity);
-                        positionComponent.setValue(position);
+                        if(noCollision) {
+                            component.setValue(velocity);
+                            positionComponent.setValue(position);
 
-                        // update shape position
-                        if (entity.hasComponent(Sprite.class)) {
-                            count++;
-                            ((Sprite) entity.getComponent(Sprite.class)).translateX(position.getX());
-                            ((Sprite) entity.getComponent(Sprite.class)).translateY(position.getY());
+                            // update shape position
+                            if (entity.hasComponent(Sprite.class)) {
+                                count++;
+                                ((Sprite) entity.getComponent(Sprite.class)).translateX(position.getX());
+                                ((Sprite) entity.getComponent(Sprite.class)).translateY(position.getY());
+                            }
                         }
 
                         // update collider position
