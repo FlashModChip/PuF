@@ -5,6 +5,7 @@ import components.Sprite;
 import entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -17,12 +18,14 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import level.LevelGenerator;
 import level.LevelToUi;
 import settings.Settings;
 import systems.SystemManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static javafx.scene.transform.Transform.translate;
@@ -36,8 +39,12 @@ public class Main extends Application {
     Settings settings = Settings.getInstance();
     // store key input in a hashmap
     public static HashMap<KeyCode,Boolean> keyInput = new HashMap<>();
-
+    //UNSCHÖN
+    public static ArrayList<Bounds> colliderWallMap = new ArrayList<>();
+    public static ArrayList<Bounds> colliderEnemiesMap = new ArrayList<>();
+    public static ArrayList<Bounds> colliderDoorMap = new ArrayList<>();
     int STAGE_WIDTH = 900;
+
 
     // Test 2d intArray
     int[][] testMap = {
@@ -54,7 +61,7 @@ public class Main extends Application {
     };
 
     LevelGenerator lol = new LevelGenerator();
-    LevelToUi map = new LevelToUi(testMap, lol.getRoomTileSizeX(), lol.getRoomTileSizeY(), STAGE_WIDTH / 20);
+   public LevelToUi map = new LevelToUi(testMap, lol.getRoomTileSizeX(), lol.getRoomTileSizeY(), STAGE_WIDTH / 20);
 
 
     //canvas test for drawing map (for better performance?)
@@ -100,6 +107,10 @@ public class Main extends Application {
 
         Pane overlay = new Pane();
         overlay.getChildren().addAll(map.interactiveRectLayer());
+        colliderWallMap = map.boundsWallRectLayer();
+        colliderEnemiesMap = map.boundsEnemiesRectLayer();
+        colliderDoorMap = map.boundsDoorRectLayer();
+        //System.out.println(colliderEnemiesMap);
 
 
         //Layout gameScene
@@ -146,10 +157,6 @@ public class Main extends Application {
 
 
         // reset camera
-        if(isPressed(KeyCode.R)){
-            System.out.println("hello" + playerPosition);
-        }
-        System.out.println("hello%%%%%%" + playerPosition);
 
     }
 

@@ -545,7 +545,7 @@ public class LevelGenerator
             	}
             	else
             	{
-                System.out.print(roomGrid[i][j].toString().substring(0,4) + " "); 
+                System.out.print(roomGrid[i][j].toString().substring(0,4) + " ");
             	}
             }
             System.out.println("");
@@ -570,7 +570,7 @@ public class LevelGenerator
             {                 
                 for (int j = 0; j < entry.getValue().getRoomData().length; j++) 
                 {                	
-                    System.out.print(entry.getValue().getRoomData()[j][i] + " ");                	
+                    System.out.print(entry.getValue().getRoomData()[j][i] + " ");
                 }
                 System.out.println("");
             }

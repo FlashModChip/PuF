@@ -1,6 +1,8 @@
 package level;
 
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -8,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LevelToUi {
 
@@ -35,9 +38,9 @@ public class LevelToUi {
             for (int j = 0; j < roomLengthX; j++) {
 
                 if (map[i][j] == 255) {
-                    // mapTheRealOne.add(rectGenerator(rect,Color.BLACK,j,i));
+                     mapTheRealOne.add(rectGenerator(rect,Color.BLACK,j,i));
                 } else if (map[i][j] == 100) {
-                    // mapTheRealOne.add(rectGenerator(rect,Color.GREY,j,i));
+                     mapTheRealOne.add(rectGenerator(rect,Color.GREY,j,i));
                 } else if (map[i][j] == 150) {
                     mapTheRealOne.add(rectGenerator(rect, Color.BLUE, j, i));
                 } else if (map[i][j] == 20) {
@@ -49,6 +52,59 @@ public class LevelToUi {
         System.out.println(mapTheRealOne);
         return mapTheRealOne;
     }
+
+    //Enemies als Hashmap
+    public ArrayList<Bounds> boundsWallRectLayer(){
+        ArrayList<Bounds> mapBounds = new ArrayList<>();
+        Rectangle rect = null;
+
+        for (int i = 0; i < roomLengthY; i++) {
+            for (int j = 0; j < roomLengthX; j++) {
+
+                if (map[i][j] == 255) {
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, j, i).getBoundsInParent());
+                }
+            }
+
+        }
+
+        return mapBounds;
+    }
+
+    //Enemies als Hashmap
+    public ArrayList<Bounds> boundsEnemiesRectLayer(){
+        ArrayList<Bounds> mapBounds = new ArrayList<>();
+        Rectangle rect = null;
+
+        for (int i = 0; i < roomLengthY; i++) {
+            for (int j = 0; j < roomLengthX; j++) {
+
+                if (map[i][j] == 20) {
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, j, i).getBoundsInParent());
+                }
+            }
+        }
+        return mapBounds;
+    }
+
+    //Enemies als Hashmap
+    public ArrayList<Bounds> boundsDoorRectLayer(){
+        ArrayList<Bounds> mapBounds = new ArrayList<>();
+        Rectangle rect = null;
+
+        for (int i = 0; i < roomLengthY; i++) {
+            for (int j = 0; j < roomLengthX; j++) {
+
+                if (map[i][j] == 150) {
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, j, i).getBoundsInParent());
+                }
+            }
+        }
+        return mapBounds;
+    }
+
+
+
 
     //Map layer
     public GraphicsContext tilesRenderer(GraphicsContext graphicsContext, Image img) {
