@@ -1,11 +1,9 @@
 package systems;
 
-import application.Main;
+import gameUi.Start;
 import entities.Entity;
 import entities.EntityManager;
-import game.Game;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.input.KeyCode;
 import settings.Settings;
 
@@ -37,7 +35,7 @@ public class KeyInputSystem implements ECSystem {
     private double xVel, yVel;
 
     // key hashmap
-    private HashMap<KeyCode,Boolean> keyInput = Main.keyInput;
+    private HashMap<KeyCode,Boolean> keyInput = Start.keyInput;
 
     @Override
     public void run(boolean debug) {

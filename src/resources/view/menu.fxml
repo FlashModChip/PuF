@@ -28,12 +28,12 @@
                   <Insets bottom="10.0" top="100.0" />
                </VBox.margin>
                <children>
-                  <Label fx:id="startButton" layoutX="219.0" layoutY="37.0" styleClass="buttons" text="PLAY">
+                  <Label fx:id="startButton" layoutX="219.0" layoutY="37.0" onMouseClicked="#changeToGameScene" styleClass="buttons" text="PLAY">
                      <HBox.margin>
                         <Insets right="70.0" />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="optionsButton" layoutX="289.0" layoutY="37.0" onMouseClicked="#changeToGameScene" styleClass="buttons" text="OPTIONS">
+                  <Label fx:id="optionsButton" layoutX="289.0" layoutY="37.0" styleClass="buttons" text="OPTIONS">
                      <HBox.margin>
                         <Insets right="70.0" />
                      </HBox.margin>

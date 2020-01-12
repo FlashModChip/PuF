@@ -3,22 +3,17 @@
 
 package gameUi.controller;
 
-import application.Main;
 import gameUi.Start;
 import gameUi.task.MoveBackgroundThread;
 import gameUi.task.PlayMusicThread;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-
-import static java.lang.Thread.currentThread;
 
 
 public class MenuController {
@@ -35,6 +30,9 @@ public class MenuController {
 
     @FXML
     public ImageView image;
+
+    @FXML
+    public Label startButton;
 
     @FXML
     public Label titleLabel;
@@ -95,7 +93,8 @@ public class MenuController {
 
     public void changeScene(String fxmlFilename) throws Exception{
         Parent scene = FXMLLoader.load(getClass().getResource("../../resources/view/" + fxmlFilename +".fxml"));
-        Start.getGuiStage().setScene(new Scene(scene, 900, 600));
+//        Main.getGuiStage().setScene(new Scene(scene, 900, 600));
+        Start.getGuiStage().setScene(Start.getGameScene());
         Start.getGuiStage().centerOnScreen();
     }
 }

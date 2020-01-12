@@ -2,7 +2,6 @@ package gameUi.controller;
 
 import components.PositionComponent;
 import entities.Player;
-import gameUi.Start;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;

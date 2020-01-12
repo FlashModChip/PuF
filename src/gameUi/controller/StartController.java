@@ -68,7 +68,7 @@ public class StartController {
 
     public FadeTransition playFade() throws Exception {
         System.out.println("playFade Transition");
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), viewHolder);
+        FadeTransition ft = new FadeTransition(Duration.millis(4000), viewHolder);
         ft.setFromValue(0);
         ft.setToValue(1);
         ft.setCycleCount(2);
