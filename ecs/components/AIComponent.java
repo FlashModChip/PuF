@@ -31,7 +31,8 @@ public class AIComponent extends Component<Boolean> {
 
     public void changeTarget(Point2D trgt) {
         target = trgt;
-    }
+    }    
+    
 
     @Override
     public Boolean getValue() {

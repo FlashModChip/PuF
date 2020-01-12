@@ -27,13 +27,20 @@ public class Player extends Entity {
      */
     private void init(double x, double y) {
         //addComponent(new NameComponent(name));
-        addComponent(new PositionComponent(x, y));
+    	
+    	//Stored, that the reference can be also given to AI component
+    	PositionComponent tmp = new PositionComponent(x, y);
+    	
+    	addComponent(tmp);
         addComponent(new VelocityComponent());
         addComponent(new KeyInputComponent());       
         //addComponent(new ShapeComponent(40, 40));
         //Testen
         addComponent(new Sprite("pic/1Stehen", new Point2D(75, 125)));
         addComponent(new RenderComponent());
+        
+        addComponent(new AITargetComponent(tmp, true));
+        
         System.out.println("passiert was");
         //System.out.println(getAllComponents());
     }
