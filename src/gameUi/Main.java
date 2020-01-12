@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class Start extends Application {
+public class Main extends Application {
 
     private static Stage guiStage;
     private static Scene gameScene;
@@ -125,17 +125,17 @@ public class Start extends Application {
 
 
 // ++++++  UI Schnellstart ins Spiel +++++++
-        guiStage = primaryStage;
-        guiStage.setTitle("Darkest Crawler");
-        guiStage.setScene(gameScene);
-        guiStage.show();
+//        guiStage = primaryStage;
+//        guiStage.setTitle("Darkest Crawler");
+//        guiStage.setScene(gameScene);
+//        guiStage.show();
 
 // ++++++  UI Start mit Intro +++++++
-//        guiStage = primaryStage;
-//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
-//        guiStage.setTitle("Darkest Crawler");
-//        guiStage.setScene(new Scene(root, 600, 400));
-//        guiStage.show();
+        guiStage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
+        guiStage.setTitle("Darkest Crawler");
+        guiStage.setScene(new Scene(root, 600, 400));
+        guiStage.show();
     }
 
     public static void main(String[] args) {
@@ -169,7 +169,7 @@ public class Start extends Application {
     // FXMLLoader help
     public static Node loadFXML(String fxmlFilename) {
         try {
-            return FXMLLoader.load(Start.class.getClassLoader().getResource(fxmlFilename));
+            return FXMLLoader.load(Main.class.getClassLoader().getResource(fxmlFilename));
         } catch (IOException e) {
             e.printStackTrace();
             return null;

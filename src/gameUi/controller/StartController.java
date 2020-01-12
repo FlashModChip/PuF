@@ -1,6 +1,6 @@
 package gameUi.controller;
 
-import gameUi.Start;
+import gameUi.Main;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,13 +57,13 @@ public class StartController {
     }
 
     public void changeView(String fxmlFilename) {
-        Node view = Start.loadFXML("../resources/view/" + fxmlFilename + ".fxml");
+        Node view = Main.loadFXML("../resources/view/" + fxmlFilename + ".fxml");
         viewHolder.getChildren().setAll(view); // clears the list of child elements and adds the view as a new child element
     }
 
     public void changeScene(String fxmlFilename, int width, int height) throws Exception{
         Parent scene = FXMLLoader.load(getClass().getResource("../../resources/view/" + fxmlFilename +".fxml"));
-        Start.getGuiStage().setScene(new Scene(scene, width, height));
+        Main.getGuiStage().setScene(new Scene(scene, width, height));
     }
 
     public FadeTransition playFade() throws Exception {

@@ -1,6 +1,6 @@
 package systems;
 
-import gameUi.Start;
+import gameUi.Main;
 import components.Component;
 import components.RenderComponent;
 import components.Sprite;
@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 public class RenderSystem implements ECSystem {
     // root
-    private Pane root = Start.root;
+    private Pane root = Main.root;
 
     @Override
     public void run(boolean debug) {

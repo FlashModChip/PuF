@@ -3,7 +3,7 @@
 
 package gameUi.controller;
 
-import gameUi.Start;
+import gameUi.Main;
 import gameUi.task.MoveBackgroundThread;
 import gameUi.task.PlayMusicThread;
 import javafx.fxml.FXML;
@@ -65,14 +65,14 @@ public class MenuController {
     public void stopStartSoundButton() {
 
         if (pMT.getMediaPlayerStatus() != true) {
-            soundOnImageSrc = new File("src/resources/images/soundButtonOn.png");
+            soundOnImageSrc = new File("src/resources/images/startmenu/soundButtonOn.png");
             soundImage = new Image(soundOnImageSrc.toURI().toString());
-            pMT.start();
+//            pMT.start();
             pMT.startSound();
 
             System.out.println("sound Thread isAlive: " + pMT.isAlive());
         } else {
-            soundOffImageSrc = new File("src/resources/images/soundButtonOff.png");
+            soundOffImageSrc = new File("src/resources/images/startmenu/soundButtonOff.png");
             soundImage = new Image(soundOffImageSrc.toURI().toString());
             pMT.stopSound();
 
@@ -94,7 +94,7 @@ public class MenuController {
     public void changeScene(String fxmlFilename) throws Exception{
         Parent scene = FXMLLoader.load(getClass().getResource("../../resources/view/" + fxmlFilename +".fxml"));
 //        Main.getGuiStage().setScene(new Scene(scene, 900, 600));
-        Start.getGuiStage().setScene(Start.getGameScene());
-        Start.getGuiStage().centerOnScreen();
+        Main.getGuiStage().setScene(Main.getGameScene());
+        Main.getGuiStage().centerOnScreen();
     }
 }

@@ -1,6 +1,6 @@
 package systems;
 
-import gameUi.Start;
+import gameUi.Main;
 import entities.Entity;
 import entities.EntityManager;
 import javafx.geometry.Point2D;
@@ -35,7 +35,7 @@ public class KeyInputSystem implements ECSystem {
     private double xVel, yVel;
 
     // key hashmap
-    private HashMap<KeyCode,Boolean> keyInput = Start.keyInput;
+    private HashMap<KeyCode,Boolean> keyInput = Main.keyInput;
 
     @Override
     public void run(boolean debug) {

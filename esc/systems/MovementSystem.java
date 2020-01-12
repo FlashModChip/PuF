@@ -1,6 +1,6 @@
 package systems;
 
-import gameUi.Start;
+import gameUi.Main;
 import components.*;
 import entities.Entity;
 import entities.EntityManager;
@@ -32,7 +32,7 @@ public class MovementSystem implements ECSystem {
     private EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
 
     // game root
-    private Pane root = Start.root;
+    private Pane root = Main.root;
 
     // level size
     private int levelHeight = Game.levelHeight;
@@ -209,25 +209,25 @@ public class MovementSystem implements ECSystem {
                         position = new Point2D(position.getX() + velocity.getX(), position.getY() + velocity.getY());
 
                         // check if we have left the map and in case throw an event
-                        for(int i = 0; i< Start.colliderWallMap.size(); i++){
+                        for(int i = 0; i< Main.colliderWallMap.size(); i++){
                             System.out.println(componentSprite.getValue().getWidth() +"  "+ componentSprite.getValue().getHeight());
-                            if(Start.colliderWallMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())){
+                            if(Main.colliderWallMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())){
 
                                 noCollision = false;
                             }
                         }
-                        for(int i = 0; i< Start.colliderEnemiesMap.size(); i++){
+                        for(int i = 0; i< Main.colliderEnemiesMap.size(); i++){
 
-                            if(Start.colliderEnemiesMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
+                            if(Main.colliderEnemiesMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
                                   System.err.println("FEIND");
                                 //  positionComponent.setValue(position);
                                 noCollision = false;
                                 //TODO Angriff oder aufsammeln etc.
                             }
                         }
-                        for(int i = 0; i< Start.colliderDoorMap.size(); i++){
+                        for(int i = 0; i< Main.colliderDoorMap.size(); i++){
 
-                            if(Start.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
+                            if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
                                 System.err.println("nächstes Level");
                                 //  positionComponent.setValue(position);
                               //  noCollision = false;
