@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@ui.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gameUi.controller.MenuController">
+   <children>
+      <ImageView fx:id="image" cache="true" depthTest="ENABLE" fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/startmenu/backTest.png" />
+         </image>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Label fx:id="titleLabel" alignment="CENTER" prefHeight="238.0" prefWidth="613.0" text="Darkest Crawler" textAlignment="CENTER">
+            </Label>
+            <HBox alignment="CENTER" prefHeight="123.0" prefWidth="900.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" top="100.0" />
+               </VBox.margin>
+               <children>
+                  <Label fx:id="startButton" layoutX="219.0" layoutY="37.0" styleClass="buttons" text="PLAY">
+                     <HBox.margin>
+                        <Insets right="70.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="optionsButton" layoutX="289.0" layoutY="37.0" onMouseClicked="#changeToGameScene" styleClass="buttons" text="OPTIONS">
+                     <HBox.margin>
+                        <Insets right="70.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="exitButton" layoutX="305.0" layoutY="37.0" styleClass="buttons" text="EXIT">
+                  </Label>
+               </children>
+            </HBox>
+            <ImageView fx:id="soundButton" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#stopStartSoundButton" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="550.0" />
+               </VBox.margin>
+               <image>
+                  <Image url="@../images/startmenu/soundButtonOn.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </children>
+</Pane>

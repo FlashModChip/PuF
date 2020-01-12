@@ -1,4 +1,4 @@
-package application.levelMap;
+package gameUi.task;
 
 import javafx.scene.shape.Rectangle;
 

@@ -1,5 +1,4 @@
 package application;
-
 import components.PositionComponent;
 import components.Sprite;
 import entities.Player;
@@ -19,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import level.LevelGenerator;
 import level.LevelToUi;
@@ -79,6 +79,7 @@ public class Main extends Application {
     @Override
     public void init() {
         System.out.println("Running...");
+
 
 
         // init & run the SystemManager
