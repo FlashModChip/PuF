@@ -1,41 +1,46 @@
-package application;
-
+package gameUi;
 import components.PositionComponent;
-import components.Sprite;
 import entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import level.LevelGenerator;
 import level.LevelToUi;
 import settings.Settings;
 import systems.SystemManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static javafx.scene.transform.Transform.translate;
 
 
 public class Main extends Application {
 
-    Stage window;
-    Scene startScene, gameScene;
+    private static Stage guiStage;
+    private static Scene gameScene;
     private SystemManager systemManager;
+
+    public static Stage getGuiStage() {
+        return guiStage;
+    }
+
+    public static Scene getGameScene() {
+        return gameScene;
+    }
+
+
     Settings settings = Settings.getInstance();
     // store key input in a hashmap
     public static HashMap<KeyCode,Boolean> keyInput = new HashMap<>();
@@ -70,6 +75,7 @@ public class Main extends Application {
     Canvas canvas = new Canvas(STAGE_WIDTH, STAGE_WIDTH / 2);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
+    //Player
     Player player = new Player(300.0,200.0);
     public static Pane root = new Pane();
 
@@ -80,7 +86,6 @@ public class Main extends Application {
     public void init() {
         System.out.println("Running...");
 
-
         // init & run the SystemManager
         systemManager = new SystemManager();
         systemManager.init();
@@ -88,30 +93,17 @@ public class Main extends Application {
 
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
 
-
-        window = primaryStage;
+        guiStage = primaryStage;
 
         map.tilesRenderer(gc, image);
-
-        //Button Start
-        Label startLabel = new Label("clicke here to play the game");
-        Button startButton = new Button("START");
-        startButton.setOnAction(e -> window.setScene(gameScene));
-
-        //Layout startScene
-        VBox startLayout = new VBox(20);
-        startLayout.getChildren().addAll(startLabel, startButton);
-        startScene = new Scene(startLayout, STAGE_WIDTH, 600);
 
         Pane overlay = new Pane();
         overlay.getChildren().addAll(map.interactiveRectLayer());
         colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
         colliderDoorMap = map.boundsDoorRectLayer();
-        //System.out.println(colliderEnemiesMap);
-
 
         //Layout gameScene
         Group rootGame = new Group();
@@ -131,15 +123,23 @@ public class Main extends Application {
         };
         timer.start();
 
-        window.setScene(startScene);
-        window.setTitle("Test run");
-        window.centerOnScreen();
-        window.show();
+
+// ++++++  UI Schnellstart ins Spiel +++++++
+//        guiStage = primaryStage;
+//        guiStage.setTitle("Darkest Crawler");
+//        guiStage.setScene(gameScene);
+//        guiStage.show();
+
+// ++++++  UI Start mit Intro +++++++
+        guiStage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
+        guiStage.setTitle("Darkest Crawler");
+        guiStage.setScene(new Scene(root, 600, 400));
+        guiStage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
-
     }
 
 
@@ -152,12 +152,6 @@ public class Main extends Application {
 
         // move camera to player position
         Point2D playerPosition = (Point2D) player.getComponent(PositionComponent.class).getValue();
-
-       // ((Sprite) player.getComponent(Sprite.class)).translateX(playerPosition.getX());
-
-
-        // reset camera
-
     }
 
     /**
@@ -172,16 +166,14 @@ public class Main extends Application {
         return keyInput.getOrDefault(key,false);
     }
 
-//Roman Boer
-
-    //Test
-    // gc.drawImage(image,10,10);
-    //	lol.generateLevel(1, false);
-
-    /*
-     * BorderPane root = new BorderPane(); Scene scene = new Scene(root,400,400);
-     * scene.getStylesheets().add(getClass().getResource("application.css").
-     * toExternalForm()); primaryStage.setScene(scene); primaryStage.show();
-     */
+    // FXMLLoader help
+    public static Node loadFXML(String fxmlFilename) {
+        try {
+            return FXMLLoader.load(Main.class.getClassLoader().getResource(fxmlFilename));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

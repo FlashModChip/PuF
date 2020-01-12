@@ -32,7 +32,7 @@ public class Player extends Entity {
         addComponent(new KeyInputComponent());       
         //addComponent(new ShapeComponent(40, 40));
         //Testen
-        addComponent(new Sprite("pic/1Stehen", new Point2D(50, 50)));
+        addComponent(new Sprite("pic/1Stehen", new Point2D(75, 125)));
         addComponent(new RenderComponent());
         System.out.println("passiert was");
         //System.out.println(getAllComponents());

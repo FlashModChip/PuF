@@ -1,18 +1,14 @@
 package systems;
 
-import application.Main;
+import gameUi.Main;
 import components.Component;
 import components.RenderComponent;
-import components.ShapeComponent;
 import components.Sprite;
 import entities.Entity;
 import entities.EntityManager;
 import entities.State;
-import javafx.scene.PointLight;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
-import systems.ECSystem;
 
 import java.util.HashMap;
 import java.util.Map;

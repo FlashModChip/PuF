@@ -1,11 +1,9 @@
 package systems;
 
-import application.Main;
+import gameUi.Main;
 import entities.Entity;
 import entities.EntityManager;
-import game.Game;
 import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
 import javafx.scene.input.KeyCode;
 import settings.Settings;
 
