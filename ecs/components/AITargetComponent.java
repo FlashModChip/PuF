@@ -2,34 +2,48 @@ package components;
 
 import javafx.geometry.Point2D;
 
+
 /**
  * Component tracking AI target pos (reference to position component)
+ * @author Roman
+ *
  */
-public class AITargetComponent extends Component<Point2D> {
-    
-    public PositionComponent position;    
-    public boolean isActive;
+public class AITargetComponent extends Component<Boolean> {
 
-    //public Component<Point2D> positionComponent;
+    public PositionComponent position;
+    public Boolean isActive;    
 
     public AITargetComponent() {
-    	position = new PositionComponent();        
-        isActive = true;
+        position = null;
+        isActive = false;
+    }
+
+    public AITargetComponent(PositionComponent pos, boolean activated) {
+        position = pos;
+        isActive = activated;
     }
     
-    public AITargetComponent(PositionComponent pos, boolean activated) {
-    	position = pos;        
-        isActive = activated;
-    }   
-
-
-    @Override
-    public Point2D getValue() {
+    /**
+     * Position of referenced Position component
+     * @return
+     */
+    public Point2D getPosition() {
         return position.getValue();
-    }
-
+    }    
+    
     @Override
-    public void setValue(Point2D value) {
-        this.position.setValue(value); 
+    public Boolean getValue() {
+
+        if(position == null)
+        {
+          isActive = false;
+        }
+
+        return isActive;
+    }
+   
+    @Override
+    public void setValue(Boolean value) {
+        this.isActive = value;
     }
 }
