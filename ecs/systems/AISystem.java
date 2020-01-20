@@ -74,7 +74,7 @@ public class AISystem implements ECSystem {
      * @param comp_trgt
      * @return
      */
-    private boolean IsInRadius(AIComponent comp, AITargetComponent comp_trgt) {
+    public boolean IsInRadius(AIComponent comp, AITargetComponent comp_trgt) {
 
         if (comp.getValue() && comp_trgt.getValue()) {
             return ((comp_trgt.getPosition().getX() - comp.getPosition().getX())
@@ -94,7 +94,7 @@ public class AISystem implements ECSystem {
      * @param entry_target
      * @return
      */
-    private Point2D getVelocity(AIComponent entry, AITargetComponent entry_target) {
+    public Point2D getVelocity(AIComponent entry, AITargetComponent entry_target) {
        
         float xVel, yVel;
         
