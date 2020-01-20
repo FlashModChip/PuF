@@ -76,6 +76,7 @@ class UnitTests {
 		
 	}
 	
+	//Testing player detection
 	@Test
 	void AISystemTest() {		
 		
