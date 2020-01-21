@@ -12,28 +12,23 @@ public class LevelGenerator
 {
     //Room generation Values
     private int roomNumber;
-
     private int roomTileSizeX;
     private int roomTileSizeY;
 
-    //Overall enemies in Level
-    private int enemyNumber;
-
-    //Max enemies per room
-    private int enemyThreshold;
-
-    //Overall items per level
-    private int itemNumber;
-
-    //Max items per level
+    // parameters for random room generation (without templates)
+    private int enemyNumber;    
+    private int enemyThreshold;    
+    private int itemNumber;    
     private int itemThreshold;
     
+    //folder for room templates
     private String path = "./level/roomTemplates/";
     
 
-    /// <summary>
-    /// Default constructor
-    /// </summary>
+    
+    /**
+     * Default ctor
+     */
     public LevelGenerator()
     {
         roomNumber = 5;
@@ -45,15 +40,30 @@ public class LevelGenerator
         itemThreshold = 1;
     }
 
-    // getter size of the rooms
+    
+    /**
+     * @return
+     */
     public int getRoomTileSizeX() {
         return roomTileSizeX;
     }
 
+    /**
+     * @return
+     */
     public int getRoomTileSizeY() {
         return roomTileSizeY;
     }
    
+    /**
+     * @param roomnum
+     * @param roomtilex
+     * @param roomtiley
+     * @param enemynum
+     * @param enemythresh
+     * @param itemnum
+     * @param itemtresh
+     */
     public LevelGenerator(int roomnum, int roomtilex, int roomtiley, int enemynum, int enemythresh, int itemnum, int itemtresh)
     {
         roomNumber = roomnum;
@@ -65,6 +75,12 @@ public class LevelGenerator
         itemThreshold = itemtresh;
     }
   
+    /**
+     * Adjust meta parameters for room generation
+     * @param roomnum
+     * @param roomtilex
+     * @param roomtiley
+     */
     public void setLayout(int roomnum, int roomtilex, int roomtiley)
     {
         roomNumber = roomnum;
@@ -72,6 +88,11 @@ public class LevelGenerator
         roomTileSizeY = roomtiley;
     }
 
+    /**
+     * enemy parameter (just for random rooms w/o template)
+     * @param enemynum
+     * @param enemythresh
+     */
     public void seEnemyLayout(int enemynum, int enemythresh)
     {
         enemyNumber = enemynum;
@@ -79,12 +100,22 @@ public class LevelGenerator
     }
 
    
+    /**
+     * item parameter (just for random rooms w/o template)
+     * @param itemnum
+     * @param itemtresh
+     */
     public void seItemLayout(int itemnum, int itemtresh)
     {
         enemyNumber = itemnum;
         enemyThreshold = itemtresh;
     }
    
+    /**
+     * @param lvlnum
+     * @param fromFile (with using templates)
+     * @return
+     */
     public LevelData generateLevel(int lvlnum, boolean fromFile)
     {
     	Random ran = new Random();
@@ -208,20 +239,18 @@ public class LevelGenerator
         }
         {
           //generateRooms(roomList);
-          generateRoomsFromTemplate(roomList);
+          generateRooms(roomList);
         }   
 
         //cut off empty columns /rows
         roomGrid = resizeArray(roomGrid);        
         
         //generate lvl grid (maybe easier for drawing level?
-        int[][] tmp= roomGridToArray(roomGrid,roomList);
+        int[][] tmp = roomGridToArray(roomGrid,roomList);
                
         //debug
-        print2D(roomGrid, roomList, tmp); 
-        //System.out.print(getRoomDataSingleTile(18,8,roomGrid,roomList));
-        
-        //LevelPicUtil.getLevelDatafromPNG(path, 20, 10);
+        //print2D(roomGrid, roomList, tmp);
+       
         
         return new LevelData(roomList,roomGrid,tmp ,lvlnum);
     }

@@ -65,7 +65,7 @@ public class Main extends Application {
             {255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 150, 255, 255, 255, 255, 255, 255, 255, 255, 255}
     };
 
-    LevelGenerator lol = new LevelGenerator();
+   LevelGenerator lol = new LevelGenerator();
    public LevelToUi map = new LevelToUi(testMap, lol.getRoomTileSizeX(), lol.getRoomTileSizeY(), STAGE_WIDTH / 20);
 
 
