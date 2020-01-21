@@ -22,8 +22,8 @@ public class Sprite extends Component<Rectangle> {
 
     	this.recimg = new Rectangle(pos.getX(), pos.getY());
     	this.recimg.setFill(new ImagePattern(sprite));
-    	this.recimg.setHeight(40.0);
-    	this.recimg.setWidth(40.0);
+    	this.recimg.setHeight(35);
+    	this.recimg.setWidth(35);
     	 this.position = pos;
     }
     

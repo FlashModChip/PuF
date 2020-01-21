@@ -21,7 +21,7 @@ public class Settings {
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_HEIGHT = WINDOW_WIDTH / 4 * 3;
     // generic blocksize
-    private static final int BLOCKSIZE = 50;
+    private static final int BLOCKSIZE = 40;
     // player movement-speed
     private static final int SPEED = 1;
 

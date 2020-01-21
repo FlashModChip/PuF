@@ -249,7 +249,7 @@ public class LevelGenerator
         int[][] tmp = roomGridToArray(roomGrid,roomList);
                
         //debug
-        //print2D(roomGrid, roomList, tmp);
+        print2D(roomGrid, roomList, tmp);
        
         
         return new LevelData(roomList,roomGrid,tmp ,lvlnum);
