@@ -115,5 +115,12 @@ public class Settings {
     public static int getStepsize() {
         return stepsize;
     }
+    
+    //Network Connectivity stuff
+   
+    public static final int PORT = 8000;
+
+    public final static String SERVER = "127.0.0.1";
+    
 
 }
