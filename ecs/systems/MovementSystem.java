@@ -12,6 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import level.LevelData;
+import level.LevelGenerator;
+import level.LevelToUi;
 import settings.Settings;
 
 import java.util.HashMap;
@@ -210,7 +213,7 @@ public class MovementSystem implements ECSystem {
 
                         // check if we have left the map and in case throw an event
                         for(int i = 0; i< Main.colliderWallMap.size(); i++){
-                            System.out.println(componentSprite.getValue().getWidth() +"  "+ componentSprite.getValue().getHeight());
+//                            System.out.println(componentSprite.getValue().getWidth() +"  "+ componentSprite.getValue().getHeight());
                             if(Main.colliderWallMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())){
 
                                 noCollision = false;
@@ -230,8 +233,25 @@ public class MovementSystem implements ECSystem {
                             if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
                                 System.err.println("nächstes Level");
                                 //  positionComponent.setValue(position);
+                                System.err.println((position.getX() + position.getY()));
                               //  noCollision = false;
                                 //TODO nächstes Level etc.
+                                 LevelGenerator lol = new LevelGenerator();
+                                 LevelData lvl = lol.generateLevel(1, false);
+                                int firstRoom = lvl.getLevelNumber();
+                                 LevelToUi map = new LevelToUi(lvl.getLevelGrid());
+//                                System.out.println("East " + position.getX());
+//                                System.out.println("South " + position.getY());
+                                if (position.getX() > 760) {
+//                                    System.out.println("East " + print2D(Main.lvl.getLevelRoomGrid()));
+                                    map.tilesRenderer(Main.getGc());
+
+                                }
+                                else if (position.getY() > 355) {
+                                    System.out.println("South " + Main.lvl.getLevelRoomGrid());
+                                    map.tilesRenderer(Main.getGc());
+
+                                }
                             }
                         }
 
