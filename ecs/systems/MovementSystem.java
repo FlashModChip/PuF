@@ -239,7 +239,7 @@ public class MovementSystem implements ECSystem {
                                  LevelGenerator lol = new LevelGenerator();
                                  LevelData lvl = lol.generateLevel(1, false);
                                 int firstRoom = lvl.getLevelNumber();
-                                 LevelToUi map = new LevelToUi(lvl.getLevelGrid());
+                                 LevelToUi map = new LevelToUi(lvl);
 //                                System.out.println("East " + position.getX());
 //                                System.out.println("South " + position.getY());
                                 if (position.getX() > 760) {

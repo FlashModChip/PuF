@@ -25,9 +25,6 @@ public class Settings {
     // player movement-speed
     private static final int SPEED = 1;
 
-    // player jump-velocity
-   // private static final int JUMP = -15; Brauchen wir nicht ??
-
 
     // gravity strength
     private static final double GRAVITY = 0.5;

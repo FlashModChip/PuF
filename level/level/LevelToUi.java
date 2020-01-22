@@ -1,6 +1,7 @@
 package level;
 
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -8,41 +9,34 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+/**
+ * class for drawing the level using level data and a tile map
+ * 
+ * @author Roman² :-)
+ */
 public class LevelToUi {
 
-    int room = 20;
-
-    private String tilesMapSrc = "level/ressources/tiles0.png";
-    private Image tilesGraphic = new Image(tilesMapSrc);
-
-    private int roomWidth =10;
-    private int roomHigh = 20;
     private int rectLength = 40;
 
-    private static int[][] levelGrid;
+    private int roomWidth, roomHigh;
 
+    private LevelData levelData;
+    private int[][] levelGrid;
 
+    private TileMap TileMap;
 
     public LevelToUi() {
-
     }
 
-//    /**
-//     * @param levelGrid
-//     * @param roomWidth
-//     * @param roomHigh
-//     * @param rectX
-//     */
-    /// </summary>
-    public LevelToUi(int[][] levelGrid) {
-//        this.roomLengthX = rectSizeX;
-//        this.roomLengthY = rectSizeY;
-//        this.rectLength = rectX;
-        this.levelGrid = levelGrid;
+    public LevelToUi(LevelData lvlDat) {
+        this.levelGrid = lvlDat.getLevelGrid();
+        this.levelData = lvlDat;
+        TileMap = new TileMap();
+        roomWidth = levelData.getRoomSizeY();
+        roomHigh = levelData.getRoomSizeX();
     }
 
-
-    //Interactive layer
+    // Interactive layer
     public ArrayList interactiveRectLayer() {
         Rectangle rect = null;
 
@@ -50,24 +44,24 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (levelGrid[i][j] == 255) {
-                    mapTheRealOne.add(rectGenerator(rect,Color.BLACK,i,j));
-                } else if (levelGrid[i][j] == 100) {
-                    mapTheRealOne.add(rectGenerator(rect,Color.GREY,i,j));
-                } else if (levelGrid[i][j] == 150) {
-                    mapTheRealOne.add(rectGenerator(rect, Color.BLUE, i,j));
-                } else if (levelGrid[i][j] == 20) {
-                    mapTheRealOne.add(rectGenerator(rect, Color.RED, i,j));
+                if (levelGrid[i][j] == TileCode.wall) {
+                    mapTheRealOne.add(rectGenerator(rect, TileCode.wallRGB, i, j));
+                } else if (levelGrid[i][j] == TileCode.floor) {
+                    mapTheRealOne.add(rectGenerator(rect, TileCode.floorRGB, i, j));
+                } else if (levelGrid[i][j] == TileCode.door) {
+                    mapTheRealOne.add(rectGenerator(rect, TileCode.doorRGB, i, j));
+                } else if (levelGrid[i][j] == TileCode.enemy) {
+                    mapTheRealOne.add(rectGenerator(rect, TileCode.enemyRGB, i, j));
                 }
+                // More tiles possible
             }
-
         }
         System.out.println(mapTheRealOne);
         return mapTheRealOne;
     }
 
-    //Enemies als Hashmap
-    public ArrayList<Bounds> boundsWallRectLayer(){
+    // Enemies als Hashmap
+    public ArrayList<Bounds> boundsWallRectLayer() {
         ArrayList<Bounds> mapBounds = new ArrayList<>();
         Rectangle rect = null;
 
@@ -75,7 +69,7 @@ public class LevelToUi {
             for (int j = 0; j < roomWidth; j++) {
 
                 if (levelGrid[i][j] == 255) {
-                    mapBounds.add(rectGenerator(rect, Color.BLACK, i,j).getBoundsInParent());
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
 
@@ -84,8 +78,8 @@ public class LevelToUi {
         return mapBounds;
     }
 
-    //Enemies als Hashmap
-    public ArrayList<Bounds> boundsEnemiesRectLayer(){
+    // Enemies als Hashmap
+    public ArrayList<Bounds> boundsEnemiesRectLayer() {
         ArrayList<Bounds> mapBounds = new ArrayList<>();
         Rectangle rect = null;
 
@@ -93,15 +87,15 @@ public class LevelToUi {
             for (int j = 0; j < roomWidth; j++) {
 
                 if (levelGrid[i][j] == 20) {
-                    mapBounds.add(rectGenerator(rect, Color.BLACK, i,j).getBoundsInParent());
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
         }
         return mapBounds;
     }
 
-    //Enemies als Hashmap
-    public ArrayList<Bounds> boundsDoorRectLayer(){
+    // Enemies als Hashmap
+    public ArrayList<Bounds> boundsDoorRectLayer() {
         ArrayList<Bounds> mapBounds = new ArrayList<>();
         Rectangle rect = null;
 
@@ -109,69 +103,47 @@ public class LevelToUi {
             for (int j = 0; j < roomWidth; j++) {
 
                 if (levelGrid[i][j] == 150) {
-                    mapBounds.add(rectGenerator(rect, Color.BLACK, i,j).getBoundsInParent());
+                    mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
         }
         return mapBounds;
     }
 
-
-
-
-    //Map layer
+    // Map layer
     public GraphicsContext tilesRenderer(GraphicsContext graphicsContext) {
 
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                //wall
-                if (levelGrid[i][j] == 255) {
-                    wallGenerator(graphicsContext, j,i, tilesGraphic);
-
-                    //floor
-                } else if (levelGrid[i][j] == 100) {
-                    floorGenerator(graphicsContext, j,i, tilesGraphic);
-
-                    //doors
-                } else if (levelGrid[i][j] == 150) {
-                    doorGenerator(graphicsContext, j,i, tilesGraphic);
-
-                    //items?
-                } else if (levelGrid[i][j] == 20) {
-                    itemGenerator(graphicsContext, j,i, tilesGraphic);
-
+                // wall
+                if (levelGrid[i][j] == TileCode.wall) {
+                    tileGenerator(graphicsContext, TileType.WALL, j, i);
+                    // floor
+                } else if (levelGrid[i][j] == TileCode.floor) {
+                    tileGenerator(graphicsContext, TileType.FLOOR, j, i);
+                    // doors
+                } else if (levelGrid[i][j] == TileCode.door) {
+                    tileGenerator(graphicsContext, TileType.DOOR, j, i);
+                    // items ?
+                } else if (levelGrid[i][j] == TileCode.enemy) {
+                    tileGenerator(graphicsContext, TileType.ENEMY, j, i);
                 }
+                // more tiles possible
             }
         }
-        //System.out.println(mapTheRealOne);
+        // System.out.println(mapTheRealOne);
         return graphicsContext;
     }
 
+    private GraphicsContext tileGenerator(GraphicsContext gc, TileType type, int i, int j) {
 
-    //drawImage( Imagesource, xCordFromImage, yCordFromImage, widthFromImage, heightFromImage, xDrawCord, yDrawCord, width, height)
-    // wall generator
-    private GraphicsContext wallGenerator(GraphicsContext gc, int i, int j, Image img) {
-        gc.drawImage(img, 0, 16, 16, 16, j * rectLength, i * rectLength, rectLength, rectLength);
-        return gc;
-    }
+        Point2D tile = this.TileMap.getTile(type);
+        int size = this.TileMap.getTileSize();
 
-    // floor generator
-    private GraphicsContext floorGenerator(GraphicsContext gc, int i, int j, Image img) {
-        gc.drawImage(img, 16, 0, 16, 16, j * rectLength, i * rectLength, rectLength, rectLength);
-        return gc;
-    }
+        gc.drawImage(this.TileMap.getTileImage(), tile.getX(), tile.getY(), size, size, j * rectLength, i * rectLength,
+                rectLength, rectLength);
 
-    // door generator
-    private GraphicsContext doorGenerator(GraphicsContext gc, int i, int j, Image img) {
-//        gc.drawImage(img, 0, 176, 16, 16, j * rectLength, i * rectLength, rectLength, rectLength);
-        gc.drawImage(img, 80, 0, 16, 16, j * rectLength, i * rectLength, rectLength, rectLength);
-        return gc;
-    }
-
-    // ?item or whatever generator
-    private GraphicsContext itemGenerator(GraphicsContext gc, int i, int j, Image img) {
-        gc.drawImage(img, 16, 16, 16, 16, j * rectLength, i * rectLength, rectLength, rectLength);
         return gc;
     }
 

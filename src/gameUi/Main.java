@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import level.LevelData;
 import level.LevelGenerator;
 import level.LevelToUi;
+import level.MapNavigator;
 import level.RoomData;
 import settings.Settings;
 import systems.SystemManager;
@@ -55,9 +56,10 @@ public class Main extends Application {
 
     public static LevelGenerator lol = new LevelGenerator();
     public static LevelData lvl = lol.generateLevel(1, false);
-//    public static RoomData rum = lvl.ge
+    
+    MapNavigator nav = MapNavigator.getInstance();   
 
-    public static LevelToUi map = new LevelToUi(lvl.getLevelGrid());
+    public static LevelToUi map = new LevelToUi(lvl);
 
     //canvas test for drawing map (for better performance?)
     private static Canvas canvas = new Canvas(settings.getWindowWidth(), settings.getWindowHeight());
@@ -84,7 +86,12 @@ public class Main extends Application {
 
         // init & run the SystemManager
         systemManager = new SystemManager();
-        systemManager.init();
+        systemManager.init();       
+        
+       nav.changeLevel(lol.generateLevel(1, false));
+      
+       nav.changecCurrentRoom(nav.getLevel().getLevelRoomGrid()[0][0]);
+        
     }
 
 
