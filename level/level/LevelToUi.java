@@ -39,18 +39,20 @@ public class LevelToUi {
     // Interactive layer
     public ArrayList interactiveRectLayer() {
         Rectangle rect = null;
-
+        
+        int[][] roomData = navi.getCurrentRoom().getRoomData();
+        
         ArrayList<Rectangle> mapTheRealOne = new ArrayList<>();
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.wall) {
+                if (roomData[i][j] == TileCode.wall) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.wallRGB, i, j));
-                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.floor) {
+                } else if (roomData[i][j] == TileCode.floor) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.floorRGB, i, j));
-                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.door) {
+                } else if (roomData[i][j] == TileCode.door) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.doorRGB, i, j));
-                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.enemy) {
+                } else if (roomData[i][j] == TileCode.enemy) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.enemyRGB, i, j));
                 }
                 // More tiles possible

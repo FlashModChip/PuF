@@ -78,6 +78,8 @@ public class Main extends Application {
     	
     	map.tilesRenderer(gc);
     	
+    	debug_pane.getChildren().addAll(map.interactiveRectLayer());
+    	
     	colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
         colliderDoorMap = map.boundsDoorRectLayer();
@@ -87,6 +89,7 @@ public class Main extends Application {
     //Player
     static Player player = new Player(200.0,200.0);
     public static Pane root = new Pane();
+    public static Pane debug_pane;
 
     public static Player getPlayer() {
         return player;
@@ -122,8 +125,9 @@ public class Main extends Application {
         map.tilesRenderer(gc);
         
 
-        Pane overlay = new Pane();
-        overlay.getChildren().addAll(map.interactiveRectLayer());
+        debug_pane = new Pane();
+        
+        debug_pane.getChildren().addAll(map.interactiveRectLayer());
         
         colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
@@ -137,7 +141,7 @@ public class Main extends Application {
 
         //Layout gameScene
         Group rootGame = new Group();
-        rootGame.getChildren().addAll(canvas, overlay,hud, root);
+        rootGame.getChildren().addAll(canvas, debug_pane,hud, root);
         gameScene = new Scene(rootGame, settings.getWindowWidth(), settings.getWindowHeight());
 
 
