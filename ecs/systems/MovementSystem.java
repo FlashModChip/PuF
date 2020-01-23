@@ -234,19 +234,23 @@ public class MovementSystem implements ECSystem {
                         for(int i = 0; i< Main.colliderDoorMap.size(); i++){
 
                             if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
-                                System.err.println("nächstes Level");
+                                
+                            	System.err.println("nächstes Level");
                                 //  positionComponent.setValue(position);
                                 System.err.println((position.getX() +"||"+ position.getY()));
                                 //  noCollision = false;
                                 Direction dir = null;
+                                Point2D tmp = null;
                                 
                                 if(!Main.getMap().getMapNavigator().isLocked())
                                 {
 									dir = Main.getMap().getMapNavigator()
 											.changecCurrentRoomByDirection(positionComponent.getValue());
-									Point2D tmp = Main.getMap().getMapNavigator().getEntryCoords(dir);
+									
+									tmp = Main.getMap().getMapNavigator().getEntryCoords(dir);
 
-									System.out.println(tmp);
+									System.out.println(dir);
+									System.out.println(tmp);									
 
 									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
 									

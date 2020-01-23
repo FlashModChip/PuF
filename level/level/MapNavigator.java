@@ -74,14 +74,14 @@ public class MapNavigator {
 		entryCoords = new HashMap<Direction, Point2D>();
 
 		// Entry points for level change
-		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2));
+		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2.5));
 		
 		entryCoords.put(Direction.SOUTH, new Point2D(Settings.getWindowWidth() / 2,
-				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2));
+				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2.5));
 		
-		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2));
+		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2.5, Settings.getWindowHeightwithoutGUI() / 2));
 		
-		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2,
+		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2.5,
 				Settings.getWindowHeightwithoutGUI() / 2));
 	}
 
@@ -140,7 +140,11 @@ public class MapNavigator {
 
 		if (nextRoom != new UUID(0, 0)) {
 			changecCurrentRoom(nextRoom);
+			 levelChangeLock = true;
+			
 			return leavingDirection;
+			
+			
 		}
 
 		return null;

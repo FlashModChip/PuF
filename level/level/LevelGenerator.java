@@ -22,7 +22,7 @@ public class LevelGenerator {
      * Default ctor
      */
     public LevelGenerator() {
-        roomNumber = 5;
+        roomNumber = 10;
         roomTileSizeX = 20;
         roomTileSizeY = 10;
         enemyNumber = 5;
