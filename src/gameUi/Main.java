@@ -57,9 +57,9 @@ public class Main extends Application {
     public static LevelGenerator lol = new LevelGenerator();
     public static LevelData lvl = lol.generateLevel(1, false);
     
-    MapNavigator nav = MapNavigator.getInstance();   
+    public MapNavigator nav = MapNavigator.getInstance();   
 
-    public static LevelToUi map = new LevelToUi(lvl);
+    public static LevelToUi map;
 
     //canvas test for drawing map (for better performance?)
     private static Canvas canvas = new Canvas(settings.getWindowWidth(), settings.getWindowHeight());
@@ -88,10 +88,10 @@ public class Main extends Application {
         systemManager = new SystemManager();
         systemManager.init();       
         
-       nav.changeLevel(lol.generateLevel(1, false));
-      
-       nav.changecCurrentRoom(nav.getLevel().getLevelRoomGrid()[0][0]);
-        
+       nav.changeLevel(lol.generateLevel(1, false));      
+       nav.changecCurrentRoom(nav.getLevel().getLevelRoomGrid()[0][0]);       
+       map = new LevelToUi(nav.getLevel());
+       
     }
 
 

@@ -61,7 +61,7 @@ public class MapNavigator {
 	public LevelData getLevel() {
 		
 		return currentLevel;		
-	}
+	}	
 
 	/**
 	 * player redraw on room change
