@@ -47,8 +47,8 @@ import settings.Settings;
  * 
  * nav.getCurrentRoom().getRoomData(); ...
  * 
- * Außerdem ist es möglich die Koordinaten der Player Componente ansttsprechend
- * zu aktualisieren
+ * Außerdem ist es möglich die Koordinaten der Player Componente
+ * ansttsprechend zu aktualisieren
  * 
  * Point2D newcoord = getEntryCoords(exitdirection);
  * playerEntity.getComponent(PositionComponent.class). setValue(newcoord);
@@ -64,6 +64,8 @@ public class MapNavigator {
 
 	private LevelData currentLevel;
 	private RoomData currentRoom;
+	
+	private boolean levelChangeLock;
 
 	private static MapNavigator instance;
 
@@ -73,11 +75,11 @@ public class MapNavigator {
 
 		// Entry points for level change
 		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2));
-		entryCoords.put(Direction.SOUTH,
-				new Point2D(Settings.getWindowWidth() / 2, Settings.getWindowHeight() - Settings.getBlocksize() * 2));
-		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeight() / 2));
-		entryCoords.put(Direction.EAST,
-				new Point2D(Settings.getWindowHeight() - Settings.getBlocksize() * 21, Settings.getWindowHeight() / 2));
+		entryCoords.put(Direction.SOUTH, new Point2D(Settings.getWindowWidth() / 2,
+				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2));
+		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2));
+		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2,
+				Settings.getWindowHeightwithoutGUI() / 2));
 	}
 
 	public static MapNavigator getInstance() {
@@ -85,6 +87,16 @@ public class MapNavigator {
 			MapNavigator.instance = new MapNavigator();
 		}
 		return MapNavigator.instance;
+	}
+	
+	public void unlock() 
+	{
+		this.levelChangeLock = false;
+	}
+	
+	public boolean isLocked() 
+	{
+		return levelChangeLock;
 	}
 
 	/**
@@ -100,7 +112,7 @@ public class MapNavigator {
 	public void changecCurrentRoom(UUID room) {
 
 		currentRoom = currentLevel.getLevelRoomList().get(room);
-	}		
+	}
 
 	/**
 	 * player traveres onto the next room
@@ -111,25 +123,19 @@ public class MapNavigator {
 
 		Direction leavingDirection = null;
 
-		
-			if(playerIsNorth(playerpos)) 
-			{
+		if (playerIsNorth(playerpos)) {
 			leavingDirection = Direction.NORTH;
-			} else if(playerIsSouth(playerpos))
-			{
+		} else if (playerIsSouth(playerpos)) {
 			leavingDirection = Direction.SOUTH;
-			} else if(playerIsWest(playerpos))
-			{
+		} else if (playerIsWest(playerpos)) {
 			leavingDirection = Direction.WEST;
-			} else if( playerIsEasth(playerpos))
-			{
+		} else if (playerIsEasth(playerpos)) {
 			leavingDirection = Direction.EAST;
-			}
-		
+		}
 
 		UUID nextRoom = currentRoom.getadjacentRoom(leavingDirection);
 
-		if (nextRoom != UUID.fromString(null)) {
+		if (nextRoom != new UUID(0, 0)) {
 			changecCurrentRoom(nextRoom);
 			return leavingDirection;
 		}
@@ -163,7 +169,9 @@ public class MapNavigator {
 					// System.out.print((new UUID(0, 0)).toString().substring(0, 4) + " ");
 				} else {
 					currentRoom = currentLevel.getLevelRoomList().get(roomGrid[i][j]);
+					System.out.print(currentRoom.getRoomID().toString());
 					return true;
+					
 				}
 			}
 		}
@@ -179,7 +187,7 @@ public class MapNavigator {
 	 */
 	public Point2D getEntryCoords(Direction dir) {
 
-		Direction counterdirection= null;
+		Direction counterdirection = null;
 
 		switch (dir) {
 		case NORTH:
@@ -201,9 +209,9 @@ public class MapNavigator {
 		default:
 			break;
 		}
-
-		return entryCoords.get(counterdirection);
 		
+		return entryCoords.get(counterdirection);
+
 	}
 
 	/**
@@ -213,9 +221,17 @@ public class MapNavigator {
 	 * @return
 	 */
 	private boolean playerIsNorth(Point2D playerpos) {
-		return ((playerpos.getX() > (Settings.getWindowWidth() / 2) - (Settings.getBlocksize() * 2))
-				|| (playerpos.getX() < (Settings.getWindowWidth() / 2) + (Settings.getBlocksize() * 2)))
-				&& (playerpos.getY() < (Settings.getBlocksize() * 2));
+		
+		System.out.println("x: " + playerpos.getX());
+		System.out.println("x: " + playerpos.getY());
+		System.out.println("width: " + Settings.getWindowWidth());
+		System.out.println("height: " + Settings.getWindowHeight());
+		
+		return (playerpos.getY()  < (Settings.getWindowHeightwithoutGUI()/2)) &&
+			   (playerpos.getX()  > (Settings.getWindowWidth()/4)) &&
+			   (playerpos.getX()  < ((Settings.getWindowWidth() - (Settings.getWindowWidth()/4))));
+		
+		
 	}
 
 	/**
@@ -225,9 +241,10 @@ public class MapNavigator {
 	 * @return
 	 */
 	private boolean playerIsSouth(Point2D playerpos) {
-		return ((playerpos.getX() > (Settings.getWindowWidth() / 2) - (Settings.getBlocksize() * 2))
-				|| (playerpos.getX() < (Settings.getWindowWidth() / 2) + (Settings.getBlocksize() * 2)))
-				&& (playerpos.getY() > (Settings.getWindowHeight() - (Settings.getBlocksize() * 2)));
+		
+		return (playerpos.getY()  > (Settings.getWindowHeightwithoutGUI()/2)) &&
+				   (playerpos.getX()  > (Settings.getWindowWidth()/4)) &&
+				   (playerpos.getX()  < ((Settings.getWindowWidth() - (Settings.getWindowWidth()/4))));
 	}
 
 	/**
@@ -237,9 +254,7 @@ public class MapNavigator {
 	 * @return
 	 */
 	private boolean playerIsWest(Point2D playerpos) {
-		return ((playerpos.getY() > (Settings.getWindowHeight() / 2) - (Settings.getBlocksize() * 2))
-				|| (playerpos.getY() < (Settings.getWindowHeight() / 2) + (Settings.getBlocksize() * 2)))
-				&& (playerpos.getX() < (Settings.getBlocksize() * 2));
+		return (playerpos.getX() < (Settings.getWindowWidth()/4));
 	}
 
 	/**
@@ -249,10 +264,7 @@ public class MapNavigator {
 	 * @return
 	 */
 	private boolean playerIsEasth(Point2D playerpos) {
-		return ((playerpos.getY() > (Settings.getWindowHeight() / 2) - (Settings.getBlocksize() * 2))
-				|| (playerpos.getY() < (Settings.getWindowHeight() / 2) + (Settings.getBlocksize() * 2)))
-				&& (playerpos.getX() > (Settings.getWindowWidth() - (Settings.getBlocksize() * 2)));
+		return (playerpos.getX()  > ((Settings.getWindowWidth() - (Settings.getWindowWidth()/4))));
 	}
 
 }
-

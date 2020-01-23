@@ -9,6 +9,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+import gameUi.Main;
+
 /**
  * class for drawing the level using level data and a tile map
  * 
@@ -20,20 +22,18 @@ public class LevelToUi {
 
     private int roomWidth, roomHigh;
 
-    private LevelData levelData;
-    private int[][] levelGrid;
+    //private LevelData levelData;
+    //private int[][] levelGrid;
+    private MapNavigator navi;
 
     private TileMap TileMap;
-
+    
+    
     public LevelToUi() {
-    }
-
-    public LevelToUi(LevelData lvlDat) {
-        this.levelGrid = lvlDat.getLevelGrid();
-        this.levelData = lvlDat;
+    	navi = MapNavigator.getInstance();       
         TileMap = new TileMap();
-        roomWidth = levelData.getRoomSizeY();
-        roomHigh = levelData.getRoomSizeX();
+        roomWidth = navi.getLevel().getRoomSizeY();
+        roomHigh = navi.getLevel().getRoomSizeX();
     }
 
     // Interactive layer
@@ -44,13 +44,13 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (levelGrid[i][j] == TileCode.wall) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.wall) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.wallRGB, i, j));
-                } else if (levelGrid[i][j] == TileCode.floor) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.floor) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.floorRGB, i, j));
-                } else if (levelGrid[i][j] == TileCode.door) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.door) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.doorRGB, i, j));
-                } else if (levelGrid[i][j] == TileCode.enemy) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.enemy) {
                     mapTheRealOne.add(rectGenerator(rect, TileCode.enemyRGB, i, j));
                 }
                 // More tiles possible
@@ -68,7 +68,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (levelGrid[i][j] == 255) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == 255) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
@@ -86,7 +86,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (levelGrid[i][j] == 20) {
+                if (navi.getCurrentRoom().getRoomData()[i][j]== 20) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
@@ -102,7 +102,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (levelGrid[i][j] == 150) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == 150) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
@@ -117,16 +117,16 @@ public class LevelToUi {
             for (int j = 0; j < roomWidth; j++) {
 
                 // wall
-                if (levelGrid[i][j] == TileCode.wall) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.wall) {
                     tileGenerator(graphicsContext, TileType.WALL, j, i);
                     // floor
-                } else if (levelGrid[i][j] == TileCode.floor) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.floor) {
                     tileGenerator(graphicsContext, TileType.FLOOR, j, i);
                     // doors
-                } else if (levelGrid[i][j] == TileCode.door) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.door) {
                     tileGenerator(graphicsContext, TileType.DOOR, j, i);
                     // items ?
-                } else if (levelGrid[i][j] == TileCode.enemy) {
+                } else if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.enemy) {
                     tileGenerator(graphicsContext, TileType.ENEMY, j, i);
                 }
                 // more tiles possible
@@ -160,6 +160,11 @@ public class LevelToUi {
             System.out.println("thats a eventRect");
         });
         return rect;
+    }
+    
+    
+    public MapNavigator getMapNavigator() {
+    	return navi;    
     }
 
 }

@@ -109,7 +109,7 @@ public class RoomData
                 return adjacentRoomEast;               
         }
 
-        return UUID.fromString(null);
+        return new UUID(0, 0);
     }
  
     public boolean alreadyadjacent(UUID roomID)

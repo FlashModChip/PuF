@@ -52,7 +52,7 @@ public class KeyInputSystem implements ECSystem {
             // default velocity
             xVel = 0;
             yVel = 0;
-            System.err.println(keyInput );
+            //System.err.println(keyInput );
 
             // W-key has special functionality ??????
             //boolean buttonW = false;
@@ -90,7 +90,7 @@ public class KeyInputSystem implements ECSystem {
                 UUID uuid = entry.getKey();
                 Component component = entry.getValue();
 
-                System.err.println(entry.getValue());
+                //System.err.println(entry.getValue());
 
 
 

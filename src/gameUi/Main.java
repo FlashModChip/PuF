@@ -55,7 +55,7 @@ public class Main extends Application {
     public static ArrayList<Bounds> colliderDoorMap = new ArrayList<>();
 
     public static LevelGenerator lol = new LevelGenerator();
-    public static LevelData lvl = lol.generateLevel(1, false);
+    //public static LevelData lvl = lol.generateLevel(1, false);
     
     public MapNavigator nav = MapNavigator.getInstance();   
 
@@ -67,6 +67,21 @@ public class Main extends Application {
 
     public static GraphicsContext getGc() {
         return gc;
+    }
+    
+    public static LevelToUi getMap() {
+    	
+        return map;
+    }
+    
+    public static void updateMap() {
+    	
+    	map.tilesRenderer(gc);
+    	
+    	colliderWallMap = map.boundsWallRectLayer();
+        colliderEnemiesMap = map.boundsEnemiesRectLayer();
+        colliderDoorMap = map.boundsDoorRectLayer();
+        
     }
 
     //Player
@@ -88,9 +103,11 @@ public class Main extends Application {
         systemManager = new SystemManager();
         systemManager.init();       
         
-       nav.changeLevel(lol.generateLevel(1, false));      
-       nav.changecCurrentRoom(nav.getLevel().getLevelRoomGrid()[0][0]);       
-       map = new LevelToUi(nav.getLevel());
+       nav.changeLevel(lol.generateLevel(1, true)); 
+       
+       nav.setStartingRoom();    
+       
+       map = new LevelToUi();
        
     }
 
@@ -102,12 +119,12 @@ public class Main extends Application {
 
         guiStage = primaryStage;
 //        map.handleLevelGrid();
-//        map.tilesRenderer(gc);
-
         map.tilesRenderer(gc);
+        
 
         Pane overlay = new Pane();
         overlay.getChildren().addAll(map.interactiveRectLayer());
+        
         colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
         colliderDoorMap = map.boundsDoorRectLayer();
@@ -168,6 +185,10 @@ public class Main extends Application {
 
         // move camera to player position
         Point2D playerPosition = (Point2D) player.getComponent(PositionComponent.class).getValue();
+       
+        //prevents too fast level changes
+        nav.unlock();
+        
     }
 
     /**

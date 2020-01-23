@@ -19,11 +19,14 @@ public class Settings {
     private static final String TITLE = "I&o";
     // window dimensions
     private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_GUI_HEIGHT = 200;
     private static final int WINDOW_HEIGHT = WINDOW_WIDTH / 4 * 3;
+    private static final int WINDOW_HEIGHT_WO_GUI = WINDOW_HEIGHT - WINDOW_GUI_HEIGHT;
+    
     // generic blocksize
     private static final int BLOCKSIZE = 40;
     // player movement-speed
-    private static final int SPEED = 1;
+    private static final int SPEED = 5;
 
 
     // gravity strength
@@ -69,6 +72,14 @@ public class Settings {
 
     public static int getWindowHeight() {
         return WINDOW_HEIGHT;
+    }
+    
+    public static int getWindowHeightwithoutGUI() {
+        return WINDOW_HEIGHT_WO_GUI;
+    }
+    
+    public static int getGUIHeight() {
+        return WINDOW_GUI_HEIGHT;
     }
 
     public static int getBlocksize() {

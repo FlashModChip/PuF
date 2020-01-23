@@ -545,25 +545,25 @@ public class LevelGenerator {
 
         System.out.println("");
 
-        for (Map.Entry<UUID, RoomData> entry : roomlist.entrySet()) {
-            for (int i = 0; i < entry.getValue().getRoomData()[i].length; i++) {
-                for (int j = 0; j < entry.getValue().getRoomData().length; j++) {
-                    System.out.print(entry.getValue().getRoomData()[j][i] + " ");
-                }
-                System.out.println("");
-            }
-            System.out.println("");
-        }
+//        for (Map.Entry<UUID, RoomData> entry : roomlist.entrySet()) {
+//            for (int i = 0; i < entry.getValue().getRoomData()[i].length; i++) {
+//                for (int j = 0; j < entry.getValue().getRoomData().length; j++) {
+//                    System.out.print(entry.getValue().getRoomData()[j][i] + " ");
+//                }
+//                System.out.println("");
+//            }
+//            System.out.println("");
+//        }
 
-        // Loop through all rows
-        for (int i = 0; i < largearr[0].length; i++) {
-            // Loop through all elements of current row
-            for (int j = 0; j < largearr.length; j++) {
-                System.out.print((largearr[j][i] != 0 ? largearr[j][i] : "000") + " ");
-
-            }
-            System.out.println("");
-        }
+//        // Loop through all rows
+//        for (int i = 0; i < largearr[0].length; i++) {
+//            // Loop through all elements of current row
+//            for (int j = 0; j < largearr.length; j++) {
+//                System.out.print((largearr[j][i] != 0 ? largearr[j][i] : "000") + " ");
+//
+//            }
+//            System.out.println("");
+//        }
 
     }
 }
