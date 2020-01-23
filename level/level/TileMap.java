@@ -33,7 +33,7 @@ public class TileMap {
         TileCoordinates.put(TileType.WALL, new Point2D(0,16));
         TileCoordinates.put(TileType.FLOOR, new Point2D(16,0));
         TileCoordinates.put(TileType.DOOR, new Point2D(80,0));
-        TileCoordinates.put(TileType.ITEM, new Point2D(16,16));   
+        TileCoordinates.put(TileType.ENEMY, new Point2D(16,16));   
      
     }
 
