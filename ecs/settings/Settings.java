@@ -16,7 +16,7 @@ public class Settings {
     private static Settings settings = new Settings();
 
     // title of the game
-    private static final String TITLE = "I&o";
+    private static final String TITLE = "Darkest Crawler";
     // window dimensions
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_GUI_HEIGHT = 200;
@@ -26,7 +26,7 @@ public class Settings {
     // generic blocksize
     private static final int BLOCKSIZE = 40;
     // player movement-speed
-    private static final int SPEED = 5;
+    private static final int SPEED = 3;
 
 
     // gravity strength

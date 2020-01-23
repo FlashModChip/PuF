@@ -14,7 +14,7 @@ public final class TileCode {
     public static final Color wallRGB = Color.BLACK;
 
     public static final int floor = 100;
-    public static final Color floorRGB = Color.GREY;
+    public static final Color floorRGB = Color.WHITE;
 
     public static final int door = 150;
     public static final Color doorRGB = Color.BLUE;
