@@ -24,7 +24,7 @@ public class LevelPicUtil {
      * @return
      */
     public static int[][] getLevelDatafromPNG(String path, int sizex, int sizey) {
-        File file = new File("level/roomTemplates/roomTemplate" + randomNumber(1, 3) + ".png");
+        File file = new File("level/roomTemplates/roomTemplate" + randomNumber(1, 9) + ".png");
         Image image = new Image(file.toURI().toString());
 
         PixelReader pixelReader = image.getPixelReader();
@@ -56,8 +56,6 @@ public class LevelPicUtil {
                     tmp[x][y] = TileCode.item;
                 } else if (c.equals(TileCode.spawnRGB)) {
                     tmp[x][y] = TileCode.spawn;
-                } else if (c.equals(TileCode.enemyRGB)) {
-                    tmp[x][y] = TileCode.enemy;
                 } else if (c.equals(TileCode.goalRGB)) {
                     tmp[x][y] = TileCode.goal;
                 }

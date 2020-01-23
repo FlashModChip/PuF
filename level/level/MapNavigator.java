@@ -75,9 +75,12 @@ public class MapNavigator {
 
 		// Entry points for level change
 		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2));
+		
 		entryCoords.put(Direction.SOUTH, new Point2D(Settings.getWindowWidth() / 2,
 				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2));
+		
 		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2));
+		
 		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2,
 				Settings.getWindowHeightwithoutGUI() / 2));
 	}
@@ -222,10 +225,10 @@ public class MapNavigator {
 	 */
 	private boolean playerIsNorth(Point2D playerpos) {
 		
-		System.out.println("x: " + playerpos.getX());
-		System.out.println("x: " + playerpos.getY());
-		System.out.println("width: " + Settings.getWindowWidth());
-		System.out.println("height: " + Settings.getWindowHeight());
+//		System.out.println("x: " + playerpos.getX());
+//		System.out.println("x: " + playerpos.getY());
+//		System.out.println("width: " + Settings.getWindowWidth());
+//		System.out.println("height: " + Settings.getWindowHeight());
 		
 		return (playerpos.getY()  < (Settings.getWindowHeightwithoutGUI()/2)) &&
 			   (playerpos.getX()  > (Settings.getWindowWidth()/4)) &&

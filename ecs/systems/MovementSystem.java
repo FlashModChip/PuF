@@ -238,16 +238,18 @@ public class MovementSystem implements ECSystem {
                                 //  positionComponent.setValue(position);
                                 System.err.println((position.getX() +"||"+ position.getY()));
                                 //  noCollision = false;
-                             
+                                Direction dir = null;
+                                
                                 if(!Main.getMap().getMapNavigator().isLocked())
                                 {
-									Direction dir = Main.getMap().getMapNavigator()
+									dir = Main.getMap().getMapNavigator()
 											.changecCurrentRoomByDirection(positionComponent.getValue());
 									Point2D tmp = Main.getMap().getMapNavigator().getEntryCoords(dir);
 
 									System.out.println(tmp);
 
-									positionComponent.setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
+									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
+									
 									Main.updateMap();
                                 }                   
 

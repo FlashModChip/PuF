@@ -70,7 +70,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (navi.getCurrentRoom().getRoomData()[i][j] == 255) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.wall) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
@@ -88,7 +88,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (navi.getCurrentRoom().getRoomData()[i][j]== 20) {
+                if (navi.getCurrentRoom().getRoomData()[i][j]== TileCode.enemy) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
@@ -104,7 +104,7 @@ public class LevelToUi {
         for (int i = 0; i < roomHigh; i++) {
             for (int j = 0; j < roomWidth; j++) {
 
-                if (navi.getCurrentRoom().getRoomData()[i][j] == 150) {
+                if (navi.getCurrentRoom().getRoomData()[i][j] == TileCode.door) {
                     mapBounds.add(rectGenerator(rect, Color.BLACK, i, j).getBoundsInParent());
                 }
             }
