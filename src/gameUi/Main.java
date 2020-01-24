@@ -1,5 +1,7 @@
 package gameUi;
 import components.PositionComponent;
+import entities.Enemy;
+import entities.Item;
 import entities.Player;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -88,6 +90,10 @@ public class Main extends Application {
 
     //Player
     static Player player = new Player(200.0,200.0);
+    Enemy enemy = new Enemy(400.0, 300.0);
+    Item item1 = new Item(100,250);
+    Item item2 =new Item(200, 300);
+    Item item3 = new Item(350, 100);
     public static Pane root = new Pane();
     public static Pane debug_pane;
 
