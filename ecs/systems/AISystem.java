@@ -2,6 +2,7 @@ package systems;
 
 
 
+import components.*;
 import entities.Entity;
 import entities.EntityManager;
 import javafx.geometry.Point2D;
@@ -13,12 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-
-import components.AIComponent;
-import components.AITargetComponent;
-import components.Component;
-import components.KeyInputComponent;
-import components.VelocityComponent;
 
 
 /**
@@ -34,90 +29,88 @@ public class AISystem implements ECSystem {
 
     private int movement = Settings.getSpeed();
 
+    private AIComponent componentAI;
+    private AITargetComponent componentAITarget;
+    private VelocityComponent componentAIVelocity;
+
     /**
-     * Gets two lists, one containing all AIComponents and one with all
-     * AITargetComponents -> Checking for each of them if a AITarget is in the
-     * radius of an AIComponent, if yes set velocity, if no stop movement
+     * Gets AiTarget and Ai Componente and Velocity of Ai
+     * Checks if is in radius --> and set Velocity for Ai
      */
     @Override
     public void run(boolean debug) {
 
-        HashMap<UUID, Component> AIcomponents = EntityManager.components.get(AIComponent.class);
-        HashMap<UUID, Component> AItargetcomponents = EntityManager.components.get(AITargetComponent.class);
-        
+        HashMap<UUID, Component> components = entityManager.components.get(VelocityComponent.class);
+        // traverse all velocityComponents
+        for (Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
+            UUID uuid = entry.getKey();
+            Entity entity = entityManager.getEntity(uuid);
 
-        for (Entry<UUID, Component> entry : AIcomponents.entrySet()) 
-        {
-            for (Entry<UUID, Component> entry_target : AItargetcomponents.entrySet())
-             {
-            	Entity entity = EntityManager.getEntity(entry.getKey());
-             
-                if (IsInRadius((AIComponent)entry,(AITargetComponent)entry_target)) 
-                {        
-                  if(entity.hasComponent(VelocityComponent.class))
-                   {                       
-                      entity.getComponent(VelocityComponent.class).setValue(getVelocity((AIComponent)entry, (AITargetComponent)entry_target));
-                   }
-                }
-                else
-                {
-                    entity.getComponent(VelocityComponent.class).setValue(new Point2D(0,0));
-                }
-
+            if(entity.hasComponent(AIComponent.class)){
+                componentAI = (AIComponent) entity.getComponent(AIComponent.class);
+                componentAIVelocity= (VelocityComponent) entity.getComponent(VelocityComponent.class);
+            }
+            if (entity.hasComponent(AITargetComponent.class)) {
+                componentAITarget = (AITargetComponent) entity.getComponent(AITargetComponent.class);
             }
         }
+
+        if (IsInRadius(componentAI, componentAITarget)) {
+            componentAIVelocity.setValue(getVelocity(componentAI, componentAITarget));
+        }
     }
-   
+
+
+
     /**
      * Checks, if an AITarget is within range of an AI-radius (if both are active)
      * @param comp
      * @param comp_trgt
      * @return
      */
-    public boolean IsInRadius(AIComponent comp, AITargetComponent comp_trgt) {
+    private boolean IsInRadius(AIComponent comp, AITargetComponent comp_trgt) {
 
         if (comp.getValue() && comp_trgt.getValue()) {
-            return ((comp_trgt.getPosition().getX() - comp.getPosition().getX())
-                    * (comp_trgt.getPosition().getX() - comp.getPosition().getX())
-                    + (comp_trgt.getPosition().getX()- comp.getPosition().getY())
-                            * (comp_trgt.getPosition().getX() - comp.getPosition().getY()) <= comp.getRadius()
-                                    * comp.getRadius());
+            return ((comp_trgt.getPosition().getX() - comp.getPosition().getX())<=comp.getRadius()
+                    && (comp_trgt.getPosition().getX() - comp.getPosition().getX())>=(comp.getRadius()*-1)
+                    && (comp_trgt.getPosition().getY() - comp.getPosition().getY())<=comp.getRadius()
+                    && (comp_trgt.getPosition().getY() - comp.getPosition().getY())>=(comp.getRadius()*-1));
         } else {
             return false;
         }
-        
+
     }
-   
+
     /**
      * Calculates new velocity to target using position values
      * @param entry
      * @param entry_target
      * @return
      */
-    public Point2D getVelocity(AIComponent entry, AITargetComponent entry_target) {
-       
+    private Point2D getVelocity(AIComponent entry, AITargetComponent entry_target) {
+
         float xVel, yVel;
-        
+
         xVel = yVel = 0;
 
         if(entry.getPosition().getX() > entry_target.getPosition().getX()){
-            xVel = movement;
+            xVel = -movement;
         }
         else if(entry.getPosition().getX() < entry_target.getPosition().getX())
         {
-            xVel = -movement;
+            xVel = movement;
         }
 
         if(entry.getPosition().getY()> entry_target.getPosition().getY())
         {
-            yVel = movement;
+            yVel = -movement;
         }
         else if(entry.getPosition().getY() < entry_target.getPosition().getY())
         {
-            yVel = -movement;
+            yVel = movement;
         }
 
-    return new Point2D(xVel,yVel);
-    
+        return new Point2D(xVel,yVel);
+
     }
 }

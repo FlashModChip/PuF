@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
 public class AITargetComponent extends Component<Boolean> {
 
     public PositionComponent position;
-    public Boolean isActive;    
+    public Boolean isActive;
 
     public AITargetComponent() {
         position = null;
@@ -22,26 +22,26 @@ public class AITargetComponent extends Component<Boolean> {
         position = pos;
         isActive = activated;
     }
-    
+
     /**
      * Position of referenced Position component
      * @return
      */
     public Point2D getPosition() {
         return position.getValue();
-    }    
-    
+    }
+
     @Override
     public Boolean getValue() {
 
         if(position == null)
         {
-          isActive = false;
+            isActive = false;
         }
 
         return isActive;
     }
-   
+
     @Override
     public void setValue(Boolean value) {
         this.isActive = value;

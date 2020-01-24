@@ -1,5 +1,6 @@
 package systems;
 
+import components.FightingComponent;
 import gameUi.Main;
 import entities.Entity;
 import entities.EntityManager;
@@ -30,9 +31,8 @@ public class KeyInputSystem implements ECSystem {
     // speed
     private int movement = Settings.getSpeed();
 
-   // private int jump = Settings.getJump(); Brauchen wir nicht, springt nicht ??
-
     private double xVel, yVel;
+    private int fight;
 
     // key hashmap
     private HashMap<KeyCode,Boolean> keyInput = Main.keyInput;
@@ -52,18 +52,15 @@ public class KeyInputSystem implements ECSystem {
             // default velocity
             xVel = 0;
             yVel = 0;
-            //System.err.println(keyInput );
+            // default fight
+            fight= 0;
 
-            // W-key has special functionality ??????
-            //boolean buttonW = false;
 
             // react on buffered user input
             // move player
             if(isPressed(KeyCode.DOWN)){
                 yVel = movement;
-               // System.out.println("klappt dies hier???");
 
-               // buttonW = true; ????
             }
             if (isPressed(KeyCode.UP)){
                 // do nothing
@@ -76,7 +73,7 @@ public class KeyInputSystem implements ECSystem {
                 xVel = -movement;
             }
             if(isPressed(KeyCode.A)){
-                //TODO Angriff gegen Feind
+                fight ++;
             }
             if(isPressed(KeyCode.D)){
                 //TODO Item einsammeln
@@ -90,41 +87,28 @@ public class KeyInputSystem implements ECSystem {
                 UUID uuid = entry.getKey();
                 Component component = entry.getValue();
 
-                //System.err.println(entry.getValue());
-
-
-
                 // check if component is enabled
                 if (component.isEnabled()) {
 
                     Entity entity = EntityManager.getEntity(uuid);
 
-                    // update jump
-					/*
-					 * if (buttonW && entity.hasComponent(JumpComponent.class)) { Component
-					 * jumpComponent = entity.getComponent(JumpComponent.class); if ((boolean)
-					 * jumpComponent.getValue()) { yVel = jump; jumpComponent.setValue(false);
-					 * eventCommandSystem.addEvent(new GameEvent(GameEvent.ENTITY_JUMP)); }
-					 * 
-					 * count++; }
-					 */
-
                     // update velocity
                     if (entity.hasComponent(VelocityComponent.class)) {
                         Component velocityComponent = entity.getComponent(VelocityComponent.class);
-                        // restore current y-velocity
-                        Point2D velocity = (Point2D) velocityComponent.getValue();
-                        if (yVel == 0) {
-                           // yVel = velocity.getY();
-                        }
-                        // set velocity
                         velocityComponent.setValue(new Point2D(xVel, yVel));
-
                         count++;
+                    }
+                    if(entity.hasComponent(FightingComponent.class)){
+                        Component fightingComponent = entity.getComponent(FightingComponent.class);
+                        if (fightingComponent.isEnabled()){
+                            fightingComponent.setValue(((int)fightingComponent.getValue()+fight));
+                            System.out.println(fightingComponent.getValue());
+                        }
                     }
                 }
             }
         }
+
 
         if(debug)
         {
@@ -142,7 +126,7 @@ public class KeyInputSystem implements ECSystem {
      *      boolean: is key pressed
      */
     private boolean isPressed(KeyCode key){
-      //  System.out.println(key + "____"+keyInput);
+        //  System.out.println(key + "____"+keyInput);
         return keyInput.getOrDefault(key,false);
     }
 }

@@ -18,6 +18,8 @@ public class SystemManager {
     MovementSystem movement = new MovementSystem();
     EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
     GarbageCollectorSystem garbage = new GarbageCollectorSystem();
+    AISystem ai = new AISystem();
+    FightingSystem fightingSystem = new FightingSystem();
 
     // settings
     Settings settings = Settings.getInstance();
@@ -65,8 +67,8 @@ public class SystemManager {
             System.out.println("SystemManager: entities to update: " + entityManager.entitiesUpdateBuffer.size());
         }
 
-        //render.run(debug_update);
-        gravity.run(debug_update);
+        ai.run(debug_update);
+        fightingSystem.run(debug_update);
         keyInput.run(debug_update);
         movement.run(debug_update);
         garbage.run(debug_update);

@@ -53,9 +53,6 @@ public class MovementSystem implements ECSystem {
 
 
 
-    // hashmap colliders
-    private HashMap<UUID, Component> colliders;
-
     // dummy box for collision detection
     private Box dummyBox = new Box(0, 0, 0);
 
@@ -81,6 +78,11 @@ public class MovementSystem implements ECSystem {
     // because we have to traverse all entities more often during collision detection
     private int stepsize = 12;
 
+    // hashmap colliders
+    private HashMap<Entity, PositionComponent > colliders = new HashMap<>();
+
+
+
     /**
      * constructor
      */
@@ -98,6 +100,7 @@ public class MovementSystem implements ECSystem {
     @Override
     public void run(boolean debug) {
         boolean noCollision = true;
+
 
         if (debug) System.err.println("MovementSystem <start>");
         int count = 0;
@@ -117,6 +120,16 @@ public class MovementSystem implements ECSystem {
             if (debugBuffer) System.out.println("entity state: " + entityState);
 
             if (entity.hasComponent(PositionComponent.class)) {
+
+                //gets Items Heahlth and Weapons
+                if((entity.hasComponent(HealthComponent.class)&&!(entity.hasComponent(FightingComponent.class)))
+                        || entity.hasComponent(WeaponComponent.class)&&!(entity.hasComponent(FightingComponent.class))){
+
+                    colliders.put(entity, (PositionComponent) entity.getComponent(PositionComponent.class));
+                }
+
+                System.out.println(colliders);
+
 
                 // get position component & data
                 PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
@@ -182,6 +195,13 @@ public class MovementSystem implements ECSystem {
                 Entity entity = entityManager.getEntity(uuid);
                 Sprite componentSprite = (Sprite) entity.getComponent(Sprite.class);
 
+
+                //is in Fight Modi
+                if(entity.hasComponent(FightingComponent.class)){
+                    noCollision = !(entity.getComponent(FightingComponent.class).isEnabled());
+                }
+
+
                 // check if component is enabled and has a position
                 // assume it has a velocity, otherwise it would not be in this list
                 if (component.isEnabled() && entity.hasComponent(PositionComponent.class)) {
@@ -222,10 +242,28 @@ public class MovementSystem implements ECSystem {
                                 noCollision = false;
                             }
                         }
-                        for(int i = 0; i< Main.colliderEnemiesMap.size(); i++){
+                        //   for(int i = 0; i< colliders.size(); i++){
+                        for(Map.Entry<Entity, PositionComponent> colliderEntry: colliders.entrySet()){
+                            Point2D positionItem = colliderEntry.getValue().getValue();
+                            if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
+                                    && positionItem.getX()<=position.getX() && (positionItem.getX() + 40)>=position.getX()){
+                                Sprite Temp = (Sprite) colliderEntry.getKey().getComponent(Sprite.class);
+                                if(colliderEntry.getKey().hasComponent(HealthComponent.class)) {
+                                    HealthComponent tempHealth = (HealthComponent) colliderEntry.getKey().getComponent(HealthComponent.class);
+                                    Temp.translate(400, 500);
+                                   PositionComponent TempPos = new PositionComponent(400,500);
+                                    colliderEntry.setValue(TempPos);
+                                    entity.addComponent(tempHealth);
+                                    //colliderEntry.setValue(PositionComponent)
+                                } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
+                                    Temp.translate(500,500);
+                                    PositionComponent TempPos = new PositionComponent(500,500);
+                                    colliderEntry.setValue(TempPos);
+                                }
+                                //tempStepItemsX+=100;
 
-                            if(Main.colliderEnemiesMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
-                                  System.err.println("FEIND");
+                                // if(positionItem.intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
+                                System.err.println("ITEM");
                                 //  positionComponent.setValue(position);
                                 noCollision = false;
                                 //TODO Angriff oder aufsammeln etc.

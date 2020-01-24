@@ -32,7 +32,7 @@ public class AIComponent extends Component<Boolean> {
     public void changeRadius(float detectionradius) {
         detectionRadius = detectionradius;
     }
-    
+
 
     /**
      * Position of referenced Position component
@@ -49,7 +49,7 @@ public class AIComponent extends Component<Boolean> {
     public float getRadius() {
         return detectionRadius;
     }
-   
+
     @Override
     public Boolean getValue() {
 
@@ -59,7 +59,7 @@ public class AIComponent extends Component<Boolean> {
 
         return isActive;
     }
-   
+
     @Override
     public void setValue(Boolean value) {
         this.isActive = value;
