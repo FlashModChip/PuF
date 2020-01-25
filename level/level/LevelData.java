@@ -3,9 +3,12 @@ package level;
 import java.util.HashMap;
 import java.util.UUID;
 
-/// <summary>
-/// Contains level data (all rooms and some meta informations, like lvl number)
-/// </summary>
+
+/**
+ * Contains level data (all rooms and some meta informations, like lvl number)
+ * @author Roman
+ *
+ */
 public class LevelData {
 
     // List of individual room data

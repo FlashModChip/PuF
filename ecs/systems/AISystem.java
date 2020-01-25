@@ -41,6 +41,7 @@ public class AISystem implements ECSystem {
     public void run(boolean debug) {
 
         HashMap<UUID, Component> components = entityManager.components.get(VelocityComponent.class);
+        
         // traverse all velocityComponents
         for (Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
             UUID uuid = entry.getKey();

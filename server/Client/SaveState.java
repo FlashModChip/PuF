@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import entities.*;
 import level.*;
 
+/**
+ * Save state for transfer to server
+ * @author Roman
+ *
+ */
 public class SaveState {
 	
     public LevelData level;
