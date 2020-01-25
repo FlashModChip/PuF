@@ -1,10 +1,8 @@
 package systems;
 
+import entities.*;
 import gameUi.Main;
 import components.*;
-import entities.Entity;
-import entities.EntityManager;
-import entities.State;
 import game.Game;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
@@ -128,8 +126,6 @@ public class MovementSystem implements ECSystem {
                     colliders.put(entity, (PositionComponent) entity.getComponent(PositionComponent.class));
                 }
 
-                System.out.println(colliders);
-
 
                 // get position component & data
                 PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
@@ -161,16 +157,26 @@ public class MovementSystem implements ECSystem {
                     }
                 }
 
-                /*
-                 * // update light if (entity.hasComponent(LightComponent.class)) { count++;
-                 * LightComponent component = (LightComponent)
-                 * entity.getComponent(LightComponent.class); State componentState =
-                 * component.getState(); if (debugBuffer)
-                 * System.out.println("component state: "+componentState); if
-                 * (positionComponentState == State.UPDATE || component.getState() ==
-                 * State.UPDATE) { component.translate(position); }
-                 * component.setState(State.STABLE); }
-                 */
+
+            }
+        }
+        HashMap<UUID, Entity> entitiesCollider = EntityManager.entities;
+        for (Map.Entry<UUID, Entity> entryCollider : entitiesCollider.entrySet()) {
+//            UUID uuid = entry.getKey();
+            Entity entity = entryCollider.getValue();
+            State entityState = entity.getState();
+
+
+            if (entity.hasComponent(PositionComponent.class)) {
+
+                //gets Items Heahlth and Weapons
+                if ((entity.hasComponent(HealthComponent.class) && !(entity.hasComponent(FightingComponent.class)))
+                        || entity.hasComponent(WeaponComponent.class) && !(entity.hasComponent(FightingComponent.class))) {
+
+                    colliders.put(entity, (PositionComponent) entity.getComponent(PositionComponent.class));
+                }
+
+
             }
         }
 
@@ -242,7 +248,6 @@ public class MovementSystem implements ECSystem {
                                 noCollision = false;
                             }
                         }
-                        //   for(int i = 0; i< colliders.size(); i++){
                         for(Map.Entry<Entity, PositionComponent> colliderEntry: colliders.entrySet()){
                             Point2D positionItem = colliderEntry.getValue().getValue();
                             if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
@@ -254,11 +259,13 @@ public class MovementSystem implements ECSystem {
                                    PositionComponent TempPos = new PositionComponent(400,500);
                                     colliderEntry.setValue(TempPos);
                                     entity.addComponent(tempHealth);
+                                    colliderEntry.getKey().delete();
                                     //colliderEntry.setValue(PositionComponent)
                                 } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
                                     Temp.translate(500,500);
                                     PositionComponent TempPos = new PositionComponent(500,500);
                                     colliderEntry.setValue(TempPos);
+                                    colliderEntry.getKey().delete();
                                 }
                                 //tempStepItemsX+=100;
 
@@ -274,9 +281,7 @@ public class MovementSystem implements ECSystem {
                             if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
                                 
                             	System.err.println("nächstes Level");
-                                //  positionComponent.setValue(position);
                                 System.err.println((position.getX() +"||"+ position.getY()));
-                                //  noCollision = false;
                                 Direction dir = null;
                                 Point2D tmp = null;
                                 
@@ -291,7 +296,10 @@ public class MovementSystem implements ECSystem {
 									System.out.println(tmp);									
 
 									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
-									
+                                    Item item1 = new Item(100,250);
+                                    Enemy enemy = new Enemy(100,200);
+
+
 									Main.updateMap();
                                 }                   
 
@@ -311,18 +319,6 @@ public class MovementSystem implements ECSystem {
                                 ((Sprite) entity.getComponent(Sprite.class)).translateY(position.getY());
                             }
                         }
-
-                        // update collider position
-                        // if (entity.hasComponent(ColliderComponent.class)) {
-                        //     count++;
-                        //     ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translate(position);
-                        // }
-
-                        /*
-                         * // update light position if (entity.hasComponent(LightComponent.class)) {
-                         * count++; ((LightComponent)
-                         * entity.getComponent(LightComponent.class)).translate(position); }
-                         */
                     }
                 }
             }

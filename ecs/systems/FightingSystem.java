@@ -60,6 +60,12 @@ public class FightingSystem implements ECSystem {
         }
     }
 
+    /**
+     * Checks if enemy und player near to fight
+     * @param comp
+     * @param comp_trgt
+     * @return
+     */
     private boolean IsInFightRadius(AIComponent comp, AITargetComponent comp_trgt) {
 
         if (comp.getValue() && comp_trgt.getValue()) {
@@ -73,6 +79,11 @@ public class FightingSystem implements ECSystem {
 
     }
 
+    /**
+     * fighting
+     * @param enemy
+     * @param player
+     */
     private void fight(Entity enemy, Entity player){
 
         if((double)enemy.getComponent(HealthComponent.class).getValue() < 0){
@@ -82,6 +93,8 @@ public class FightingSystem implements ECSystem {
             enemy.getComponent(PositionComponent.class).setValue(new Point2D(1600,500));
             enemy.getComponent(AIComponent.class).setValue(false);
             player.getComponent(FightingComponent.class).setEnabled(false);
+            enemy.delete();
+            player.getComponent(FightingComponent.class).setValue(0);
         }
         enemy.getComponent(HealthComponent.class).setValue(
                (double) enemy.getComponent(HealthComponent.class).getValue()- (int)player.getComponent(FightingComponent.class).getValue()) ;

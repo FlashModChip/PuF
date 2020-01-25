@@ -1,17 +1,18 @@
 package systems;
 
+import components.*;
 import gameUi.Main;
-import components.Component;
-import components.RenderComponent;
-import components.Sprite;
 import entities.Entity;
 import entities.EntityManager;
 import entities.State;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import settings.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -30,29 +31,15 @@ public class RenderSystem implements ECSystem {
         if(debug) System.err.println("RenderSystem <start>");
         int count = 0;
 
-        // DEPRECATED access by component
-        // to prevent rendering on every frame
-        // render-system can only operate once
-        // this lacks possibilities to add or remove entities (or components) during runtime
-//        HashMap<UUID, Component> components = EntityManager.components.get(RenderComponent.class);
-
         // this new approach is using a separate buffer to indicate changes rather than static states
         // changes are indicated by flag and stored in the buffer
         HashMap<UUID, Entity> entities = EntityManager.entitiesUpdateBuffer;
 
-        // check if there are any entities in the update-pipeline
-        // rendering is only needed once when entity is created
-        // removing an entity from scene will also be indicated on the update-channel
-
-        // DEPRECATED (see above)
-        // check if we there are any renderComponents
-//        if (components == null) {
 
         // new approach
         if (entities == null) {
             if(debug) System.out.println("entities to render: 0");
         } else {
-//            if(debug) System.out.println("entities to render: " + entities.size());
 
             // traverse all renderComponents
 //            for(Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
@@ -86,27 +73,47 @@ public class RenderSystem implements ECSystem {
                         }
                         // add shape to scene, when either the renderComponent or the shapeComponent is flagged to update
                         else if (renderComponentState == State.UPDATE || component.getState() == State.UPDATE) {
+                            //root.getChildren().add(shape);
+
+                            if((entity.hasComponent(HealthComponent.class)||(entity.hasComponent(WeaponComponent.class))|| (entity.hasComponent(AIComponent.class))
+                                    &&(!entity.hasComponent(AITargetComponent.class)))){
+                                boolean isNotContains = false;
+                                int randomYint = 100;
+                                int randomXint = 200;
+                                do{
+                                    isNotContains = false;
+                                    System.out.println("Hallooo");
+                                    Random randomX = new Random();
+                                    randomXint = randomX.nextInt(Settings.getWindowWidth());
+                                    Random randomY = new Random();
+                                    randomYint = randomY.nextInt(Settings.getWindowHeight() / 2);
+                                    Point2D TempPoint = new Point2D(randomXint, randomYint);
+
+
+                                    for (int i = 0; i < Main.colliderWallMap.size(); i++) {
+                                       System.out.println(Main.colliderWallMap+""+ TempPoint);
+                                    if(Main.colliderWallMap.get(i).contains(TempPoint)){
+                                          isNotContains = true;
+                                      }
+
+                                    }
+
+                                }while(isNotContains);
+
+
+                                entity.getComponent(PositionComponent.class).setValue(new Point2D(randomXint,randomYint));
+                               Sprite item = (Sprite) entity.getComponent(Sprite.class);
+                               item.translate(randomXint,randomYint);
+
+
+                            }
+
                             root.getChildren().add(shape);
                             System.out.println(root);
                         }
                     }
 
-                    // update light
-               //     if (entity.hasComponent(LightComponent.class)) {
-               //         count++;
-               //         Component component = entity.getComponent(LightComponent.class);
-               //         State componentState = component.getState();
-//                        System.out.println("component state: "+componentState);
-               //         PointLight light = (PointLight) component.getValue();
-                        // remove light from scene, when either the renderComponent or the lightComponent is flagged to delete
-               //         if (entityState == State.DELETE || renderComponentState == State.DELETE || component.getState() == State.DELETE) {
-              //              root.getChildren().remove(light);
-               //         }
-                        // add light to scene, when either the renderComponent or the lightComponent is flagged to update
-             //           else if (renderComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-             //               root.getChildren().add(light);
-             //           }
-                    //}
+
                 }
             }
         }
