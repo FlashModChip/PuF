@@ -71,6 +71,7 @@ public class SystemManager {
         fightingSystem.run(debug_update);
         keyInput.run(debug_update);
         movement.run(debug_update);
+        render.run(debug_update);
         garbage.run(debug_update);
         eventCommandSystem.run(debug_update);
 

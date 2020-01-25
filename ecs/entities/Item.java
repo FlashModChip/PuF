@@ -35,12 +35,12 @@ public class Item extends Entity {
         //Temporare Zufallsmechanismus für Items entweder Health oder Weapon
         Random zufallsItem = new Random();
         int zufallsZahlItem = zufallsItem.nextInt(2);
-        System.out.println(zufallsZahlItem);
+
         if(zufallsZahlItem==0){
-            addComponent(new Sprite("pic/medizinkoffer",new Point2D(x, y)));
+            addComponent(new Sprite("pic/potion",new Point2D(x, y)));
             addComponent(new HealthComponent(2000.0));
         } else {
-            addComponent(new Sprite("pic/messer1", new Point2D(x,y)));
+            addComponent(new Sprite("pic/shield", new Point2D(x,y)));
             addComponent(new WeaponComponent(10.0));
         }
         addComponent(new RenderComponent());
