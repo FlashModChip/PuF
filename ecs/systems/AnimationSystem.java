@@ -95,7 +95,7 @@ public class AnimationSystem implements ECSystem {
                     boolean movingLeft = positionComponent.isMovingLeft();
 
 
-                    System.out.println("get velo & pos " + position + componentSprite);
+//                    System.out.println("get velo & pos " + position + componentSprite);
 
 
 
@@ -141,7 +141,7 @@ public class AnimationSystem implements ECSystem {
                                             ((Sprite) entity.getComponent(Sprite.class)).setImageXPos(-2.30);
                                         } else if (movingLeft) {
                                             ((Sprite) entity.getComponent(Sprite.class)).animate(currentTileRow, -1.0);
-                                            System.out.println("now update pic with current tile" + currentTileRow);
+//                                            System.out.println("now update pic with current tile" + currentTileRow);
                                             ((Sprite) entity.getComponent(Sprite.class)).setImageXPos(currentTileRow -= 1.06);
                                         } else if (!movingLeft) {
                                             ((Sprite) entity.getComponent(Sprite.class)).animate(currentTileRow, -2.1);
