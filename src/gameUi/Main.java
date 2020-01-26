@@ -106,16 +106,19 @@ public class Main extends Application {
     @Override
     public void init() {
         System.out.println("Running...");
+        nav.changeLevel(lol.generateLevel(1, true));
+
+        nav.setStartingRoom();
+
+        map = new LevelToUi();
+        colliderWallMap = map.boundsWallRectLayer();
+        colliderEnemiesMap = map.boundsEnemiesRectLayer();
+        colliderDoorMap = map.boundsDoorRectLayer();
 
         // init & run the SystemManager
         systemManager = new SystemManager();
         systemManager.init();       
-        
-       nav.changeLevel(lol.generateLevel(1, true)); 
-       
-       nav.setStartingRoom();    
-       
-       map = new LevelToUi();
+
        
     }
 
