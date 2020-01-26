@@ -2,6 +2,7 @@ package entities;
 
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 import components.*;
 import javafx.geometry.Point2D;
@@ -16,13 +17,18 @@ public class Item extends Entity {
 
     public Item() {
         super();
-        init(0,0);
+        init(0,0, null);
     }
 
 
     public Item(double x, double y) {
         super();
-        init(x, y);
+        init(x, y, null);
+    }
+
+    public Item(double x, double y, UUID room) {
+        super();
+        init(x, y,room);
     }
 
     /**
@@ -30,7 +36,7 @@ public class Item extends Entity {
      * @param x
      * @param y
      */
-    private void init(double x, double y) {
+    private void init(double x, double y, UUID room ) {
         addComponent(new PositionComponent(x, y));
         //Temporare Zufallsmechanismus für Items entweder Health oder Weapon
         Random zufallsItem = new Random();
