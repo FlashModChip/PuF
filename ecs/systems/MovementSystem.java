@@ -19,6 +19,7 @@ import settings.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -34,6 +35,8 @@ public class MovementSystem implements ECSystem {
     // event-system
     private EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
 
+    private Random ran = new Random();
+    
     // game root
     private Pane root = Main.root;
 
@@ -227,24 +230,34 @@ public class MovementSystem implements ECSystem {
                                 System.err.println((position.getX() +"||"+ position.getY()));
                                 Direction dir = null;
                                 Point2D tmp = null;
-
-
-
+                            	
                                 
                                 if(!Main.getMap().getMapNavigator().isLocked())
                                 {
+                                	
+                                	boolean alreadyVisited=  Main.getMap().getMapNavigator().getRoomVisited();
+                                	
 									dir = Main.getMap().getMapNavigator()
 											.changecCurrentRoomByDirection(positionComponent.getValue());
 									
 									tmp = Main.getMap().getMapNavigator().getEntryCoords(dir);
 
-									System.out.println(dir);
-									System.out.println(tmp);									
+									//System.out.println(dir);
+									//System.out.println(tmp);									
 
 									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
-                                    Item item1 = new Item(100,250);
-                                    Enemy enemy = new Enemy(100,200);
-
+                                    //Item item1 = new Item(100,250);                                    
+									
+									
+									if(!alreadyVisited)
+									{	
+										
+										for (int j = 0; j < ran.nextInt(3); j++) 
+										{
+										  new Enemy(100,200, Main.getMap().getMapNavigator().getCurrentRoom().getRoomID());
+										}				
+										
+									}
 
 									Main.updateMap();
                                 }                   
