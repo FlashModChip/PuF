@@ -5,6 +5,7 @@ import entities.Entity;
 import entities.EntityManager;
 import gameUi.Main;
 import javafx.geometry.Point2D;
+import level.MapNavigator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class FightingSystem implements ECSystem {
 
     private Entity entityPlayer;
     private Entity entityEnemy;
+    
+    private MapNavigator navi =  MapNavigator.getInstance();
 
 
 
@@ -49,8 +52,22 @@ public class FightingSystem implements ECSystem {
                 componentAITarget = (AITargetComponent) entity.getComponent(AITargetComponent.class);
                 componentTargetFight = (FightingComponent) entity.getComponent(FightingComponent.class);
             }
+            
+            
+            if(entity.hasComponent(RoomComponent.class) && (entity.getComponent(RoomComponent.class).getValue() != navi.getCurrentRoom().getRoomID()))
+			{
+				System.out.println("DEATH" + entity.getComponent(HealthComponent.class).getValue());
+				Sprite enemySprite = (Sprite) entity.getComponent(Sprite.class);
+				enemySprite.translate(1600, 500);
+				entity.getComponent(PositionComponent.class).setValue(new Point2D(1600, 500));
+				entity.getComponent(AIComponent.class).setValue(false);				
+				entity.delete();
+			}
+            
         }
 
+        if(componentAI != null && componentAITarget != null) 
+        {
         if (IsInFightRadius(componentAI, componentAITarget)&& !isInDoor(entityPlayer)) {
             componenteAIFight.setEnabled(true);
             componentTargetFight.setEnabled(true);
@@ -58,6 +75,7 @@ public class FightingSystem implements ECSystem {
         } else{
             componenteAIFight.setEnabled(false);
             componentTargetFight.setEnabled(false);
+        }
         }
     }
 
