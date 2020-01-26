@@ -13,6 +13,8 @@ public class RoomData {
 	private UUID adjacentRoomSouth;
 	private UUID adjacentRoomWest;
 	private UUID adjacentRoomEast;
+	
+	private boolean isVisited;
 
 	private UUID roomID;
 
@@ -23,6 +25,8 @@ public class RoomData {
 		adjacentRoomSouth = new UUID(0, 0);
 		adjacentRoomWest = new UUID(0, 0);
 		adjacentRoomEast = new UUID(0, 0);
+		
+		isVisited = false;
 
 		roomID = UUID.randomUUID();
 	}
@@ -34,6 +38,8 @@ public class RoomData {
 		adjacentRoomSouth = south;
 		adjacentRoomWest = west;
 		adjacentRoomEast = east;
+		
+		isVisited = false;
 
 		roomID = UUID.randomUUID();
 	}
@@ -129,5 +135,16 @@ public class RoomData {
 	public boolean alreadyadjacent(UUID roomID) {
 		return this.adjacentRoomNorth == roomID || this.adjacentRoomEast == roomID || this.adjacentRoomSouth == roomID
 				|| this.adjacentRoomWest == roomID;
+	}
+	
+	
+	public void setisVisited(boolean isvis)
+	{
+		this.isVisited = isvis;
+	}
+	
+	public boolean getisVisited() {
+		
+		return this.isVisited;
 	}
 }

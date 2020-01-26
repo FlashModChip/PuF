@@ -115,6 +115,8 @@ public class MapNavigator {
 	public void changecCurrentRoom(UUID room) {
 
 		currentRoom = currentLevel.getLevelRoomList().get(room);
+		
+		setRoomVisited(room);
 	}
 
 	/**
@@ -273,5 +275,26 @@ public class MapNavigator {
 	private boolean playerIsEasth(Point2D playerpos) {
 		return (playerpos.getX()  > ((Settings.getWindowWidth() - (Settings.getWindowWidth()/4))));
 	}
+	
+	
+	
+	public void setRoomVisited(UUID room) {
+		
+		currentLevel.getLevelRoomList().get(room).setisVisited(true);
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param 
+	 * @return
+	 */
+	public boolean getRoomVisited(UUID room) {
+		
+		return currentLevel.getLevelRoomList().get(room).getisVisited();
+		
+	}
+	
 
 }
