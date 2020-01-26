@@ -246,7 +246,9 @@ public class MovementSystem implements ECSystem {
 									//System.out.println(tmp);									
 
 									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
-                                    //Item item1 = new Item(100,250);                                    
+									Main.getPlayer().getComponent(VelocityComponent.class).setValue(new Point2D(0,0));
+									
+									//Item item1 = new Item(100,250);                                    
 									
 									
 									if(!alreadyVisited)

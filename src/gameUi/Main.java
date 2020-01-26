@@ -182,6 +182,13 @@ public class Main extends Application {
 //        guiStage.setTitle("Darkest Crawler");
 //        guiStage.setScene(new Scene(root, 600, 400));
 //        guiStage.show();
+
+// ++++++  UI Start mit Intro +++++++
+//        guiStage = primaryStage;
+//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
+//        guiStage.setTitle("Darkest Crawler");
+//        guiStage.setScene(new Scene(root, 600, 400));
+//        guiStage.show();
     }
 
     public static void main(String[] args) {
