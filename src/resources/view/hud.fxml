@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -7,35 +8,97 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="900.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gameUi.controller.HudController">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="800.0" spacing="40.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gameUi.controller.HudController">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="220.0" spacing="10.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="170.0">
          <children>
             <Label text="HEALTH POINTS" textAlignment="CENTER">
                <font>
                   <Font size="18.0" />
                </font>
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
             </Label>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <ImageView fx:id="firstLife" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="heart1" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/hud/fullLife.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="secondLife" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="heart2" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/hud/fullLife.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="heart3" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/hud/emptyLife.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
+         </children>
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="170.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <ImageView fx:id="potion1" fitHeight="40.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/hud/potion.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="potion2" fitHeight="40.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/hud/emptyPotion.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="potion3" fitHeight="40.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/hud/emptyPotion.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <Label text="PRESS &quot;X&quot; TO USE">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="120.0" spacing="7.0">
+         <children>
+            <ImageView fx:id="swordImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <image>
+                  <Image url="@../images/hud/sword.png" />
+               </image>
+            </ImageView>
+            <Label text="PRESS &quot;A&quot; TO USE" />
+         </children>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="120.0" spacing="7.0">
+         <children>
+            <ImageView fx:id="shieldImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/hud/shieldSlot.png" />
+               </image>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </ImageView>
+            <Label text="PRESS &quot;D&quot; TO USE" />
          </children>
       </VBox>
    </children>

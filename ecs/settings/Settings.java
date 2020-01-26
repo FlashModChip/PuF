@@ -20,7 +20,7 @@ public class Settings {
     // window dimensions
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_GUI_HEIGHT = 200;
-    private static final int WINDOW_HEIGHT = WINDOW_WIDTH / 4 * 3;
+    private static final int WINDOW_HEIGHT = WINDOW_WIDTH / 4 * 3 - 100;
     private static final int WINDOW_HEIGHT_WO_GUI = WINDOW_HEIGHT - WINDOW_GUI_HEIGHT;
     
     // generic blocksize

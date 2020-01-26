@@ -85,7 +85,7 @@ public class MenuController {
 
     public void changeToGameScene () throws Exception {
         pMT.stopSound();
-        changeScene("game");
+        changeScene("Main");
 
 //        System.out.println("sound Thread isAlive: " + pMT.isAlive());
 //        System.out.println("movingBackground Thread isAlive: " + mBgT.isAlive());
