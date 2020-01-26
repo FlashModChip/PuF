@@ -35,6 +35,7 @@ public class Player extends Entity {
         addComponent(new VelocityComponent());
         addComponent(new KeyInputComponent());
         addComponent(new HealthComponent(5000.0));
+        addComponent(new WeaponComponent(0.0));
         addComponent(new Sprite("pic/1Stehen", new Point2D(x,y)));
         addComponent(new RenderComponent());
         addComponent(new AITargetComponent(tmp, true));

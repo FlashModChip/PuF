@@ -34,6 +34,7 @@ public class Enemy extends Entity {
         addComponent(new VelocityComponent());
         addComponent(new Sprite("pic/Enemy", new Point2D(175, 125)));
         addComponent(new HealthComponent(5000.0));
+        addComponent(new WeaponComponent(0.0));
         addComponent(new RenderComponent());
         addComponent(new AIComponent(tmp,100, true));
         addComponent(new FightingComponent());
