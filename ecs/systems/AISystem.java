@@ -27,7 +27,7 @@ public class AISystem implements ECSystem {
 
     private EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
 
-    private int movement = Settings.getSpeed();
+    private int movement = Settings.getSpeed()/2;
 
     private AIComponent componentAI;
     private AITargetComponent componentAITarget;
@@ -41,6 +41,7 @@ public class AISystem implements ECSystem {
     public void run(boolean debug) {
 
         HashMap<UUID, Component> components = entityManager.components.get(VelocityComponent.class);
+        
         // traverse all velocityComponents
         for (Map.Entry<UUID, ? extends Component> entry : components.entrySet()) {
             UUID uuid = entry.getKey();
@@ -50,14 +51,22 @@ public class AISystem implements ECSystem {
                 componentAI = (AIComponent) entity.getComponent(AIComponent.class);
                 componentAIVelocity= (VelocityComponent) entity.getComponent(VelocityComponent.class);
             }
+            
             if (entity.hasComponent(AITargetComponent.class)) {
                 componentAITarget = (AITargetComponent) entity.getComponent(AITargetComponent.class);
             }
+            
+            if(componentAI != null && componentAITarget != null ) {
+            if (IsInRadius(componentAI, componentAITarget)) {
+                componentAIVelocity.setValue(getVelocity(componentAI, componentAITarget));
+            }    }        
+            
         }
 
-        if (IsInRadius(componentAI, componentAITarget)) {
-            componentAIVelocity.setValue(getVelocity(componentAI, componentAITarget));
-        }
+     
+        
+        //System.out.println(entry.getKey())
+        
     }
 
 

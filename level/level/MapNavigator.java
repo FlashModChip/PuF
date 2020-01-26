@@ -74,14 +74,14 @@ public class MapNavigator {
 		entryCoords = new HashMap<Direction, Point2D>();
 
 		// Entry points for level change
-		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2.5));
+		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2));
 		
 		entryCoords.put(Direction.SOUTH, new Point2D(Settings.getWindowWidth() / 2,
-				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2.5));
+				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2));
 		
-		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2.5, Settings.getWindowHeightwithoutGUI() / 2));
+		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2));
 		
-		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2.5,
+		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2,
 				Settings.getWindowHeightwithoutGUI() / 2));
 	}
 
@@ -114,7 +114,8 @@ public class MapNavigator {
 	 */
 	public void changecCurrentRoom(UUID room) {
 
-		currentRoom = currentLevel.getLevelRoomList().get(room);
+		currentRoom = currentLevel.getLevelRoomList().get(room);		
+		
 	}
 
 	/**
@@ -273,5 +274,26 @@ public class MapNavigator {
 	private boolean playerIsEasth(Point2D playerpos) {
 		return (playerpos.getX()  > ((Settings.getWindowWidth() - (Settings.getWindowWidth()/4))));
 	}
+	
+	
+	
+	public void setRoomVisited(UUID room) {
+		
+		currentLevel.getLevelRoomList().get(room).setisVisited(true);
+		
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param 
+	 * @return
+	 */
+	public boolean getRoomVisited() {
+		
+		return currentLevel.getLevelRoomList().get(this.getCurrentRoom().getRoomID()).getisVisited();
+		
+	}
+	
 
 }

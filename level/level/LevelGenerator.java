@@ -7,6 +7,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+
+/**
+ * LeveGenerator level factory for parameterized level construction
+ * @author Roman
+ * 
+ */
 public class LevelGenerator {
 	
     // Room generation Values

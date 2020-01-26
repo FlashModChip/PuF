@@ -3,10 +3,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +20,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import Client.SaveState;
 import entities.Entity;
 import level.LevelData;
 
@@ -28,7 +31,7 @@ public class Server {
 
     private static final String xmlFilePath = "./???";
 
-    public static void saveXMLtoFile(ArrayList<Entity> Player, ArrayList<LevelData> Level)
+    public static void saveXMLtoFile(String save)
     {
         try
         {
@@ -78,8 +81,21 @@ public class Server {
         } catch (TransformerException tfe) {
             tfe.printStackTrace();
         }  
+    }    
+    
+    
+    /**
+     * @param save
+     */
+    public static void savetoDatabase(String save)
+    {  
+    	try {
+         serverData.saveToDatabase(File.createTempFile(ServerSetting.path, save));            
 
-    }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }    
 
     //new thread
     void ServerThread() 
@@ -104,9 +120,7 @@ public class Server {
         {
             serverSocket = null;
         }
-    }
-
-    ///example run (iando-project)
+    } 
     public void run() {
         
         while (serverSocket != null) 

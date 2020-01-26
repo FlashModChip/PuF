@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.Socket;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,39 +14,64 @@ import javax.xml.bind.Marshaller;
 
 import settings.Settings;
 
+
+/**
+ * Class for Cloud save client access
+ * @author Roman
+ *
+ */
 public class Client {    
 
-    void sendCloudSave(SaveState state) throws IOException {
+	
+    /**
+     * @param state
+     * @throws IOException
+     */
+    public void sendCloudSave(SaveState state) throws IOException {
 
-        java.net.Socket socket = new java.net.Socket(Settings.SERVER, Settings.PORT); // verbindet
-                                                                                                        // sich mit
-                                                                                                        // Server
-        String zuSendendeNachricht = convertGameStateToXML(state);
+        Socket socket = new java.net.Socket(Settings.SERVER, Settings.PORT); 
+        
+        String message = convertGameStateToXML(state);        
+        
+        writeSave(socket, message);
+       
+    }    
+    
+    
+    /**
+     * @return
+     * @throws IOException
+     */
+    public SaveState  readCloudSave() throws IOException {
 
-        schreibeNachricht(socket, zuSendendeNachricht);
-
-        String empfangeneNachricht = leseNachricht(socket);
-
-        System.out.println(empfangeneNachricht);
-    }
-
-    void schreibeNachricht(java.net.Socket socket, String nachricht) throws IOException {
-        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-        printWriter.print(nachricht);
-        printWriter.flush();
-
-    }
-
-    String leseNachricht(java.net.Socket socket) throws IOException {
+        Socket socket = new java.net.Socket(Settings.SERVER, Settings.PORT); 
+        
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        char[] buffer = new char[200];
+        
+        char[] buffer = new char[2000];
 
-        int anzahlZeichen = bufferedReader.read(buffer, 0, 200);
-        // blockiert bis Nachricht empfangen
-        String nachricht = new String(buffer, 0, anzahlZeichen);
+        int countSigns = bufferedReader.read(buffer, 0, 2000);
+       
+        
+        String message = new String(buffer, 0, countSigns);
+        
 
-        return nachricht;
+        return convertXMLToGameState(message);
+      
+    }    
+    
+    
+    /**
+     * @param socket
+     * @param message
+     * @throws IOException
+     */
+    void writeSave(Socket socket, String message) throws IOException {
+        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+        printWriter.print(message);
+        printWriter.flush();
+
     }
 
     
@@ -80,26 +106,33 @@ public class Client {
         
 		return null;
     }
+    
 
-	/*
-	 * public static convertXMLToGameState(String xml) {
-	 * 
-	 * try {
-	 * 
-	 * JAXBContext jaxbContext = JAXBContext.newInstance(Question.class);
-	 * 
-	 * Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller(); Question
-	 * que = (Question) jaxbUnmarshaller.unmarshal(file);
-	 * 
-	 * System.out.println(que.getId() + " " + que.getQuestionname());
-	 * System.out.println("Answers:"); List<Answer> list = que.getAnswers(); for
-	 * (Answer ans : list) System.out.println(ans.getId() + " " +
-	 * ans.getAnswername() + "  " + ans.getPostedby());
-	 * 
-	 * } catch (JAXBException e) { e.printStackTrace(); }
-	 * 
-	 * }
+	
+	  /**
+	 * @param xml
+	 * @return
 	 */
+	public static SaveState convertXMLToGameState(String xml) {
+	  
+//	  try {
+//	  
+//	  JAXBContext jaxbContext = JAXBContext.newInstance(Question.class);
+//	  
+//	  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller(); Question
+//	  que = (Question) jaxbUnmarshaller.unmarshal(file);
+//	  
+//	  System.out.println(que.getId() + " " + que.getQuestionname());
+//	  System.out.println("Answers:"); List<Answer> list = que.getAnswers(); for
+//	  (Answer ans : list) System.out.println(ans.getId() + " " +
+//	  ans.getAnswername() + "  " + ans.getPostedby());
+//	  
+//	  } catch (JAXBException e) { e.printStackTrace(); }
+		  
+		  return null;
+	  
+	  }
+	 
 
 }
 
