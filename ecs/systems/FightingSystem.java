@@ -3,6 +3,7 @@ package systems;
 import components.*;
 import entities.Entity;
 import entities.EntityManager;
+import gameUi.Main;
 import javafx.geometry.Point2D;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class FightingSystem implements ECSystem {
             }
         }
 
-        if (IsInFightRadius(componentAI, componentAITarget)) {
+        if (IsInFightRadius(componentAI, componentAITarget)&& !isInDoor(entityPlayer)) {
             componenteAIFight.setEnabled(true);
             componentTargetFight.setEnabled(true);
             fight(entityEnemy, entityPlayer);
@@ -78,6 +79,25 @@ public class FightingSystem implements ECSystem {
         }
 
     }
+
+    /**
+     * Checks if player is in Door --> than Fight Modi false
+     *@param player
+     *@return
+     */
+
+    private boolean isInDoor(Entity player){
+       Sprite playerSprite= (Sprite) player.getComponent(Sprite.class);
+        for(int i = 0; i<Main.colliderWallMap.size(); i++){
+            if(Main.colliderWallMap.get(i).intersects(playerSprite.getValue().getX(), playerSprite.getValue().getY(),playerSprite.getValue().getWidth(), playerSprite.getValue().getHeight())){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 
     /**
      * fighting

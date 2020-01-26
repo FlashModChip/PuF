@@ -35,46 +35,19 @@ public class MovementSystem implements ECSystem {
     private EventCommandSystem eventCommandSystem = EventCommandSystem.getInstance();
 
     // game root
-    private Pane root = Main.root;   
+    private Pane root = Main.root;
 
-    // level size
-    private int levelHeight = Game.levelHeight;
-    private int levelWidth = Game.levelWidth;
+    // Through Door Warkaound
+    private boolean isThroughDoor = false;
+
 
     // debug
 
     private boolean debugDummy = Settings.getDebug("MovementSystem@dummy");
-    private boolean debugStepSize = Settings.getDebug("MovementSystem@stepsize");
 
 
     private boolean debugBuffer = false;
 
-
-
-    // dummy box for collision detection
-    private Box dummyBox = new Box(0, 0, 0);
-
-    // null vector for comparision
-    private Point3D nullVector = new Point3D(0, 0, 0);
-
-
-
-    // safe spot
-    // we beam the collider to this place during collision detection to prevent self-collision
-    // axis origin is where map creation start, it should be empty
-    // if the entity is to big consider using negative values or in a 2D game offsetting on z-axis
-    //  private Point3D safeSpot = Settings.getSafeSpot();
-
-    // fallback dummy size
-    // is used when entity has no shape and no collider
-    private Box fallBackSize = Settings.getFallBackSize();
-
-    // stepsize defines the max vector length of velocity
-    // it should not be greater than the smallest entity on the map
-    // otherwise collision detection could fail and the moving entity would magically jumping over it
-    // decreasing this value will decrease performance as well
-    // because we have to traverse all entities more often during collision detection
-    private int stepsize = 12;
 
     // hashmap colliders
     private HashMap<Entity, PositionComponent > colliders = new HashMap<>();
@@ -87,10 +60,7 @@ public class MovementSystem implements ECSystem {
     public MovementSystem() {
 
         if (debugDummy) {
-            PhongMaterial material = new PhongMaterial();
-            material.setDiffuseColor(Color.RED);
-            dummyBox.setMaterial(material);
-            root.getChildren().addAll(dummyBox);
+
         }       
       
     }
@@ -116,6 +86,10 @@ public class MovementSystem implements ECSystem {
             Entity entity = entry.getValue();
             State entityState = entity.getState();
             if (debugBuffer) System.out.println("entity state: " + entityState);
+            System.out.println("Kommme ich hier rein" + isThroughDoor);
+
+
+
 
             if (entity.hasComponent(PositionComponent.class)) {
 
@@ -144,19 +118,6 @@ public class MovementSystem implements ECSystem {
                         component.translateY(position.getY());
                     }
                 }
-
-                // update collider
-                if (entity.hasComponent(ColliderComponent.class)) {
-                    count++;
-                    ColliderComponent component = (ColliderComponent) entity.getComponent(ColliderComponent.class);
-                    State componentState = component.getState();
-                    if (debugBuffer) System.out.println("component state: " + componentState);
-                    if (positionComponentState == State.UPDATE || component.getState() == State.UPDATE) {
-                        component.translateX(position.getX());
-                        component.translateY(position.getY());
-                    }
-                }
-
 
             }
         }
@@ -218,24 +179,8 @@ public class MovementSystem implements ECSystem {
                     Point2D position = positionComponent.getValue();
 
 
-
-                    // check if entity needs an update (velocity is != 0)
-                    if (!velocity.equals(nullVector)) {
-                        count++;
-
-
                         // === PART 3 - COLLISION DETECTION ===
 
-                        // before running collision detection, we move the collider to a safe spot to prevent self-collision
-                        // the position will be reset automatically when applying the new position
-                        if (entity.hasComponent(ColliderComponent.class)) {
-                            count++;
-                            // ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translateX(safeSpot.getX());
-                            // ((ColliderComponent) entity.getComponent(ColliderComponent.class)).translateX(safeSpot.getY());
-                        }
-
-                        // run collision detection
-                        // velocity = collisionDetection(entity, position, velocity);
 
                         // update position (add vector to current position)
                         position = new Point2D(position.getX() + velocity.getX(), position.getY() + velocity.getY());
@@ -252,26 +197,24 @@ public class MovementSystem implements ECSystem {
                             Point2D positionItem = colliderEntry.getValue().getValue();
                             if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
                                     && positionItem.getX()<=position.getX() && (positionItem.getX() + 40)>=position.getX()){
-                                Sprite Temp = (Sprite) colliderEntry.getKey().getComponent(Sprite.class);
+                               // Sprite Temp = (Sprite) colliderEntry.getKey().getComponent(Sprite.class);
                                 if(colliderEntry.getKey().hasComponent(HealthComponent.class)) {
-                                    HealthComponent tempHealth = (HealthComponent) colliderEntry.getKey().getComponent(HealthComponent.class);
-                                    Temp.translate(400, 500);
-                                   PositionComponent TempPos = new PositionComponent(400,500);
-                                    colliderEntry.setValue(TempPos);
-                                    entity.addComponent(tempHealth);
+                                    Double tempHealth =  (Double) colliderEntry.getKey().getComponent(HealthComponent.class).getValue();
+                                    Double tempHealthPlayerEnemy = (Double) (entity.getComponent(HealthComponent.class).getValue());
+                                    System.out.println("gesundheit davor" + tempHealthPlayerEnemy);
+                                    entity.getComponent(HealthComponent.class).setValue(tempHealth+tempHealthPlayerEnemy);
                                     colliderEntry.getKey().delete();
-                                    //colliderEntry.setValue(PositionComponent)
-                                } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
-                                    Temp.translate(500,500);
-                                    PositionComponent TempPos = new PositionComponent(500,500);
-                                    colliderEntry.setValue(TempPos);
-                                    colliderEntry.getKey().delete();
-                                }
-                                //tempStepItemsX+=100;
+                                    System.out.println("gesundheit danach" +  entity.getComponent(HealthComponent.class).getValue());
 
-                                // if(positionItem.intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
-                                System.err.println("ITEM");
-                                //  positionComponent.setValue(position);
+                                } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
+                                    Double tempWeapon =  (Double) colliderEntry.getKey().getComponent(WeaponComponent.class).getValue();
+                                    Double tempWeaponPlayerEnemy = (Double) (entity.getComponent(WeaponComponent.class).getValue());
+                                    System.out.println("Waffen davor" + tempWeaponPlayerEnemy);
+                                    entity.getComponent(HealthComponent.class).setValue(tempWeapon+tempWeaponPlayerEnemy);
+                                    colliderEntry.getKey().delete();
+                                    System.out.println("Waffen danach" +  entity.getComponent(HealthComponent.class).getValue());
+                                }
+
                                 noCollision = false;
                                 //TODO Angriff oder aufsammeln etc.
                             }
@@ -284,6 +227,9 @@ public class MovementSystem implements ECSystem {
                                 System.err.println((position.getX() +"||"+ position.getY()));
                                 Direction dir = null;
                                 Point2D tmp = null;
+
+
+
                                 
                                 if(!Main.getMap().getMapNavigator().isLocked())
                                 {
@@ -322,7 +268,7 @@ public class MovementSystem implements ECSystem {
                     }
                 }
             }
-        }
+
 
         if (debug) {
             System.out.println("moved components: " + count);
@@ -332,5 +278,3 @@ public class MovementSystem implements ECSystem {
 
 }
 
-
-//TODO Collision siehe Philipps version
