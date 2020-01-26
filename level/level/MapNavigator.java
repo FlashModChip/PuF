@@ -114,9 +114,8 @@ public class MapNavigator {
 	 */
 	public void changecCurrentRoom(UUID room) {
 
-		currentRoom = currentLevel.getLevelRoomList().get(room);
+		currentRoom = currentLevel.getLevelRoomList().get(room);		
 		
-		setRoomVisited(room);
 	}
 
 	/**
@@ -290,9 +289,9 @@ public class MapNavigator {
 	 * @param 
 	 * @return
 	 */
-	public boolean getRoomVisited(UUID room) {
+	public boolean getRoomVisited() {
 		
-		return currentLevel.getLevelRoomList().get(room).getisVisited();
+		return currentLevel.getLevelRoomList().get(this.getCurrentRoom().getRoomID()).getisVisited();
 		
 	}
 	
