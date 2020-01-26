@@ -196,32 +196,38 @@ public class MovementSystem implements ECSystem {
                                 noCollision = false;
                             }
                         }
-                        for(Map.Entry<Entity, PositionComponent> colliderEntry: colliders.entrySet()){
-                            Point2D positionItem = colliderEntry.getValue().getValue();
-                            if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
-                                    && positionItem.getX()<=position.getX() && (positionItem.getX() + 40)>=position.getX()){
-                               // Sprite Temp = (Sprite) colliderEntry.getKey().getComponent(Sprite.class);
-                                if(colliderEntry.getKey().hasComponent(HealthComponent.class)) {
-                                    Double tempHealth =  (Double) colliderEntry.getKey().getComponent(HealthComponent.class).getValue();
-                                    Double tempHealthPlayerEnemy = (Double) (entity.getComponent(HealthComponent.class).getValue());
-                                    System.out.println("gesundheit davor" + tempHealthPlayerEnemy);
-                                    entity.getComponent(HealthComponent.class).setValue(tempHealth+tempHealthPlayerEnemy);
-                                    colliderEntry.getKey().delete();
-                                    System.out.println("gesundheit danach" +  entity.getComponent(HealthComponent.class).getValue());
+                    for(Map.Entry<Entity, PositionComponent> colliderEntry: colliders.entrySet()){
+                        Point2D positionItem = colliderEntry.getValue().getValue();
+                        if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
+                                && positionItem.getX()<=position.getX() && (positionItem.getX() + 40)>=position.getX()){
+                            Sprite Temp = (Sprite) colliderEntry.getKey().getComponent(Sprite.class);
+                            if(colliderEntry.getKey().hasComponent(HealthComponent.class)) {
+                                Double tempHealth =  (Double) colliderEntry.getKey().getComponent(HealthComponent.class).getValue();
+                                Double tempHealthPlayerEnemy = (Double) (entity.getComponent(HealthComponent.class).getValue());
+                                System.out.println("gesundheit davor" + tempHealthPlayerEnemy);
+                                entity.getComponent(HealthComponent.class).setValue(tempHealth+tempHealthPlayerEnemy);
+                                Temp.translate(1000,1000);
+                                PositionComponent TempPos = (PositionComponent) new PositionComponent(1000,1000);
+                                colliderEntry.setValue(TempPos);
+                                colliderEntry.getKey().delete();
+                                System.out.println("gesundheit danach" +  entity.getComponent(HealthComponent.class).getValue());
 
-                                } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
-                                    Double tempWeapon =  (Double) colliderEntry.getKey().getComponent(WeaponComponent.class).getValue();
-                                    Double tempWeaponPlayerEnemy = (Double) (entity.getComponent(WeaponComponent.class).getValue());
-                                    System.out.println("Waffen davor" + tempWeaponPlayerEnemy);
-                                    entity.getComponent(HealthComponent.class).setValue(tempWeapon+tempWeaponPlayerEnemy);
-                                    colliderEntry.getKey().delete();
-                                    System.out.println("Waffen danach" +  entity.getComponent(HealthComponent.class).getValue());
-                                }
-
-                                noCollision = false;
-                                //TODO Angriff oder aufsammeln etc.
+                            } else if(colliderEntry.getKey().hasComponent(WeaponComponent.class) ){
+                                Double tempWeapon =  (Double) colliderEntry.getKey().getComponent(WeaponComponent.class).getValue();
+                                Double tempWeaponPlayerEnemy = (Double) (entity.getComponent(WeaponComponent.class).getValue());
+                                System.out.println("Waffen davor" + tempWeaponPlayerEnemy);
+                                entity.getComponent(WeaponComponent.class).setValue(tempWeapon+tempWeaponPlayerEnemy);
+                                Temp.translate(1000,1000);
+                                PositionComponent TempPos = (PositionComponent) new PositionComponent(1000,1000);
+                                colliderEntry.setValue(TempPos);
+                                colliderEntry.getKey().delete();
+                                System.out.println("Waffen danach" +  entity.getComponent(WeaponComponent.class).getValue());
                             }
+
+                            noCollision = false;
+                            //TODO Angriff oder aufsammeln etc.
                         }
+                    }
                         for(int i = 0; i< Main.colliderDoorMap.size(); i++){
 
                             if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
@@ -257,6 +263,7 @@ public class MovementSystem implements ECSystem {
 										for (int j = 0; j < ran.nextInt(3); j++) 
 										{
 										  new Enemy(100,200, Main.getMap().getMapNavigator().getCurrentRoom().getRoomID());
+										  new Item(100, 200, Main.getMap().getMapNavigator().getCurrentRoom().getRoomID());
 										}				
 										
 									}
