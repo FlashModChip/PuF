@@ -89,8 +89,9 @@ public class Main extends Application {
     }
 
     //Player
-    static Player player = new Player(200.0,200.0);
-    Enemy enemy = new Enemy(400.0, 300.0);
+    static Player player = new Player(200.0,300.0);
+    //Enemy enemy = new Enemy(400.0, 300.0);
+    //Enemy enemy2 = new Enemy(450.0, 300.0);
     Item item1 = new Item(100,250);
 
     public static Pane root = new Pane();
@@ -106,16 +107,19 @@ public class Main extends Application {
     @Override
     public void init() {
         System.out.println("Running...");
+        nav.changeLevel(lol.generateLevel(1, true));
+
+        nav.setStartingRoom();
+
+        map = new LevelToUi();
+        colliderWallMap = map.boundsWallRectLayer();
+        colliderEnemiesMap = map.boundsEnemiesRectLayer();
+        colliderDoorMap = map.boundsDoorRectLayer();
 
         // init & run the SystemManager
         systemManager = new SystemManager();
         systemManager.init();       
-        
-       nav.changeLevel(lol.generateLevel(1, true)); 
-       
-       nav.setStartingRoom();    
-       
-       map = new LevelToUi();
+
        
     }
 

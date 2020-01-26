@@ -7,9 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
-/// <summary>
-/// Reading/saving level data from/to image files
-/// </summary>
+/**
+ * Reading/saving level data from/to image files
+ * @author Roman
+ *
+ */
 public class LevelPicUtil {
     private LevelPicUtil() {
 
