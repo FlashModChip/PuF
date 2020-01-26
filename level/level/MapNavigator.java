@@ -74,15 +74,15 @@ public class MapNavigator {
 		entryCoords = new HashMap<Direction, Point2D>();
 
 		// Entry points for level change
-		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() * 2));
+		entryCoords.put(Direction.NORTH, new Point2D(Settings.getWindowWidth() / 2, Settings.getBlocksize() *1.5));
 		
-		entryCoords.put(Direction.SOUTH, new Point2D(Settings.getWindowWidth() / 2,
-				Settings.getWindowHeightwithoutGUI() - Settings.getBlocksize() * 2));
+		entryCoords.put(Direction.SOUTH, new Point2D((Settings.getWindowWidth() / 2),
+				(Settings.getWindowHeightwithoutGUI() )));
 		
-		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2));
+		entryCoords.put(Direction.WEST, new Point2D(Settings.getBlocksize() * 2, Settings.getWindowHeightwithoutGUI() / 2 + Settings.getBlocksize()));
 		
 		entryCoords.put(Direction.EAST, new Point2D(Settings.getWindowWidth() - Settings.getBlocksize() * 2,
-				Settings.getWindowHeightwithoutGUI() / 2));
+				Settings.getWindowHeightwithoutGUI() / 2 +  Settings.getBlocksize()));
 	}
 
 	public static MapNavigator getInstance() {
@@ -194,7 +194,8 @@ public class MapNavigator {
 	 * @return
 	 */
 	public Point2D getEntryCoords(Direction dir) {
-
+		
+		
 		Direction counterdirection = null;
 
 		switch (dir) {
@@ -217,6 +218,8 @@ public class MapNavigator {
 		default:
 			break;
 		}
+		
+		
 		
 		return entryCoords.get(counterdirection);
 

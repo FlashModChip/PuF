@@ -80,7 +80,7 @@ public class Main extends Application {
     	
     	map.tilesRenderer(gc);
     	
-    	debug_pane.getChildren().addAll(map.interactiveRectLayer());
+    	//debug_pane.getChildren().addAll(map.interactiveRectLayer());
     	
     	colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
@@ -136,7 +136,7 @@ public class Main extends Application {
 
         debug_pane = new Pane();
         
-        debug_pane.getChildren().addAll(map.interactiveRectLayer());
+        //debug_pane.getChildren().addAll(map.interactiveRectLayer());
         
         colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();

@@ -76,6 +76,7 @@ public class MovementSystem implements ECSystem {
         if (debug) System.err.println("MovementSystem <start>");
         int count = 0;
 
+        //System.out.println("Ich am here be here! "+ Main.getPlayer().getComponent(PositionComponent.class).getValue());
 
         // === PART 1 - POSITION ENTITIES FROM UPDATE-BUFFER ===
         // all entities in buffer will be placed in the world
@@ -92,7 +93,7 @@ public class MovementSystem implements ECSystem {
             System.out.println("Kommme ich hier rein" + isThroughDoor);
 
 
-
+            
 
             if (entity.hasComponent(PositionComponent.class)) {
 
@@ -151,7 +152,8 @@ public class MovementSystem implements ECSystem {
         // translate: shapes, colliders & lights
 
         HashMap<UUID, Component> components = entityManager.components.get(VelocityComponent.class);
-
+        boolean updated = false;
+        
         // check if we there are any velocityComponents
         if (components == null) {
             if (debug) System.out.println("entities to move: 0");
@@ -196,6 +198,7 @@ public class MovementSystem implements ECSystem {
                                 noCollision = false;
                             }
                         }
+                        
                     for(Map.Entry<Entity, PositionComponent> colliderEntry: colliders.entrySet()){
                         Point2D positionItem = colliderEntry.getValue().getValue();
                         if (positionItem.getY()<=position.getY() && (positionItem.getY()+40)>=position.getY()
@@ -228,6 +231,7 @@ public class MovementSystem implements ECSystem {
                             //TODO Angriff oder aufsammeln etc.
                         }
                     }
+                    
                         for(int i = 0; i< Main.colliderDoorMap.size(); i++){
 
                             if(Main.colliderDoorMap.get(i).intersects(position.getX(), position.getY(), componentSprite.getValue().getWidth(), componentSprite.getValue().getHeight())) {
@@ -235,11 +239,11 @@ public class MovementSystem implements ECSystem {
                             	System.err.println("nächstes Level");
                                 System.err.println((position.getX() +"||"+ position.getY()));
                                 Direction dir = null;
-                                Point2D tmp = null;
+                                Point2D tmp = null;                                
                             	
                                 
                                 if(!Main.getMap().getMapNavigator().isLocked())
-                                {
+                                {                                  	                                	
                                 	
                                 	boolean alreadyVisited=  Main.getMap().getMapNavigator().getRoomVisited();
                                 	
@@ -248,14 +252,30 @@ public class MovementSystem implements ECSystem {
 									
 									tmp = Main.getMap().getMapNavigator().getEntryCoords(dir);
 
+									
+									
 									//System.out.println(dir);
 									//System.out.println(tmp);									
-
-									Main.getPlayer().getComponent(PositionComponent.class).setValue(Main.getMap().getMapNavigator().getEntryCoords(dir));
+									
+									Main.getPlayer().getComponent(PositionComponent.class).setValue(tmp);
 									Main.getPlayer().getComponent(VelocityComponent.class).setValue(new Point2D(0,0));
 									
+									updated = true;
+									
+									   ((Sprite) entity.getComponent(Sprite.class)).translateX(tmp.getX());
+		                               ((Sprite) entity.getComponent(Sprite.class)).translateY(tmp.getY());
+		                                
 									//Item item1 = new Item(100,250);                                    
 									
+								/*
+								 * System.out.println("Transition! "+ dir);
+								 * System.out.println("Ich should be here! "+
+								 * Main.getMap().getMapNavigator().getEntryCoords(dir));
+								 * System.out.println("Ich am here be here! "+
+								 * Main.getPlayer().getComponent(PositionComponent.class).getValue());
+								 * System.out.println("My Spite: "+ ((Sprite)
+								 * entity.getComponent(Sprite.class)).getImageXPos());
+								 */
 									
 									if(!alreadyVisited)
 									{	
@@ -276,9 +296,12 @@ public class MovementSystem implements ECSystem {
                         }
 
                         // store velocity and position in it's components
-                        if(noCollision) {
+                       if(noCollision) {
                             component.setValue(velocity);
-                            positionComponent.setValue(position);
+                            
+                            if(!updated) {
+                            positionComponent.setValue(position);                            
+                            }
 
                             // update shape position
                             if (entity.hasComponent(Sprite.class)) {
