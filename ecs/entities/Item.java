@@ -37,10 +37,10 @@ public class Item extends Entity {
         int zufallsZahlItem = zufallsItem.nextInt(2);
 
         if(zufallsZahlItem==0){
-            addComponent(new Sprite("pic/potion",new Point2D(x, y)));
+            addComponent(new Sprite("pic/potion",new Point2D(x, y),false));
             addComponent(new HealthComponent(2000.0));
         } else {
-            addComponent(new Sprite("pic/shield", new Point2D(x,y)));
+            addComponent(new Sprite("pic/shield", new Point2D(x,y), false));
             addComponent(new WeaponComponent(10.0));
         }
         addComponent(new RenderComponent());

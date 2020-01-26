@@ -32,7 +32,7 @@ public class Enemy extends Entity {
         PositionComponent tmp = new PositionComponent(x, y);
         addComponent(tmp);
         addComponent(new VelocityComponent());
-        addComponent(new Sprite("pic/Enemy", new Point2D(175, 125)));
+        addComponent(new Sprite("pic/Enemy", new Point2D(175, 125),true));
         addComponent(new HealthComponent(5000.0));
         addComponent(new RenderComponent());
         addComponent(new AIComponent(tmp,100, true));

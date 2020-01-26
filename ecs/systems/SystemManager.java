@@ -11,6 +11,7 @@ public class SystemManager {
     EntityManager entityManager = EntityManager.getInstance();
 
     // store all systems here
+    AnimationSystem animationSystem = new AnimationSystem();
     RenderSystem render = new RenderSystem();
     KeyInputSystem keyInput = new KeyInputSystem();
     //RotationSystem rotation = new RotationSystem();
@@ -45,6 +46,7 @@ public class SystemManager {
             System.out.println("buffered: " + entityManager.entitiesUpdateBuffer.size());
         }
 
+        animationSystem.run(debug_init);
         movement.run(debug_init);
         //rotation.run(debug_init);
         render.run(debug_init);
@@ -67,6 +69,7 @@ public class SystemManager {
             System.out.println("SystemManager: entities to update: " + entityManager.entitiesUpdateBuffer.size());
         }
 
+        animationSystem.run(debug_update);
         ai.run(debug_update);
         fightingSystem.run(debug_update);
         keyInput.run(debug_update);
