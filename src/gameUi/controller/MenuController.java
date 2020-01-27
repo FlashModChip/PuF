@@ -85,15 +85,13 @@ public class MenuController {
 
     public void changeToGameScene () throws Exception {
         pMT.stopSound();
-        changeScene("Main");
+        changeScene();
 
 //        System.out.println("sound Thread isAlive: " + pMT.isAlive());
 //        System.out.println("movingBackground Thread isAlive: " + mBgT.isAlive());
     }
 
-    public void changeScene(String fxmlFilename) throws Exception{
-        Parent scene = FXMLLoader.load(getClass().getResource("../../resources/view/" + fxmlFilename +".fxml"));
-//        Main.getGuiStage().setScene(new Scene(scene, 900, 600));
+    public void changeScene() throws Exception{
         Main.getGuiStage().setScene(Main.getGameScene());
         Main.getGuiStage().centerOnScreen();
     }
