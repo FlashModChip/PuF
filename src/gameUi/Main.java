@@ -171,24 +171,17 @@ public class Main extends Application {
 
 
 // ++++++  UI Schnellstart ins Spiel +++++++
+//        guiStage = primaryStage;
+//        guiStage.setTitle("Darkest Crawler");
+//        guiStage.setScene(gameScene);
+//        guiStage.show();
+
+// ++++++  UI Start mit Intro +++++++
         guiStage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
         guiStage.setTitle("Darkest Crawler");
-        guiStage.setScene(gameScene);
+        guiStage.setScene(new Scene(root, 600, 400));
         guiStage.show();
-
-// ++++++  UI Start mit Intro +++++++
-//        guiStage = primaryStage;
-//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
-//        guiStage.setTitle("Darkest Crawler");
-//        guiStage.setScene(new Scene(root, 600, 400));
-//        guiStage.show();
-
-// ++++++  UI Start mit Intro +++++++
-//        guiStage = primaryStage;
-//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
-//        guiStage.setTitle("Darkest Crawler");
-//        guiStage.setScene(new Scene(root, 600, 400));
-//        guiStage.show();
     }
 
     public static void main(String[] args) {
