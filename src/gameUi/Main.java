@@ -52,14 +52,12 @@ public class Main extends Application {
     // store key input in a hashmap
     public static HashMap<KeyCode,Boolean> keyInput = new HashMap<>();
     //UNSCHÖN
-    //<frage>
     public static ArrayList<Bounds> colliderWallMap = new ArrayList<>();
     public static ArrayList<Bounds> colliderEnemiesMap = new ArrayList<>();
     public static ArrayList<Bounds> colliderDoorMap = new ArrayList<>();
 
     public static LevelGenerator lol = new LevelGenerator();
 
-    //    <frage>
     public MapNavigator nav = MapNavigator.getInstance();   
 
     public static LevelToUi map;
@@ -80,8 +78,7 @@ public class Main extends Application {
     	
     	map.tilesRenderer(gc);
 
-        //    <frage>
-    	debug_pane.getChildren().addAll(map.interactiveRectLayer());
+//    	debug_pane.getChildren().addAll(map.interactiveRectLayer());
     	
     	colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
@@ -137,7 +134,7 @@ public class Main extends Application {
 
         debug_pane = new Pane();
         
-        debug_pane.getChildren().addAll(map.interactiveRectLayer());
+//        debug_pane.getChildren().addAll(map.interactiveRectLayer());
         
         colliderWallMap = map.boundsWallRectLayer();
         colliderEnemiesMap = map.boundsEnemiesRectLayer();
@@ -153,7 +150,6 @@ public class Main extends Application {
         Group rootGame = new Group();
         rootGame.getChildren().addAll(canvas, debug_pane,hud, root);
         gameScene = new Scene(rootGame, settings.getWindowWidth(), settings.getWindowHeight());
-
 
 
         // capture user input into buffer
@@ -183,13 +179,6 @@ public class Main extends Application {
         guiStage.setTitle("Darkest Crawler");
         guiStage.setScene(new Scene(root, 600, 400));
         guiStage.show();
-
-// ++++++  UI Start mit Intro +++++++
-//        guiStage = primaryStage;
-//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
-//        guiStage.setTitle("Darkest Crawler");
-//        guiStage.setScene(new Scene(root, 600, 400));
-//        guiStage.show();
     }
 
     public static void main(String[] args) {
