@@ -52,13 +52,14 @@ public class Main extends Application {
     // store key input in a hashmap
     public static HashMap<KeyCode,Boolean> keyInput = new HashMap<>();
     //UNSCHÖN
+    //<frage>
     public static ArrayList<Bounds> colliderWallMap = new ArrayList<>();
     public static ArrayList<Bounds> colliderEnemiesMap = new ArrayList<>();
     public static ArrayList<Bounds> colliderDoorMap = new ArrayList<>();
 
     public static LevelGenerator lol = new LevelGenerator();
-    //public static LevelData lvl = lol.generateLevel(1, false);
-    
+
+    //    <frage>
     public MapNavigator nav = MapNavigator.getInstance();   
 
     public static LevelToUi map;
@@ -72,14 +73,14 @@ public class Main extends Application {
     }
     
     public static LevelToUi getMap() {
-    	
         return map;
     }
     
     public static void updateMap() {
     	
     	map.tilesRenderer(gc);
-    	
+
+        //    <frage>
     	debug_pane.getChildren().addAll(map.interactiveRectLayer());
     	
     	colliderWallMap = map.boundsWallRectLayer();
@@ -93,6 +94,7 @@ public class Main extends Application {
     //Enemy enemy = new Enemy(400.0, 300.0);
     //Enemy enemy2 = new Enemy(450.0, 300.0);
     Item item1 = new Item(100,250);
+
 
     public static Pane root = new Pane();
     public static Pane debug_pane;
@@ -120,7 +122,6 @@ public class Main extends Application {
         systemManager = new SystemManager();
         systemManager.init();       
 
-       
     }
 
 
@@ -171,17 +172,17 @@ public class Main extends Application {
 
 
 // ++++++  UI Schnellstart ins Spiel +++++++
-        guiStage = primaryStage;
-        guiStage.setTitle("Darkest Crawler");
-        guiStage.setScene(gameScene);
-        guiStage.show();
+//        guiStage = primaryStage;
+//        guiStage.setTitle("Darkest Crawler");
+//        guiStage.setScene(gameScene);
+//        guiStage.show();
 
 // ++++++  UI Start mit Intro +++++++
-//        guiStage = primaryStage;
-//        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
-//        guiStage.setTitle("Darkest Crawler");
-//        guiStage.setScene(new Scene(root, 600, 400));
-//        guiStage.show();
+        guiStage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource("../resources/view/main.fxml"));
+        guiStage.setTitle("Darkest Crawler");
+        guiStage.setScene(new Scene(root, 600, 400));
+        guiStage.show();
 
 // ++++++  UI Start mit Intro +++++++
 //        guiStage = primaryStage;
